@@ -1,0 +1,15 @@
+{
+  "api_provider": "deepseek",
+  "api_key": "<在此填写文本模型的 API Key>",
+  "api_base_url": "",
+  "text_model": "deepseek-chat",
+  "vision_provider": "qwen",
+  "vision_api_key": "<在此填写视觉 OCR 的 API Key，留空则复用上面的>",
+  "vision_base_url": "",
+  "vision_model": "qwen3-vl-plus",
+  "ocr_method": "auto",
+  "language": "zh",
+  "hotkey": "ctrl+shift+s",
+  "reply_count": 3,
+  "reply_style": "friendly"
+}

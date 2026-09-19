@@ -1,0 +1,26 @@
+# 运行期数据（数据库、截图，可能包含屏幕隐私内容）
+data/
+error/
+
+# 打包产物
+build/
+*.egg-info/
+
+# Python
+__pycache__/
+*.py[cod]
+
+# 本地配置：包含 API Key，切勿提交（模板见 config.example.json）
+config.json
+
+# 构建临时目录与日志
+.bld/
+.build_tmp/
+build_log*.txt
+build_try_*.log
+
+# 编辑器/系统
+.vscode/
+.idea/
+Thumbs.db
+desktop.ini
