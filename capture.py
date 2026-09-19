@@ -2,10 +2,16 @@ import tkinter as tk
 from tkinter import ttk
 import mss
 import logging
-from PIL import Image, ImageTk
+import time
+from PIL import Image, ImageTk, ImageEnhance
 import threading
 
 logger = logging.getLogger(__name__)
+
+# 覆盖层里框选区域外的压暗程度（0.45 ≈ 叠加 55% 黑色遮罩）
+DIM_FACTOR = 0.45
+# 拖动时原色区域的刷新间隔（秒），避免大范围拖动时卡顿
+BRIGHT_REFRESH_INTERVAL = 0.03
 
 
 def capture_full_screen():
@@ -68,17 +74,43 @@ def select_region(callback, master=None):
         canvas = tk.Canvas(root, width=bg_image.width, height=bg_image.height, highlightthickness=0)
         canvas.pack()
 
-        # 显式传 master=root：图片名是按 Tcl 解释器隔离的。
-        # 不传 master 时 PhotoImage 会注册到默认根窗口那个解释器，
-        # 而 canvas 属于本函数创建的窗口（独立模式下是另一个解释器），
-        # 于是报 TclError: image "pyimage1" doesn't exist
-        bg_photo = ImageTk.PhotoImage(bg_image, master=root)
-        canvas.create_image(0, 0, anchor=tk.NW, image=bg_photo)
-        canvas.image = bg_photo  # 留住引用，防止被 Python GC 回收
+        # 整屏压暗，框选区域再把原色画面贴回去 —— 经典截图工具的"外面变暗、选区变亮"
+        dim_photo = ImageTk.PhotoImage(
+            ImageEnhance.Brightness(bg_image).enhance(DIM_FACTOR), master=root
+        )
+        canvas.create_image(0, 0, anchor=tk.NW, image=dim_photo)
+        canvas.dim_photo = dim_photo  # 留住引用，防止被 Python GC 回收
 
-        overlay = canvas.create_rectangle(0, 0, 0, 0, outline="#00ff00", width=2, fill="", stipple="gray25")
-        info_label = canvas.create_text(10, 15, anchor=tk.NW, text="拖拽选择聊天窗口区域 | ESC 取消",
+        overlay = canvas.create_rectangle(0, 0, 0, 0, outline="#00ff00", width=3, fill="")
+        info_label = canvas.create_text(12, 16, anchor=tk.NW, text="拖拽选择聊天窗口区域 | ESC 取消",
                                          fill="#00ff00", font=("Microsoft YaHei", 12, "bold"))
+
+        bright_item = None     # 选区内的原色图
+        bright_photo = None
+        last_refresh = [0.0]
+
+        def hide_bright_region():
+            if bright_item is not None:
+                canvas.itemconfig(bright_item, state=tk.HIDDEN)
+
+        def show_bright_region(x1, y1, x2, y2):
+            """把选区内的原色画面贴回覆盖层（做了节流，拖动大区域也不卡）"""
+            nonlocal bright_item, bright_photo
+            if x2 - x1 <= 0 or y2 - y1 <= 0:
+                return
+            now = time.monotonic()
+            if now - last_refresh[0] < BRIGHT_REFRESH_INTERVAL:
+                return
+            last_refresh[0] = now
+
+            bright_photo = ImageTk.PhotoImage(bg_image.crop((x1, y1, x2, y2)), master=root)
+            if bright_item is None:
+                bright_item = canvas.create_image(x1, y1, anchor=tk.NW, image=bright_photo)
+                canvas.tag_raise(overlay)
+                canvas.tag_raise(info_label)
+            else:
+                canvas.coords(bright_item, x1, y1)
+                canvas.itemconfig(bright_item, image=bright_photo, state=tk.NORMAL)
 
         start_x = tk.IntVar(value=0)
         start_y = tk.IntVar(value=0)
@@ -96,13 +128,17 @@ def select_region(callback, master=None):
         def on_press(event):
             start_x.set(event.x)
             start_y.set(event.y)
+            hide_bright_region()          # 重新框选时先撤掉上一次的高亮
             canvas.coords(overlay, event.x, event.y, event.x, event.y)
 
         def on_drag(event):
-            canvas.coords(overlay, start_x.get(), start_y.get(), event.x, event.y)
-            w = abs(event.x - start_x.get())
-            h = abs(event.y - start_y.get())
-            canvas.itemconfig(info_label, text=f"区域: {w} x {h} | ESC 取消 | 回车确认")
+            x1 = min(start_x.get(), event.x)
+            y1 = min(start_y.get(), event.y)
+            x2 = max(start_x.get(), event.x)
+            y2 = max(start_y.get(), event.y)
+            canvas.coords(overlay, x1, y1, x2, y2)
+            show_bright_region(x1, y1, x2, y2)
+            canvas.itemconfig(info_label, text=f"区域: {x2 - x1} x {y2 - y1} | ESC 取消 | 回车确认")
 
         def on_release(event):
             x1 = min(start_x.get(), event.x)
