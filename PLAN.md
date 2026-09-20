@@ -11,8 +11,9 @@ ChatSight 是一款桌面端工具，能够实时捕获屏幕上的聊天窗口�
    **直接截取指定窗口**（窗口被浏览器挡住也能截到）；截完在浏览器里拖拽框选识别区域
 2. **OCR 文字识别** - 支持本地 Tesseract OCR 和 AI 视觉模型（千问 qwen3-vl / GPT-4o / Claude Vision）
 3. **AI 智能回复推荐** - 将识别到的聊天内容发送给 AI 模型，生成多条推荐回复
-4. **聊天记录保存** - 使用 SQLite 本地数据库持久化存储所有识别到的对话和推荐；
-   **截图文件默认永久保留**，识别结果和历史记录里都能点开查看当时保存的图
+4. **历史记录（对话 + 识别）** - 使用 SQLite 本地数据库持久化存储：**AI 对话**存成
+   「对话记录 + 时间」（保留 user / assistant 角色）、**识别结果**存成「识别记录 + 时间」，
+   推荐回复一并保存；**截图文件默认永久保留**，识别结果和历史记录里都能点开查看当时保存的图
 5. **多模型支持** - 支持 OpenAI、Anthropic Claude、DeepSeek、通义千问，以及任何 OpenAI 兼容 API（Ollama、LM Studio 等）
 6. **联网搜索** - AI 对话页可打开"联网搜索"：先联网检索，再**抓取排名靠前网页的正文**，
    让模型依据正文 + 摘要作答并标注来源编号，回答下方列出可点击的来源链接（**不需要任何搜索 API Key**）
@@ -99,7 +100,10 @@ ChatSight/
 
 ### server.py - Flask 后端
 - `load_config()` / `save_config()`：读写 `config.json`
-- `run_ocr(image, image_path, session_id)`：OCR 并入库，`session_id` 为 0 时新建会话
+- `run_ocr(image, image_path, session_id)`：OCR 并入库，`session_id` 为 0 时新建**识别**会话
+- `/api/chat` 的落库逻辑：每次问答后存「最后一条用户消息 + 本次回复」（`session_id` 为 0 时新建
+  **对话**会话），并把 `session_id` 返回给前端续接。只存这两条 —— 前端每次都要把完整历史发给模型，
+  全量入库会把同一句话反复记账；落库失败只记日志，不能把已经拿到的回复丢掉
 - `parse_port(argv)`：解析 `--port`，缺失或非法时回退 5050
 - `port_in_use(port)`：启动前探测端口；**被占用时直接报错退出**，不再允许第二个实例悄悄绑上同一端口
 - `MAX_CHAT_MESSAGES`：对话只发送最近 30 条，防止上下文无限增长
@@ -114,7 +118,7 @@ ChatSight/
 | POST   | `/api/config`                     | 保存配置                         |
 | GET    | `/api/update`                     | 检测 GitHub 上是否有新版本（立即返回，后台联网） |
 | POST   | `/api/models`                     | 用表单里的临时配置拉取模型列表   |
-| POST   | `/api/chat`                       | AI 对话（`search: true` 时先联网搜索，返回 `sources` 与 `search` 元信息） |
+| POST   | `/api/chat`                       | AI 对话（`search: true` 时先联网搜索，返回 `sources` 与 `search` 元信息；返回 `session_id`，并把这一问一答存进对话记录） |
 | POST   | `/api/ocr/upload`                 | 上传图片识别，返回 `image_url`（保存的图） |
 | POST   | `/api/capture`                    | 服务端全屏截图，返回文件名与尺寸 |
 | GET    | `/api/windows`                    | 列出可截取的顶层窗口（z 序，最上层在前） |
@@ -122,12 +126,15 @@ ChatSight/
 | POST   | `/api/ocr/region`                 | 按框选区域裁剪并识别，返回 `image_url`（裁剪图）与 `source_url`（原图） |
 | POST   | `/api/suggestions`                | 生成推荐回复                     |
 | POST   | `/api/suggestions/<id>/copied`    | 标记推荐回复已被复制             |
-| GET    | `/api/sessions`                   | 历史会话列表                     |
-| GET    | `/api/sessions/<id>`              | 单个会话的消息与推荐（每条带 `image_url` / `image_exists`） |
-| DELETE | `/api/sessions/<id>`              | 删除会话及其消息、推荐           |
+| GET    | `/api/sessions`                   | 历史记录列表（每条带 `type`：`chat` / `recognition`） |
+| GET    | `/api/sessions/<id>`              | 单条记录（`session` 含 `type`）+ 消息与推荐（消息带 `role`、`image_url` / `image_exists`） |
+| DELETE | `/api/sessions/<id>`              | 删除记录及其消息、推荐           |
 
 ### static/ - 网页前端
-- `app.js` 里的 `state` 保存当前页、配置、会话 id、待发送对话与截图信息
+- `app.js` 里的 `state` 保存当前页、配置、两类会话 id（`sessionId` = 识别、`chatSessionId` = 对话，
+  分别落在 localStorage）、待发送对话与截图信息；`loadSession()` 按记录的 `type` 分流 —— 对话记录
+  回填到「AI 对话」页（并接上 `state.chat` 可继续对话），识别记录回「识别」页。
+  刷新页面时 `restoreChatSession()` 会把上次那段对话接回来，记录被删掉则重置为新对话
 - 截屏流程：`POST /api/capture` → 弹层里拖拽框选（坐标按 `截图宽度 / 显示宽度` 缩放）→ `POST /api/ocr/region`
 - **三种截屏入口**：「截屏识别」支持选择延时（立即 / 3 秒 / 5 秒，倒计时期间可以切到聊天窗口）；
   「截取窗口」弹出 `GET /api/windows` 的窗口列表，点一行调 `POST /api/capture/window`。
@@ -230,9 +237,15 @@ ChatSight/
 
 ### storage.py - 数据存储模块
 - `ChatStorage` 类：管理 SQLite 数据库，每次操作独立连接
-- 表结构：sessions（会话）, messages（消息）, suggestions（推荐回复）
-- `create_session()`, `save_message()`, `save_suggestions()`, `mark_suggestion_copied()`
-- `get_sessions()`, `get_session_messages()`, `search_messages()`, `delete_session()`
+- 表结构：sessions（记录，`session_type` 区分 `chat` / `recognition`）、messages（消息，
+  `role` 区分 `user` / `assistant`，识别消息的 `role` 为空）、suggestions（推荐回复）
+- `_migrate()`：启动时给老库补 `sessions.session_type` / `messages.role` 两列
+  （SQLite 没有 `ADD COLUMN IF NOT EXISTS`，只能先 `PRAGMA table_info` 查缺再 `ALTER TABLE`），
+  并把旧标题「会话 时间」就地改成「识别记录 时间」
+- `create_session(title=None, session_type="recognition")`：不传标题时按类型生成
+  「对话记录 时间」/「识别记录 时间」
+- `save_message()`, `save_suggestions()`, `mark_suggestion_copied()`
+- `get_sessions()`, `get_session()`, `get_session_messages()`, `search_messages()`, `delete_session()`
 
 ### logger.py - 日志模块
 - `setup_logging()`：安装滚动文件日志 + 控制台日志 + `error/` 错误日志（幂等，重复调用无副作用）
@@ -275,9 +288,11 @@ ChatSight/
 4. 在弹出的截图里拖拽框选聊天区域
 5. 程序自动 OCR 识别文字内容（结果可编辑、可复制、可导出）；识别结果**下方会出现原图和裁剪图的缩略图，点开可看大图**
 6. 点"生成推荐回复"，AI 根据聊天上下文生成多条回复，一键复制
-7. 所有识别结果和推荐自动保存到本地数据库，截图文件默认永久保留在 `data/screenshots/`，
+7. 所有识别结果和推荐自动保存成「识别记录 + 时间」，截图文件默认永久保留在 `data/screenshots/`，
    左侧历史记录可随时回看（含当时的截图）、删除
-8. 「AI 对话」页可直接和文本模型聊天；勾选 **联网搜索** 后，回答会先检索网页、带编号引用，并在下方列出可点击来源
+8. 「AI 对话」页可直接和文本模型聊天，**每轮问答也会自动存成「对话记录 + 时间」**，
+   点左侧历史里的对话记录可以回放，并接着往下聊；勾选 **联网搜索** 后，回答会先检索网页、
+   带编号引用，并在下方列出可点击来源
 
 ## 运行方式
 

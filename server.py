@@ -121,7 +121,7 @@ def run_ocr(image, image_path: str, session_id: int = 0):
         vision_model=config.get("vision_model", "qwen3-vl-plus"),
     )
     if not session_id:
-        session_id = storage.create_session()
+        session_id = storage.create_session(session_type="recognition")
     storage.save_message(session_id, text, image_path)
     return text, session_id
 
@@ -207,6 +207,10 @@ def chat():
             return jsonify({"error": "消息不能为空"}), 400
 
         use_search = bool(body.get("search"))
+        session_id = int(body.get("session_id") or 0)
+        # 前端每次都会带上完整历史（模型需要上下文），所以只把「最后一条用户消息 + 本次回复」
+        # 写进记录，否则同一句话会被反复保存
+        last_user = next((m["content"] for m in reversed(messages) if m["role"] == "user"), "")
         sources = []
         search_info = {"requested": use_search, "mode": "", "engine": "", "error": ""}
 
@@ -257,7 +261,17 @@ def chat():
         if not reply:
             return jsonify({"error": "模型没有返回任何内容"}), 502
 
-        payload = {"reply": reply}
+        # 落库成「对话记录」。存库失败不该把已经拿到的回复丢掉，所以只记日志
+        try:
+            if not session_id:
+                session_id = storage.create_session(session_type="chat")
+            if last_user:
+                storage.save_message(session_id, last_user, role="user")
+            storage.save_message(session_id, reply, role="assistant")
+        except Exception as db_error:
+            logger.warning(f"对话记录保存失败: {db_error}")
+
+        payload = {"reply": reply, "session_id": session_id}
         if use_search:
             payload["search"] = search_info
             payload["sources"] = sources
@@ -485,7 +499,8 @@ def session_detail(session_id):
             # 顺手给出可访问的图片 URL，前端历史记录里可以直接查看当时保存的截图
             m["image_url"] = image_url(m.get("image_path"))
             m["image_exists"] = bool(m.get("image_path")) and os.path.isfile(m["image_path"])
-        return jsonify({"messages": messages})
+        # session 带上 type，前端据此决定用「AI 对话」页还是「识别」页展示
+        return jsonify({"session": storage.get_session(session_id), "messages": messages})
     except Exception as e:
         return err(e)
 

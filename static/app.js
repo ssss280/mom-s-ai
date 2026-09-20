@@ -6,6 +6,7 @@ const state = {
   providers: {},
   version: "",
   sessionId: Number(localStorage.getItem("chatsight_session") || 0),
+  chatSessionId: Number(localStorage.getItem("chatsight_chat_session") || 0),
   chat: [],
   capture: null,
   selectedSession: null,
@@ -50,6 +51,11 @@ function showError(e) {
 function setSession(id) {
   state.sessionId = id;
   localStorage.setItem("chatsight_session", String(id));
+}
+
+function setChatSession(id) {
+  state.chatSessionId = id;
+  localStorage.setItem("chatsight_chat_session", String(id));
 }
 
 // ---------- 页面导航 ----------
@@ -132,9 +138,16 @@ async function sendChat() {
   $("#btn-chat-send").disabled = true;
 
   try {
-    const data = await postJSON("/api/chat", { messages: state.chat, search: useSearch });
+    const data = await postJSON("/api/chat", {
+      messages: state.chat,
+      search: useSearch,
+      session_id: state.chatSessionId || 0,
+    });
+    // 后端已把这一问一答存进对话记录，首次对话时会返回新建的会话 id
+    if (data.session_id) setChatSession(data.session_id);
     state.chat.push({ role: "assistant", content: data.reply });
     appendMsg("ai", data.reply, false, data.sources);
+    refreshHistory();
     if (useSearch && data.search) {
       const count = (data.sources || []).length;
       if (count) {
@@ -178,7 +191,9 @@ $("#chat-input").addEventListener("keydown", (e) => {
 });
 
 $("#btn-chat-clear").addEventListener("click", () => {
+  // 只清空当前这段对话、下次发送新建一条记录；已保存的记录留在左侧历史里
   state.chat = [];
+  setChatSession(0);
   $("#chat-messages").innerHTML = "";
   $("#chat-empty").style.display = "";
   setStatus("对话已清空");
@@ -574,12 +589,48 @@ async function refreshHistory() {
   }
 }
 
+function loadChatSession(id, messages) {
+  state.chat = messages.map((m) => ({
+    role: m.role === "assistant" ? "assistant" : "user",
+    content: m.raw_text,
+  }));
+  setChatSession(id);
+
+  $("#chat-messages").innerHTML = "";
+  state.chat.forEach((m) => appendMsg(m.role === "assistant" ? "ai" : "user", m.content));
+  showPage("chat");
+  setStatus(`已加载对话记录，共 ${messages.length} 条消息`);
+}
+
+async function restoreChatSession() {
+  // 刷新页面后把上次的对话接回来；记录被删掉了就当作新对话
+  if (!state.chatSessionId) return;
+  try {
+    const data = await api(`/api/sessions/${state.chatSessionId}`);
+    if (!data.messages.length) {
+      setChatSession(0);
+      return;
+    }
+    loadChatSession(state.chatSessionId, data.messages);
+  } catch (e) {
+    setChatSession(0);
+  }
+}
+
 async function loadSession(id) {
   try {
     const data = await api(`/api/sessions/${id}`);
     if (!data.messages.length) return;
 
     state.selectedSession = id;
+
+    // 对话记录在「AI 对话」页回放，识别记录在「识别」页回放
+    if ((data.session || {}).type === "chat") {
+      loadChatSession(id, data.messages);
+      await refreshHistory();
+      return;
+    }
+
     setSession(id);
 
     $("#recog-text").value = data.messages.map((m) => m.raw_text).join("\n\n---\n\n");
@@ -613,9 +664,11 @@ $("#btn-history-delete").addEventListener("click", async () => {
     return;
   }
   if (!confirm("确定要删除此会话记录吗？")) return;
+  const id = state.selectedSession;
   try {
-    await api(`/api/sessions/${state.selectedSession}`, { method: "DELETE" });
-    if (state.sessionId === state.selectedSession) setSession(0);
+    await api(`/api/sessions/${id}`, { method: "DELETE" });
+    if (state.sessionId === id) setSession(0);
+    if (state.chatSessionId === id) setChatSession(0);
     state.selectedSession = null;
     await refreshHistory();
     setStatus("会话已删除");
@@ -807,6 +860,7 @@ async function checkUpdate(attempt = 0) {
   try {
     await loadSettings();
     await refreshHistory();
+    await restoreChatSession();
   } catch (e) {
     showError(e);
   }
