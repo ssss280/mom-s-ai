@@ -37,11 +37,13 @@ TIMEOUT = 8
 DEFAULT_COUNT = 6
 CACHE_TTL = 300
 MAX_SNIPPET = 300
-MIN_RELEVANCE = 0.3      # 相关性低于这个值的结果不要
+MIN_RELEVANCE = 0.3      # 相关性达到这个值才算"可信结果"
+FALLBACK_MIN = 0.2       # 达不到上面但到了这个值：作为"低相关参考"喂给模型，并提示它自行判断
 TOTAL_BUDGET = 12        # 一轮搜索的总预算（秒）
 READ_PAGES = 3           # 联网搜索后抓前几篇的正文
 PAGE_MAX_CHARS = 2000    # 每篇正文最多取多少字符喂给模型
 PAGE_MAX_BYTES = 800_000  # 单页最多下载多少字节（防大页面拖时间）
+MIN_PAGE_CHARS = 100     # 抽出来不到这么多字符的正文当没抓到（反爬页/纯 JS 页只有几个字）
 PAGES_BUDGET = 6         # 抓正文的总预算（秒）——实测放到 8 秒会让整轮偏慢
 PAGE_TIMEOUT = 5         # 单页抓取超时（秒）
 
@@ -103,7 +105,7 @@ MEDIA_HOSTS = (
 
 # 被反爬拦下时页面里会出现这些字样（配合"一条结果都没有 + 页面异常短"判断）
 BLOCK_MARKERS = re.compile(r"安全验证|验证码|请输入验证|访问过于频繁|wappass|seccode|captcha|滑动验证", re.I)
-COOLDOWN = 600          # 被拦后 10 分钟内不再问这个引擎
+COOLDOWN = 300          # 被拦后 5 分钟内不再问这个引擎（实测拦一会儿就放，10 分钟太长会把自己饿死）
 
 _blocked_until: dict = {}
 
@@ -151,6 +153,48 @@ def clean_query(text: str, max_len: int = 60) -> str:
     return query[:max_len].strip(" \t，,。.！!？?、;；:：")
 
 
+# 追问句：自己几乎没有检索价值，必须结合上一句才有意义
+_FOLLOW_UP_TAIL = re.compile(r"(呢|那|那么|还有|继续|再来|然后)\s*[？?。.]?$")
+_FOLLOW_UP_HEAD = re.compile(r"^(那|那么|还有|再|继续|然后|它|这个|那个|这些|那些)")
+_ONLY_YEARISH = re.compile(r"^[\d年月日\s，,。.？?、]{0,8}$")
+
+
+def is_follow_up(query: str) -> bool:
+    """判断是不是"追问"（如「2026年的呢」「那地点呢」）。
+
+    这类句子必须拼上上一句才能搜索——实测日志里出现过直接拿「2026年的呢」去搜的情况，
+    结果当然是一堆无关网页。
+    """
+    query = (query or "").strip()
+    if not query:
+        return False
+    if _FOLLOW_UP_TAIL.search(query) or _FOLLOW_UP_HEAD.match(query):
+        return True
+    # 只有年份/日期这种，也算追问（"2026年"）
+    return bool(_ONLY_YEARISH.match(query))
+
+
+def build_query(message: str, history: list = None) -> str:
+    """结合上下文生成搜索词。
+
+    history 是之前的用户消息（从旧到新），当前这句如果是追问就拼上最近一条有信息量的上一句。
+    """
+    cleaned = clean_query(message)
+    if not cleaned:
+        return ""
+    if not is_follow_up(cleaned):
+        return cleaned
+    for previous in reversed(history or []):
+        prev = clean_query(previous)
+        # 上一句也得有信息量，否则继续往前找
+        if prev and len(term_text(prev).strip()) >= 2 and not is_follow_up(prev):
+            # 追问句里的新约束（年份等）要保留，但"是什么时候/呢"这类噪声去掉：
+            # 「香港灯具展是什么时候」+「2026年的呢」->「香港灯具展是什么时候 2026年」
+            tail = term_text(cleaned).strip() or cleaned
+            return f"{prev} {tail}".strip()
+    return cleaned
+
+
 def _tidy(text: str) -> str:
     return re.sub(r"\s+", " ", text or "").strip(" \t，,。.！!？?、;；:：")
 
@@ -159,9 +203,11 @@ def _tidy(text: str) -> str:
 _YEAR_RE = re.compile(r"(?<![0-9A-Za-z])(?:19|20)\d{2}\s*年?(?![0-9])")
 # 只削句尾的疑问成分，不要句中乱削（否则「今天北京天气怎么样」会变成「今天北京天气 样」）
 _TAIL_QUESTION_RE = re.compile(
-    r"(?:怎么样|怎么|如何|是多少|多少钱|在哪[里儿]?|什么时候|何时|是什么|有哪些|几点|多久|吗|呢|啊|呀|吧|的)\s*$"
+    r"(?:怎么样|怎么|如何|是多少|多少钱|在哪[里儿]?|什么时候|何时|是什么|有哪些|几点|多久|的时间|时间|是|吗|呢|啊|呀|吧|的)\s*$"
 )
-_LEAD_COMMAND_RE = re.compile(r"^(?:(?:帮我|请|麻烦|帮忙)\s*)?(?:(?:查一下|查询|搜索|搜一下|搜|找一下|看看)\s*)?")
+_LEAD_COMMAND_RE = re.compile(
+    r"^(?:(?:帮我|请|麻烦|帮忙)\s*)?(?:(?:查一查|查查|查一下|查询|搜索一下|搜索|搜一下|搜一搜|找一下|了解一下|看看)\s*)?"
+)
 
 
 def query_variants(query: str) -> list:
@@ -180,7 +226,12 @@ def query_variants(query: str) -> list:
         variants.append(no_year)
 
     # 再去掉"帮我查一下/怎么样"这类问句成分，只留核心实体
-    core = _tidy(_TAIL_QUESTION_RE.sub("", _LEAD_COMMAND_RE.sub("", no_year or query)))
+    core = no_year or query
+    for _ in range(3):   # 反复削：`香港灯具展是什么时候` -> `香港灯具展是` -> `香港灯具展`
+        stripped = _tidy(_TAIL_QUESTION_RE.sub("", _LEAD_COMMAND_RE.sub("", core)))
+        if stripped == core:
+            break
+        core = stripped
     if len(core) >= 2 and core not in variants:
         variants.append(core)
 
@@ -188,10 +239,14 @@ def query_variants(query: str) -> list:
 
 
 def _score_and_filter(query: str, merged: list) -> list:
+    """打分并按相关性排序。
+
+    这里**不做阈值过滤**：可信（≥MIN_RELEVANCE）和低相关（≥FALLBACK_MIN）由调用方分层，
+    否则"低相关兜底"那一档永远是空的。
+    """
     for item in merged:
         item["score"] = relevance(query, item)
-    merged.sort(key=lambda x: x["score"], reverse=True)
-    return [item for item in merged if item["score"] >= MIN_RELEVANCE]
+    return sorted(merged, key=lambda x: x["score"], reverse=True)
 
 
 # ---------- 还原跳转链接 ----------
@@ -278,11 +333,28 @@ def _resolve_results(results: list, timeout: int = 6) -> list:
 
 # ---------- 相关性打分 ----------
 
+# 问句成分：它们不是检索关键词，留在打分里只会稀释命中率
+# （实测「香港灯具展是什么时候」9 个 bigram 里 4 个是问句噪声，把真结果压到阈值以下）
+_QUESTION_WORDS = re.compile(
+    r"(什么时候|多久|几点|什么样|怎么样|怎么办|怎么|如何|是什么|哪些|哪个|哪里|在哪[里儿]?|"
+    r"多少钱|多少|为何|为什么|是不是|有没有|能不能|可不可以|"
+    r"请问|帮我|帮忙|查一查|查查|查一下|查询|搜索一下|搜索|搜一下|搜一搜|找一下|了解一下|看看|告诉我|"
+    r"是|的|吗|呢|啊|呀|吧|了|一下|时候)"
+)
+
+
+def term_text(text: str) -> str:
+    """只保留有检索价值的词，用于相关性打分。"""
+    text = re.sub(r"^(?:那|那么|还有|再|继续|然后|它|这个|那个)\s*", "", (text or "").strip())
+    return _QUESTION_WORDS.sub(" ", text)
+
+
 def relevance(query: str, item: dict) -> float:
     """查询词与结果标题/摘要的匹配程度，0~1。"""
-    cjk = re.sub(r"[^\u4e00-\u9fff]", "", query or "")
+    source = term_text(query) or query
+    cjk = re.sub(r"[^\u4e00-\u9fff]", "", source or "")
     grams = {cjk[i:i + 2] for i in range(len(cjk) - 1)} or ({cjk} if cjk else set())
-    words = set(re.findall(r"[a-z0-9]{2,}", (query or "").lower()))
+    words = set(re.findall(r"[a-z0-9]{2,}", (source or "").lower()))
     terms = list(grams) + list(words)
     if not terms:
         return 0.0
@@ -453,8 +525,11 @@ ENGINES = (
     ("baidu", _search_baidu),
     ("duckduckgo", _search_duckduckgo),
 )
-PARALLEL_ENGINES = ENGINES[:4]   # 国内可用的四个，并行查
-FALLBACK_ENGINE = ENGINES[4]     # 挂了代理 / 在国外时才用得上
+# 分两批打：搜狗/百度很容易触发安全验证，只在第一批没结果时才用它们，
+# 免得每次搜索都同时打 4 个引擎、用不了几次就被集体拦下
+PRIMARY_ENGINES = ENGINES[:2]     # bing + so360，最抗压
+SECONDARY_ENGINES = ENGINES[2:4]  # sogou + baidu，中文覆盖好但容易拦
+FALLBACK_ENGINE = ENGINES[4]      # DuckDuckGo，挂了代理/在国外才用得上
 
 
 def _gather(query: str, engines, count: int, deadline: float):
@@ -522,7 +597,8 @@ def search(query: str, count: int = DEFAULT_COUNT, use_cache: bool = True) -> di
     `engine` 是贡献结果最多的引擎；结果已按相关性排序并过滤掉不相关的。
     """
     query = clean_query(query)
-    info = {"query": query, "query_used": "", "engine": "", "results": [], "error": ""}
+    info = {"query": query, "query_used": "", "engine": "", "results": [], "error": "",
+            "low_relevance": False}
     if not query:
         info["error"] = "搜索内容为空"
         return info
@@ -534,15 +610,28 @@ def search(query: str, count: int = DEFAULT_COUNT, use_cache: bool = True) -> di
 
     deadline = time.time() + TOTAL_BUDGET
     merged_all, errors, results = [], [], []
+    weak: list = []          # 相关性不够"可信"但也不是垃圾的结果，最后兜底用
+
+    def _try(variant: str, engines, need_secondary: bool):
+        """跑一批引擎，返回 (可信结果, 低相关候选)。"""
+        merged, variant_errors = _gather(variant, engines, count * 2, deadline)
+        merged_all.extend(merged)
+        errors.extend(variant_errors)
+        scored = _score_and_filter(variant, merged)
+        good = [item for item in scored if item["score"] >= MIN_RELEVANCE]
+        low = [item for item in scored if FALLBACK_MIN <= item["score"] < MIN_RELEVANCE]
+        return good, low
 
     # 一轮一轮换查询词试：原样 -> 去掉年份 -> 只留核心实体
     for variant in query_variants(query):
         if time.time() >= deadline:
             break
-        merged, variant_errors = _gather(variant, PARALLEL_ENGINES, count * 2, deadline)
-        merged_all.extend(merged)
-        errors.extend(variant_errors)
-        good = _score_and_filter(variant, merged)
+        good, low = _try(variant, PRIMARY_ENGINES, False)
+        weak.extend(low)
+        if not good and time.time() < deadline:
+            # 主力两个引擎没结果，再拉搜狗/百度（它们更容易被反爬，所以放第二批）
+            more_good, more_low = _try(variant, SECONDARY_ENGINES, True)
+            good, weak = more_good, weak + more_low
         if good:
             results = _resolve_results(_dedupe(good)[:count])
             if results:
@@ -556,7 +645,9 @@ def search(query: str, count: int = DEFAULT_COUNT, use_cache: bool = True) -> di
         logger.info("国内引擎没有相关结果，尝试 DuckDuckGo")
         extra, extra_errors = _gather(query, (FALLBACK_ENGINE,), count * 2, deadline)
         errors.extend(extra_errors)
-        good = _score_and_filter(query, extra)
+        scored = _score_and_filter(query, extra)
+        good = [item for item in scored if item["score"] >= MIN_RELEVANCE]
+        weak.extend(item for item in scored if FALLBACK_MIN <= item["score"] < MIN_RELEVANCE)
         if good:
             results = _resolve_results(_dedupe(good)[:count])
             info["query_used"] = query
@@ -567,6 +658,16 @@ def search(query: str, count: int = DEFAULT_COUNT, use_cache: bool = True) -> di
         info["results"] = results
         logger.info(f"搜索「{query}」（实际用「{info['query_used']}」）合并 {len(merged_all)} 条，"
                     f"过滤后 {len(results)} 条（最相关来自 {info['engine']}，分数 {best['score']}）")
+    elif weak:
+        # 没有"可信"结果，但有一些沾边的：与其告诉用户"没查到"，不如交给模型判断
+        # （模型判语义比这里的 bigram 打分靠谱），同时明确标注"相关性不高"
+        results = _resolve_results(_dedupe(sorted(weak, key=lambda x: x["score"], reverse=True))[:3])
+        info["engine"] = results[0]["engine"] if results else ""
+        info["results"] = results
+        info["low_relevance"] = True
+        info["error"] = f"未找到高相关结果，以下 {len(results)} 条相关性较低，仅供参考"
+        logger.info(f"搜索「{query}」没有高相关结果，退回 {len(results)} 条低相关参考（最高分 "
+                    f"{results[0]['score'] if results else 0}）")
     else:
         dropped = len(merged_all)
         info["error"] = (f"没有找到相关结果（试了 {len(query_variants(query))} 种查询词，{dropped} 条都被判为不相关）"
@@ -648,7 +749,12 @@ def fetch_page_text(url: str, max_chars: int = PAGE_MAX_CHARS, timeout: int = PA
             continue
     if page is None:
         page = raw.decode("utf-8", "replace")
-    return extract_text(page, max_chars)
+    text = extract_text(page, max_chars)
+    if len(text) < MIN_PAGE_CHARS:
+        # 反爬页 / 纯 JS 页抽出来只有寥寥几个字，当没抓到，别拿它充当"正文"
+        logger.info(f"正文太短（{len(text)} 字符），忽略: {url[:60]}")
+        return ""
+    return text
 
 
 def fetch_pages(urls: list, count: int = READ_PAGES, timeout: int = PAGE_TIMEOUT) -> dict:

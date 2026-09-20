@@ -80,6 +80,13 @@ SEARCH_EMPTY_SYSTEM_PROMPT = """用户希望你联网查最新信息，但这次
 3. 绝对不要编造具体的日期、价格、地点、人名等事实；
 4. 用中文简洁作答，不要复述这份说明。"""
 
+# 找到了结果但相关性都不高时用这段：让模型把这些当线索而不是事实
+SEARCH_LOW_RELEVANCE_PROMPT = """重要提醒：这次联网搜索**没有找到高度相关的资料**，下面给到的几条相关性较低，只能当线索。请：
+1. 开头说明"没有检索到很匹配的资料，以下仅供参考"；
+2. 不要把这几条当成确凿事实，凡涉及日期、价格、地点、人名都要提醒用户自行核对；
+3. 宁可说"不确定"，也不要替它们圆场；
+4. 用中文简洁作答，不要复述这份说明。"""
+
 
 def err(e: Exception, code: int = 500):
     logger.exception(f"接口错误: {e}")
@@ -219,11 +226,14 @@ def chat():
                 # 百炼自带联网搜索：让模型自己检索，不用我们抓网页
                 search_info["mode"] = "native"
             else:
-                query = next((m["content"] for m in reversed(messages) if m["role"] == "user"), "")
+                # 追问句（「2026年的呢」）自己没检索价值，要拼上上一句用户消息才有意义
+                user_texts = [m["content"] for m in messages if m["role"] == "user"]
+                query = web_search.build_query(user_texts[-1] if user_texts else "", user_texts[:-1])
                 found = web_search.search(query, count=SEARCH_COUNT)
                 search_info["engine"] = found["engine"]
                 search_info["error"] = found["error"]
                 search_info["mode"] = "local"
+                search_info["low_relevance"] = bool(found.get("low_relevance"))
                 # 让前端能显示"实际用了哪个查询词"（搜索里会把问句成分和年份洗掉/改写）
                 search_info["query"] = found["query"]
                 search_info["query_used"] = found.get("query_used") or found["query"]
@@ -236,12 +246,16 @@ def chat():
                         pages = web_search.fetch_pages([r["url"] for r in found["results"]],
                                                        count=web_search.READ_PAGES)
                         search_info["pages"] = len(pages)
-                    messages = [
-                        {"role": "system", "content": SEARCH_SYSTEM_PROMPT},
-                        {"role": "system", "content":
-                            "以下是刚刚联网搜索到的网页结果（含正文节选）：\n\n"
-                            + web_search.build_context(found["results"], pages)},
-                    ] + messages
+                    injected = [{"role": "system", "content": SEARCH_SYSTEM_PROMPT}]
+                    if found.get("low_relevance"):
+                        # 没找到高相关结果时，明确告诉模型这是弱证据，别当事实用
+                        injected.insert(0, {"role": "system", "content": SEARCH_LOW_RELEVANCE_PROMPT})
+                    injected.append({
+                        "role": "system",
+                        "content": "以下是刚刚联网搜索到的网页结果（含正文节选）：\n\n"
+                                   + web_search.build_context(found["results"], pages),
+                    })
+                    messages = injected + messages
                 else:
                     search_info["error"] = found["error"] or "没有搜到结果"
                     # 关键：搜不到也要明确告诉模型"没查到"，否则它会凭记忆自信作答

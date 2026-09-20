@@ -7,7 +7,7 @@
 每次发版改完这里的 `__version__`，记得同步在 CHANGELOG.md 顶部加一条记录。
 """
 
-__version__ = "1.3.0"
+__version__ = "1.4.0"
 
 # 更新检测使用的 GitHub 仓库（owner/repo）与默认分支
 UPDATE_REPO = "ssss280/mom-s-ai"
