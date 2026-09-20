@@ -58,7 +58,14 @@ class ChatSightModel:
             else:
                 return None
 
-        return OpenAI(api_key=api_key, base_url=base_url)
+        kwargs = {"api_key": api_key}
+        if base_url:
+            kwargs["base_url"] = base_url
+        else:
+            # 之前这里会把 base_url="" 直接塞给 OpenAI()，请求时抛出的错误
+            # 完全看不出原因；现在回退到 SDK 默认地址并留下一条告警
+            logger.warning(f"提供商 {provider} 未配置 Base URL，回退到 OpenAI 默认地址")
+        return OpenAI(**kwargs)
 
     def _init_clients(self):
         self.client = self._build_client(
@@ -151,13 +158,13 @@ class ChatSightModel:
             return [f"API 调用失败: {str(e)}"]
 
     def analyze_chat_with_vision(self, image_base64: str) -> str:
-        if not self.is_configured:
-            return "请先在设置中配置 API Key"
+        if not self.is_vision_configured:
+            return "请先在设置中配置视觉模型 API Key"
 
         model = self.config.get("vision_model", "gpt-4o")
 
         try:
-            response = self.client.chat.completions.create(
+            response = self.vision_client.chat.completions.create(
                 model=model,
                 messages=[
                     {

@@ -8,8 +8,8 @@
   "vision_base_url": "",
   "vision_model": "qwen3-vl-plus",
   "ocr_method": "auto",
-  "language": "zh",
-  "hotkey": "ctrl+shift+s",
   "reply_count": 3,
-  "reply_style": "friendly"
+  "reply_style": "friendly",
+  "screenshot_keep": 0,
+  "search_read_pages": 1
 }
