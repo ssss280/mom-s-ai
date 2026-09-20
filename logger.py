@@ -1,21 +1,10 @@
 import logging
 import os
-import sys
 import traceback
 from logging.handlers import RotatingFileHandler
 from datetime import datetime
 
-from paths import (
-    APP_DIR,
-    DATA_DIR,
-    ERROR_DIR,
-    LOG_FILE,
-    IS_FROZEN,
-    ensure_writable_dir,
-)
-
-# 兼容旧代码引用（注意：冻结后 APP_DIR 是 exe 目录，不再是 library.zip 内部）
-SOURCE_DIR = APP_DIR
+from paths import DATA_DIR, ERROR_DIR, LOG_FILE, ensure_writable_dir
 
 _active_data_dir = None
 _active_error_dir = None
@@ -63,11 +52,7 @@ class ErrorHandler(logging.Handler):
 
 
 def setup_logging():
-    """初始化日志系统；无论如何都不抛异常，返回日志文件路径。
-
-    旧实现在这里直接 os.makedirs，冻结打包后路径非法会抛异常，
-    而此时 handler 还没装上，导致“报错弹窗 + 零日志”。
-    """
+    """初始化日志系统；无论如何都不抛异常，返回日志文件路径。"""
     global _active_data_dir, _active_error_dir
 
     log_file = None
@@ -106,8 +91,7 @@ def setup_logging():
             root_logger.addHandler(error_handler)
 
             logging.info("=" * 50)
-            logging.info("ChatSight 启动")
-            logging.info(f"程序目录: {APP_DIR} (frozen={IS_FROZEN})")
+            logging.info("ChatSight 网页版启动")
             logging.info(f"日志文件: {log_file}")
             logging.info("=" * 50)
         else:
@@ -135,8 +119,6 @@ def write_crash_log(title: str, detail: str) -> str:
             with open(crash_file, "w", encoding="utf-8") as f:
                 f.write(f"致命错误: {title}\n")
                 f.write(f"时间: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\n")
-                f.write(f"程序目录: {APP_DIR} (frozen={IS_FROZEN})\n")
-                f.write(f"可执行文件: {sys.executable}\n")
                 f.write(f"描述: {detail}\n\n")
 
                 log_file = get_log_file()
@@ -151,51 +133,3 @@ def write_crash_log(title: str, detail: str) -> str:
         except Exception:
             continue
     return ""
-
-
-def fatal_error(title: str, message: str):
-    """记录致命错误、写崩溃日志并弹窗提示"""
-    try:
-        logging.critical(f"{title}: {message}")
-    except Exception:
-        pass
-
-    crash_file = write_crash_log(title, message)
-
-    tip = f"错误日志已保存到: {crash_file}" if crash_file else "错误日志保存失败，请检查目录权限"
-
-    try:
-        import tkinter as tk
-        from tkinter import messagebox
-        root = tk.Tk()
-        root.withdraw()
-        messagebox.showerror(title, f"{message}\n\n{tip}")
-        root.destroy()
-    except Exception:
-        # 连弹窗都失败（无 GUI）时，至少把错误打到 stderr
-        try:
-            sys.stderr.write(f"[{title}] {message}\n{tip}\n")
-        except Exception:
-            pass
-
-
-def get_error_files() -> list:
-    """获取所有错误日志文件列表"""
-    directory = get_error_dir()
-    if not os.path.exists(directory):
-        return []
-    files = [f for f in os.listdir(directory) if f.endswith(".log")]
-    files.sort(reverse=True)
-    return files
-
-
-def clear_error_files():
-    """清空错误日志文件夹"""
-    directory = get_error_dir()
-    if not os.path.exists(directory):
-        return
-    for f in os.listdir(directory):
-        try:
-            os.remove(os.path.join(directory, f))
-        except Exception:
-            pass

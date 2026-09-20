@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ChatSight - AI 聊天智能助手</title>
+<link rel="stylesheet" href="/style.css">
+</head>
+<body>
+
+<aside id="sidebar">
+  <div class="brand">
+    <div class="brand-name">ChatSight</div>
+    <div class="brand-sub">AI 聊天智能助手</div>
+  </div>
+
+  <nav class="nav">
+    <div class="nav-item active" data-page="chat">AI 对话</div>
+    <div class="nav-item" data-page="recognition">识别</div>
+  </nav>
+
+  <div class="sidebar-section">历史记录</div>
+  <div id="history-list"></div>
+  <div class="history-actions">
+    <button class="btn btn-mini" id="btn-history-refresh">刷新</button>
+    <button class="btn btn-mini" id="btn-history-delete">删除</button>
+  </div>
+
+  <nav class="nav nav-bottom">
+    <div class="nav-item" data-page="settings">设置</div>
+  </nav>
+</aside>
+
+<main id="main">
+
+  <!-- AI 对话 -->
+  <section class="page active" id="page-chat">
+    <header class="page-header">
+      <h1>AI 对话</h1>
+      <div class="page-actions">
+        <button class="btn btn-mini" id="btn-chat-clear">清空对话</button>
+      </div>
+    </header>
+
+    <div class="chat-area" id="chat-area">
+      <div class="chat-empty" id="chat-empty">有什么可以帮你的？</div>
+      <div id="chat-messages"></div>
+    </div>
+
+    <div class="chat-input-wrap">
+      <textarea id="chat-input" rows="3" placeholder="输入消息，Enter 发送，Shift+Enter 换行"></textarea>
+      <button class="btn btn-primary" id="btn-chat-send">发送</button>
+    </div>
+  </section>
+
+  <!-- 识别 -->
+  <section class="page" id="page-recognition">
+    <header class="page-header">
+      <h1>识别</h1>
+      <div class="page-actions">
+        <button class="btn" id="btn-upload">上传图片</button>
+        <button class="btn" id="btn-capture">截屏识别</button>
+        <button class="btn" id="btn-copy">复制文本</button>
+        <button class="btn" id="btn-export">导出文本</button>
+        <button class="btn btn-primary" id="btn-suggest">生成推荐回复</button>
+      </div>
+    </header>
+
+    <input type="file" id="file-input" accept="image/*" hidden>
+
+    <div class="recog-panels">
+      <div class="recog-left">
+        <div class="panel-label">识别结果</div>
+        <textarea id="recog-text" placeholder="上传图片或截屏后，识别结果会显示在这里"></textarea>
+      </div>
+      <div class="recog-right">
+        <div class="panel-label">推荐回复</div>
+        <div id="suggestions"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 设置 -->
+  <section class="page" id="page-settings">
+    <header class="page-header">
+      <h1>设置</h1>
+    </header>
+
+    <div class="settings-body">
+      <h2>AI 模型配置</h2>
+      <div class="form-grid">
+        <label>API 提供商:</label>
+        <select id="cfg-provider"></select>
+        <span class="hint"></span>
+
+        <label>API Key:</label>
+        <input type="password" id="cfg-api-key">
+        <span class="hint"></span>
+
+        <label>API Base URL:</label>
+        <input type="text" id="cfg-base-url">
+        <span class="hint">留空使用默认地址</span>
+
+        <label>文本模型:</label>
+        <div class="inline">
+          <input type="text" id="cfg-text-model" list="dl-text-models">
+          <datalist id="dl-text-models"></datalist>
+          <button class="btn" id="btn-fetch-text">获取模型列表</button>
+        </div>
+        <span class="hint"></span>
+
+        <label>视觉模型:</label>
+        <div class="inline">
+          <input type="text" id="cfg-vision-model" list="dl-vision-models">
+          <datalist id="dl-vision-models"></datalist>
+          <button class="btn" id="btn-fetch-vision">获取模型列表</button>
+        </div>
+        <span class="hint"></span>
+      </div>
+
+      <h2>视觉 OCR 独立配置（可选）</h2>
+      <p class="hint section-hint">文本模型和 OCR 可用不同服务商，例如文本用 DeepSeek、OCR 用千问。</p>
+      <div class="form-grid">
+        <label>视觉提供商:</label>
+        <select id="cfg-vision-provider"></select>
+        <span class="hint">留空 = 与文本模型相同</span>
+
+        <label>视觉 API Key:</label>
+        <input type="password" id="cfg-vision-api-key">
+        <span class="hint">留空 = 与文本模型相同</span>
+
+        <label>视觉 Base URL:</label>
+        <input type="text" id="cfg-vision-base-url">
+        <span class="hint">留空使用默认地址</span>
+      </div>
+
+      <h2>识别与回复</h2>
+      <div class="form-grid">
+        <label>OCR 方式:</label>
+        <select id="cfg-ocr-method">
+          <option value="auto">auto</option>
+          <option value="vision">vision</option>
+          <option value="tesseract">tesseract</option>
+        </select>
+        <span class="hint">auto=优先视觉模型, tesseract=本地OCR</span>
+
+        <label>推荐回复数:</label>
+        <input type="number" id="cfg-reply-count" min="1" max="10">
+        <span class="hint"></span>
+
+        <label>回复风格:</label>
+        <select id="cfg-reply-style">
+          <option value="friendly">friendly</option>
+          <option value="professional">professional</option>
+          <option value="humorous">humorous</option>
+          <option value="concise">concise</option>
+          <option value="empathetic">empathetic</option>
+        </select>
+        <span class="hint"></span>
+      </div>
+
+      <button class="btn btn-primary" id="btn-save-settings">保存设置</button>
+    </div>
+  </section>
+
+</main>
+
+<!-- 截屏框选弹层 -->
+<div id="crop-modal" hidden>
+  <div class="crop-toolbar">
+    <span id="crop-info">拖拽框选要识别的区域</span>
+    <button class="btn" id="btn-crop-cancel">取消</button>
+  </div>
+  <div class="crop-stage" id="crop-stage">
+    <img id="crop-image" alt="屏幕截图">
+    <div id="crop-rect" hidden></div>
+  </div>
+</div>
+
+<div id="toast" hidden></div>
+
+<footer id="statusbar">就绪</footer>
+
+<script src="/app.js"></script>
+</body>
+</html>
