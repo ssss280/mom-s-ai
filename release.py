@@ -1,18 +1,24 @@
-"""发版助手（重写版）：以 **git tag 为权威基准**，一条命令完成发版全流程。
+"""发版助手：以 **git tag 为权威基准**，并且**改版本号必须先拿到人工同意**。
 
-为什么要改成"以 tag 为基准"：
+为什么改成"以 tag 为基准"：
 旧版调用 `update_check.status()` 取"远端版本"，而那个检测会依次去读
 version.py → CHANGELOG → releases → tags，**谁先返回就用谁**。
 一旦 tags/releases 落后于 version.py，就会拿到偏低的版本号，
 于是同一个版本号被发两次——这正是之前 CHANGELOG 出现两组同名版本的根源。
 tag 是发布时打的、不可变，用它当基准才稳。
 
+为什么要有 `--approved`（见 AGENTS.md 第一条）：
+版本号是对外承诺，一旦推送到公开仓库就收不回来；这个项目已经因为自动跳号踩过坑。
+所以凡是会**写版本号**的动作（`--apply` / `--release`）都必须带上
+`--approved <版本号>` 作为人工同意凭据，否则直接拒绝执行。
+这是刻意设计的摩擦：逼着先问人。只读的预览（不带这两个参数）不受影响。
+
 用法：
-    py release.py                        # 打印本地/远端(tag)最高版本，以及本次建议的号
-    py release.py --apply                # 只把版本号写进 version.py
-    py release.py --release              # 一键发版：升版本 → 提交 → 打 tag → 推送 → 建 Release
-    py release.py --release --beta       # 发测试版（1.7.0-beta.1，Release 勾 pre-release）
-    py release.py --patch                # 升修订号（1.6.0 → 1.6.1），默认升次版本号
+    py release.py                        # 只读预览：本地/远端(tag)最高版本，以及建议的号
+    py release.py --apply --approved 1.1.1        # 把版本号写进 version.py
+    py release.py --release --approved 1.1.1      # 一键发版：写号 → 提交 → 打 tag → 推送 → 建 Release
+    py release.py --release --beta --approved 1.2.0-beta.1   # 发测试版（Release 勾 pre-release）
+    py release.py --patch                # 建议升修订号（1.6.0 → 1.6.1），默认升次版本号
     py release.py --offline              # 不联网，只用本地 tag 作基准
 
 一键发版依赖：
@@ -95,7 +101,17 @@ def read_local_version() -> str:
     return match.group(1) if match else ""
 
 
-def write_local_version(version: str) -> None:
+def write_local_version(version: str, approved: bool = False) -> None:
+    """把版本号写进 version.py。
+
+    `approved=False` 时**直接拒绝**——这是防"绕过闸门"的最后一道锁：
+    以后不管是谁（人或 AI）新写一段代码来改版本号，忘了带同意凭据就会在这里失败，
+    而不是静默地把版本号改掉。见 AGENTS.md 第一条。
+    """
+    if not approved:
+        raise PermissionError(
+            "改版本号需要人工同意：write_local_version(version, approved=True)。"
+            "请先向用户确认版本号（见 AGENTS.md 第一条）。")
     path = os.path.join(ROOT, VERSION_FILE)
     text = open(path, encoding="utf-8").read()
     new_text, count = re.subn(
@@ -182,10 +198,14 @@ def create_release(version: str, prerelease: bool, notes: str) -> bool:
 # ---------- 主流程 ----------
 
 def main() -> int:
-    parser = argparse.ArgumentParser(description="以 git tag 为基准的发版助手")
-    parser.add_argument("--apply", action="store_true", help="把版本号写进 version.py")
+    parser = argparse.ArgumentParser(
+        description="以 git tag 为基准的发版助手（改版本号需要 --approved 人工同意）")
+    parser.add_argument("--apply", action="store_true",
+                        help="把版本号写进 version.py（必须同时给 --approved）")
     parser.add_argument("--release", action="store_true",
-                        help="一键发版：升版本 → 写 CHANGELOG 模板 → 提交 → 打 tag → 推送 → 建 Release")
+                        help="一键发版：提交 → 打 tag → 推送 → 建 Release（必须同时给 --approved）")
+    parser.add_argument("--approved", metavar="版本号", default="",
+                        help="人工已同意的版本号；改版本号的动作缺它就拒绝执行（见 AGENTS.md）")
     parser.add_argument("--beta", action="store_true", help="发预发布版（1.7.0-beta.1）")
     parser.add_argument("--patch", action="store_true", help="升修订号而不是次版本号")
     parser.add_argument("--offline", action="store_true", help="不联网，只用本地标签作基准")
@@ -226,12 +246,34 @@ def main() -> int:
         print("      确认要发就加 --force。")
         return 2
 
-    if not (args.apply or args.release):
+    writing_version = args.apply or args.release
+    if not writing_version:
         print("\n（加 --apply 只写版本号；加 --release 走完整发版流程）")
+        print("（两者都需要 --approved <版本号>，表示人工已同意——见 AGENTS.md 第一条）")
         return 0
 
-    write_local_version(target)
-    print(f"已写入 {VERSION_FILE}：__version__ = {target!r}")
+    # ===== 人工同意闸门 =====
+    # 版本号是对外承诺，推送到公开仓库就收不回来。缺 --approved 直接拒绝，
+    # 逼着使用者（尤其是 AI 助手）先去问人，而不是自作主张改号。
+    if not args.approved:
+        print("\n" + "!" * 72)
+        print("拒绝执行：改版本号需要人工同意。")
+        print(f"请先向用户确认版本号，然后用：")
+        print(f"    py release.py {'--release' if args.release else '--apply'}"
+              f" --approved {target}")
+        print("\n（规则见 AGENTS.md 第一条；只读预览不需要 --approved）")
+        print("!" * 72)
+        return 4
+    if args.approved.strip() != target:
+        print(f"\n拒绝执行：--approved 给的是 {args.approved!r}，"
+              f"但按标签基准算出的是 {target!r}。")
+        print("两者必须一致——请和用户确认到底要发哪个版本号。")
+        print("（如果你确认就要发 --approved 那个号，请让用户明确同意后，"
+              "用 --force 或先调整标签基准再试）")
+        return 4
+
+    write_local_version(target, approved=True)
+    print(f"已写入 {VERSION_FILE}：__version__ = {target!r}（人工已同意）")
 
     top = changelog_top_version()
     if top != target:

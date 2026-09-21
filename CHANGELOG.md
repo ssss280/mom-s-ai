@@ -3,11 +3,20 @@
 本文件记录 ChatSight 的所有重要变更。
 格式参考 [Keep a Changelog](https://keepachangelog.com/zh-CN/1.1.0/)，版本号遵循[语义化版本](https://semver.org/lang/zh-CN/)。
 
-**两条约定（详见 PLAN.md「更新记录约定」）：**
+> ### 🚫 改版本号前必须先问用户（强制工作流）
+>
+> **不要自己决定版本号。** 改 `version.py`、增删本文件的版本标题、执行
+> `release.py --apply/--release`、打版本标签，**都要先向用户请求并等到明确同意**。
+> 完整规则见 **[AGENTS.md](AGENTS.md)** 第一条；`release.py` 在缺 `--approved <版本号>`
+> 时会直接拒绝执行（退出码 4），底层 `write_local_version()` 也会抛 `PermissionError`。
+
+**三条约定（详见 [AGENTS.md](AGENTS.md) 与 PLAN.md「版本管理约定」）：**
 
 1. 每次代码或文档改动都必须在这里登记一条，没有例外。
-2. **版本号以 GitHub 上的版本为准，提交时取它的下一个**：例如 GitHub 上当前是 1.2.0，本次就提交 1.3.0。
-   用 `py release.py` 可以自动查出该用哪个号，并用 `--apply` 同步写进 `version.py`。
+2. **版本号基准是 git 标签**：`py release.py` 取标签里的最高版本推算下一个号
+   （早期用"远端读到的版本号"当基准，检测顺序会让落后的一方胜出，导致同号重发）。
+3. **改版本号必须先获用户同意**，再用 `py release.py --apply --approved <版本号>`
+   或 `--release --approved <版本号>` 写入；`--approved` 就是"人工已同意"的凭据。
 
 ## 版本编号说明
 
@@ -67,6 +76,19 @@ py release.py --release --beta    # 发测试版（Release 标记为 pre-release
   规则写进 `PLAN.md`。
 - `PLAN.md` 的「更新记录约定」扩写为「版本管理约定」，补上三个概念的区别、
   稳定/测试版区分、发版命令与分支模型。
+- **新增工作流强制规则：改版本号前必须先问用户**（用户要求，作为工作流的一部分固化下来）。
+  为了让**任何 AI 助手**都能识别到，规则写进了这些位置：
+  - **`AGENTS.md`（新建）**：AI 助手入口文件，第一条就是这条规则，含正确的请示话术示例；
+  - `PLAN.md` 顶部醒目引用块 + 「版本管理约定」章节；
+  - `CHANGELOG.md` 头部醒目引用块（并修正了旧文里"以 GitHub 版本为准取下一个"的过时说法——
+    那正是导致同号重发的规则）；
+  - `version.py` 文件头 docstring（要改的就是这个文件，改之前必然看到）；
+  - **`README.md`（新建）**：项目此前没有 README，补上并指向 `AGENTS.md`。
+- **技术上也做了强制（光写文档约束不住 AI）**：`release.py` 新增 `--approved <版本号>` 人工同意凭据，
+  `--apply` / `--release` 缺它会**直接拒绝执行**（退出码 4，打印该用哪条命令）；
+  底层 `write_local_version(version, approved=True)` 在未授权时抛 `PermissionError`，
+  防止以后有人/AI 新写一段代码绕过闸门。只读预览不受影响。
+  实测：4 条拒绝路径全部拦住，`version.py` 未被改动（`test_version_gate.py` 6/6）。
 
 ### 修复（功能验收部分）
 
