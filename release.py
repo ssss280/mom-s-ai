@@ -161,6 +161,11 @@ def push(tag: str = "") -> None:
         print(f"  已推送标签 {tag}")
 
 
+def is_beta_version(version: str) -> bool:
+    """这个版本号是不是预发布版（决定 Release 要不要勾 pre-release）。"""
+    return update_check.is_prerelease(version)
+
+
 def create_release(version: str, prerelease: bool, notes: str) -> bool:
     """用 GitHub API 建 Release；没有 token 就跳过并提示。"""
     token = os.environ.get("GITHUB_TOKEN") or os.environ.get("GH_TOKEN")
@@ -210,14 +215,37 @@ def main() -> int:
     parser.add_argument("--patch", action="store_true", help="升修订号而不是次版本号")
     parser.add_argument("--offline", action="store_true", help="不联网，只用本地标签作基准")
     parser.add_argument("--force", action="store_true", help="允许版本号不比基准高（谨慎）")
+    parser.add_argument("--publish-only", action="store_true",
+                        help="只为**当前已有的**版本建 GitHub Release（不改版本号、不打标签），"
+                             "用于补建历史版本的 Release；不需要 --approved")
     args = parser.parse_args()
 
     logging.basicConfig(level=logging.WARNING)
 
+    # 先读基础信息：两条分支（补建 Release / 正常发版）都要用
+    local = read_local_version()
+
+    # ---- 补建 Release 模式：只发布已存在的版本，不碰版本号 ----
+    # 这条路**不需要** --approved：它不改任何版本号、不打标签，只是给已有标签补一份发布说明。
+    if args.publish_only:
+        version = args.approved or local
+        tag = f"v{version}"
+        tags_now = local_tags(fetch=not args.offline)
+        if tag not in tags_now and not args.force:
+            print(f"拒绝：标签 {tag} 不存在（本地也没有）。")
+            print("  补建 Release 只能针对已存在的标签；要新建版本请用 --release --approved <号>。")
+            return 5
+        section = changelog_section(version)
+        if not section:
+            print(f"提示：CHANGELOG 里没有 [{version}] 段落，Release 说明会是空的。")
+        print(f"为 {tag} 建 Release（prerelease={is_beta_version(version)}）…")
+        ok = create_release(version, prerelease=is_beta_version(version),
+                            notes=section or f"ChatSight {version}")
+        return 0 if ok else 6
+
     tags = local_tags(fetch=not args.offline)
     stable = highest_stable_version(tags)
     overall = highest_version(tags)
-    local = read_local_version()
     print(f"github 标签共 {len(tags)} 个")
     print(f"  最高正式版 : {stable or '（无）'}")
     print(f"  最高版本   : {overall or '（无）'}")
