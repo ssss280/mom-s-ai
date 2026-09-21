@@ -64,6 +64,33 @@ def is_newer(latest: str, current: str) -> bool:
     return a > b
 
 
+# 预发布标记：1.7.0-beta.1 / 1.7.0-rc.2 / 2.0.0-alpha
+PRERELEASE_RE = re.compile(r"-(alpha|beta|rc|pre|dev)", re.I)
+
+
+def is_prerelease(version: str) -> bool:
+    """这个版本号是不是预发布（测试版）。
+
+    为什么必须能识别：实测 `is_newer("1.7.0-beta.1", "1.6.0")` 返回 True，
+    也就是**只要发了测试版，所有稳定版用户都会看到「可更新」并被拽去更新**。
+    有了这个判断，稳定通道就能把它过滤掉。
+    """
+    return bool(PRERELEASE_RE.search(version or ""))
+
+
+def should_notify(latest: str, current: str, channel: str = "stable") -> bool:
+    """按通道判断"该不该提示用户更新"。
+
+    - `stable`（默认）：忽略预发布版。日常用户不该被测试版打扰。
+    - `beta`：预发布版也提示，方便自己/愿意尝鲜的人拿到测试版。
+    """
+    if not is_newer(latest, current):
+        return False
+    if channel == "beta":
+        return True
+    return not is_prerelease(latest)
+
+
 def next_version(remote: str, part: str = "minor") -> str:
     """按「GitHub 上的版本 + 1」算出本次要提交的版本号。
 
@@ -231,6 +258,21 @@ STRATEGIES = (
 )
 
 
+def update_channel() -> str:
+    """当前更新通道：stable（默认，只提示正式版）/ beta（预发布版也提示）。
+
+    从 config.json 读，避免模块之间互相 import。读不到就按 stable 处理——
+    默认更保守：宁可少提示，也不要把测试版推给日常用户。
+    """
+    try:
+        from paths import CONFIG_PATH
+        with open(CONFIG_PATH, "r", encoding="utf-8") as fh:
+            value = (json.load(fh) or {}).get("update_channel", "stable")
+        return "beta" if str(value).strip().lower() == "beta" else "stable"
+    except Exception:
+        return "stable"
+
+
 def _detect(deadline: float) -> dict:
     info = {
         "current": __version__,
@@ -238,6 +280,8 @@ def _detect(deadline: float) -> dict:
         "has_update": False,
         "url": REPO_URL,
         "source": "",
+        "channel": update_channel(),
+        "latest_prerelease": False,
         "error": "",
     }
     found = None
@@ -264,10 +308,16 @@ def _detect(deadline: float) -> dict:
         return info
 
     latest, source, url = found
-    info.update(latest=latest, source=source, url=url,
-                has_update=is_newer(latest, __version__))
-    logger.info(f"更新检测：本地 {__version__} / 远端 {latest}（{source}）→ "
-                f"{'有新版本' if info['has_update'] else '已是最新'}")
+    channel = info["channel"]
+    info.update(
+        latest=latest, source=source, url=url,
+        latest_prerelease=is_prerelease(latest),
+        # 关键：稳定通道**不提示预发布版**，否则一发 beta 所有用户都会被拽去更新
+        has_update=should_notify(latest, __version__, channel),
+    )
+    logger.info(f"更新检测：本地 {__version__} / 远端 {latest}（{source}）"
+                f"通道 {channel}{'，预发布' if info['latest_prerelease'] else ''} → "
+                f"{'有新版本' if info['has_update'] else '已是最新（或按通道不提示）'}")
     return info
 
 

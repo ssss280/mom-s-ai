@@ -57,19 +57,72 @@ ChatSight/
 
 > 路径统一由 `paths.py` 解析（`APP_DIR` 即源码目录）。目录不可写时会自动回退到系统临时目录，保证程序不会因为"写不了日志"而崩溃。
 
-## 更新记录约定
+## 版本管理约定
+
+### 三个概念别混
+
+| 东西 | 作用 | 放什么 |
+| --- | --- | --- |
+| `version.py` 的 `__version__` | 程序当前版本（唯一真相） | `1.1.0` |
+| Git **标签** `v1.1.0` | 不可变快照：这个版本号对应哪次提交 | 打完不再改动 |
+| GitHub **Release** | 给人看的发布：更新说明、入口 | 从标签生成，说明取自 CHANGELOG |
+
+### 版本号规则
+
+- **语义化版本**：`主.次.修订`。
+- **正式版**：`1.2.0`（无后缀）。
+- **测试版**：`1.2.0-beta.1`、`1.2.0-rc.1`（带后缀即预发布）。
+- **基准是 git 标签**：`release.py` 取标签里的最高版本推算下一个号。
+  **不再用"从远端读到的版本号"**——早期就是这么做的，而那个检测会依次读
+  version.py → CHANGELOG → releases → tags，谁先返回用谁，
+  tags/releases 落后时就会拿到偏低的号，于是同一个版本号发两次
+  （之前 CHANGELOG 出现过两组同名版本，根因就在这）。
+- **一次提交/推送 = 一个版本**：未发布的改动合并到同一个版本里登记，不要开出多个号。
+
+### 稳定版 / 测试版怎么区分
+
+- 打标签时用后缀区分；GitHub Release 上把测试版勾成 **pre-release**，
+  这样 `/releases/latest` 永远只指向正式版。
+- 程序侧：配置项 `update_channel`（默认 `stable`）。
+  **稳定通道不提示预发布版**——实测 `is_newer("1.7.0-beta.1", "1.6.0")` 为 True，
+  没有这道闸的话，一发测试版所有普通用户都会被提示更新。
+  想尝鲜的人在设置里切到 `beta`。
+
+### 发版流程
+
+```powershell
+py release.py                     # 看下一个版本号该是多少（以标签为基准）
+py release.py --apply             # 只写进 version.py
+py release.py --release           # 一键：提交 → 打标签 → 推送 → 建 GitHub Release
+py release.py --release --beta    # 发测试版（Release 勾 pre-release）
+```
+
+建 Release 需要 `GITHUB_TOKEN` 环境变量（`repo` 权限）；没设也能打标签推送，
+只是会跳过建 Release 并提示网页链接。
+
+### 分支模型
+
+| 分支 | 用途 | 规则 |
+| --- | --- | --- |
+| `main` | **始终是可发布的稳定版** | 只接受从 `release/*` 合回来的代码 |
+| `dev` | 日常开发 | 平时都推这里 |
+| `release/<版本>` | 准备发某个版本时从 `dev` 切出 | 只修 bug；发完合回 `main` 与 `dev` |
+| `feature/<名字>` | 单个功能（可选） | 做完合回 `dev` |
+
+```powershell
+git switch dev                          # 日常开发
+git switch -c release/1.2 dev           # 准备发 1.2.0
+py release.py --release                 # 发版（打 tag + 建 Release）
+git switch main && git merge release/1.2
+git switch dev && git merge release/1.2
+```
+
+### 记录要求
 
 - **任何代码或文档改动，都必须在 `CHANGELOG.md` 里登记一条**，没有例外。
-- **版本号以 GitHub 仓库上的版本为准，提交新版本时取它的下一个**：
-  例如 GitHub 上当前是 1.2.0，本次就提交 1.3.0（对应 `version.py` 的 `__version__`）。
-  不要凭空往前跳号 —— 本地版本必须 = 远端版本 + 1。
-- **一次提交/推送 = 一个版本**：所有尚未发布的改动合并到同一个版本里登记，不要开出多个本地版本号。
-- 发版三步：
-  1. `py release.py --apply`（自动查出该用的号并写进 `version.py`；`--patch` 升修订号、`--offline` 不联网）
-  2. 在 `CHANGELOG.md` 顶部加/合并一条同名版本记录
-  3. `git add -A && git commit && git push`
-- 格式遵循 [Keep a Changelog](https://keepachangelog.com/zh-CN/1.1.0/)，分类使用 `新增 / 修复 / 变更 / 说明`。
-- 回归脚本会校验「CHANGELOG 顶部版本 == `version.py`」，不一致会直接报 FAIL。
+- 格式遵循 [Keep a Changelog](https://keepachangelog.com/zh-CN/1.1.0/)，
+  分类使用 `新增 / 修复 / 变更 / 说明`。
+- 校验：`CHANGELOG.md` 顶部版本 == `version.py` 的 `__version__`，不一致算 FAIL。
 
 ## 技术选型
 

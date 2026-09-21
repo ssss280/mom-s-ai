@@ -97,46 +97,141 @@ function appendMsg(role, text, isError = false, sources = null) {
   div.textContent = text;
   // 联网搜索的来源要挂在正文后面（顺序不能反，否则会被 textContent 清掉）
   if (sources && sources.length) {
-    const box = document.createElement("div");
-    box.className = "msg-sources";
-
-    const head = document.createElement("div");
-    head.className = "msg-sources-head";
-    head.textContent = "信息来源";
-    box.appendChild(head);
-
-    sources.forEach((s, i) => {
-      const row = document.createElement("div");
-      row.className = "msg-source";
-
-      const a = document.createElement("a");
-      a.href = s.url || "#";
-      a.target = "_blank";
-      a.rel = "noopener";
-      a.title = s.url || "";
-
-      const idx = document.createElement("span");
-      idx.className = "src-index";
-      idx.textContent = `[${i + 1}]`;
-
-      // 明确标出是哪个网站
-      const site = document.createElement("span");
-      site.className = "src-site";
-      site.textContent = s.site || s.url || "";
-
-      const title = document.createElement("span");
-      title.className = "src-title";
-      title.textContent = s.title || s.url || "";
-
-      a.append(idx, site, title);
-      row.appendChild(a);
-      box.appendChild(row);
-    });
-    div.appendChild(box);
+    appendSources(div, sources);
   }
   $("#chat-messages").appendChild(div);
   const area = $("#chat-area");
   area.scrollTop = area.scrollHeight;
+  return div;
+}
+
+function appendSources(div, sources) {
+  const box = document.createElement("div");
+  box.className = "msg-sources";
+
+  const head = document.createElement("div");
+  head.className = "msg-sources-head";
+  head.textContent = "信息来源";
+  box.appendChild(head);
+
+  sources.forEach((s, i) => {
+    const row = document.createElement("div");
+    row.className = "msg-source";
+
+    const a = document.createElement("a");
+    a.href = s.url || "#";
+    a.target = "_blank";
+    a.rel = "noopener";
+    a.title = s.url || "";
+
+    const idx = document.createElement("span");
+    idx.className = "src-index";
+    idx.textContent = `[${i + 1}]`;
+
+    // 明确标出是哪个网站
+    const site = document.createElement("span");
+    site.className = "src-site";
+    site.textContent = s.site || s.url || "";
+
+    const title = document.createElement("span");
+    title.className = "src-title";
+    title.textContent = s.title || s.url || "";
+
+    a.append(idx, site, title);
+    row.appendChild(a);
+    box.appendChild(row);
+  });
+  div.appendChild(box);
+}
+
+// ---------- 打字机效果 ----------
+
+let typewriterActive = false;
+
+async function typewriterMsg(div, text) {
+  typewriterActive = true;
+  const cursor = document.createElement("span");
+  cursor.className = "typing-cursor";
+  div.appendChild(cursor);
+  const area = $("#chat-area");
+  for (let i = 0; i < text.length; i++) {
+    if (!typewriterActive) break;
+    div.insertBefore(document.createTextNode(text[i]), cursor);
+    // 每打几个字就滚动一次，避免长文本卡住滚动
+    if (i % 3 === 0) area.scrollTop = area.scrollHeight;
+    // 标点处稍微停顿，让节奏更像人在打字
+    const ch = text[i];
+    let delay = 18;
+    if (/[，。！？；：、,.!?;:]/.test(ch)) delay = 120;
+    else if (/[\n\r]/.test(ch)) delay = 80;
+    await sleep(delay);
+  }
+  typewriterActive = false;
+  cursor.remove();
+  area.scrollTop = area.scrollHeight;
+}
+
+function skipTypewriter() {
+  typewriterActive = false;
+}
+
+// ---------- 加载动画 ----------
+
+function showLoading() {
+  $("#chat-empty").style.display = "none";
+  const div = document.createElement("div");
+  div.className = "msg ai msg-loading";
+  div.innerHTML = '<span class="dot"></span><span class="dot"></span><span class="dot"></span>';
+  $("#chat-messages").appendChild(div);
+  const area = $("#chat-area");
+  area.scrollTop = area.scrollHeight;
+  return div;
+}
+
+function removeLoading(div) {
+  if (div && div.parentNode) div.remove();
+}
+
+// ---------- 推荐追问 ----------
+
+async function showSuggestions(context) {
+  const box = $("#chat-suggestions");
+  box.innerHTML = "";
+  box.hidden = true;
+  if (!context || !context.trim()) return;
+
+  try {
+    const data = await postJSON("/api/chat/suggest-questions", {
+      messages: state.chat.slice(-6), // 最近几条对话作为上下文
+    });
+    const questions = (data.questions || []).filter((q) => q && q.trim());
+    if (!questions.length) return;
+    box.hidden = false;
+    questions.forEach((q) => {
+      const chip = document.createElement("button");
+      chip.className = "chat-sug-chip";
+      chip.textContent = q.trim();
+      chip.title = "点击直接发送";
+      chip.addEventListener("click", () => {
+        box.innerHTML = "";
+        box.hidden = true;
+        $("#chat-input").value = q.trim();
+        sendChat();
+      });
+      box.appendChild(chip);
+    });
+    const area = $("#chat-area");
+    area.scrollTop = area.scrollHeight;
+  } catch (e) {
+    // 推荐追问失败不打扰用户，静默处理
+    console.warn("推荐追问失败:", e);
+  }
+}
+
+function hideSuggestions() {
+  const box = $("#chat-suggestions");
+  box.innerHTML = "";
+  box.hidden = true;
 }
 
 async function sendChat() {
@@ -148,8 +243,11 @@ async function sendChat() {
   input.value = "";
   state.chat.push({ role: "user", content: text });
   appendMsg("user", text);
+  hideSuggestions();
   setStatus(useSearch ? "正在联网搜索..." : "AI 正在思考...");
   $("#btn-chat-send").disabled = true;
+
+  const loadingDiv = showLoading();
 
   try {
     const data = await postJSON("/api/chat", {
@@ -157,10 +255,25 @@ async function sendChat() {
       search: useSearch,
       session_id: state.chatSessionId || 0,
     });
-    // 后端已把这一问一答存进对话记录，首次对话时会返回新建的会话 id
+    removeLoading(loadingDiv);
+
     if (data.session_id) setChatSession(data.session_id);
     state.chat.push({ role: "assistant", content: data.reply });
-    appendMsg("ai", data.reply, false, data.sources);
+
+    // 先创建消息 div，再用打字机逐字填入，来源追加在打字完成后
+    const msgDiv = document.createElement("div");
+    msgDiv.className = "msg ai";
+    $("#chat-messages").appendChild(msgDiv);
+    const area = $("#chat-area");
+    area.scrollTop = area.scrollHeight;
+
+    await typewriterMsg(msgDiv, data.reply);
+
+    if (data.sources && data.sources.length) {
+      appendSources(msgDiv, data.sources);
+      area.scrollTop = area.scrollHeight;
+    }
+
     refreshHistory();
     if (useSearch && data.search) {
       const count = (data.sources || []).length;
@@ -177,7 +290,11 @@ async function sendChat() {
     } else {
       setStatus("就绪");
     }
+
+    // 回答完成后生成推荐追问
+    showSuggestions(data.reply);
   } catch (e) {
+    removeLoading(loadingDiv);
     // 失败时不要把这条消息留在待发送历史里，否则重试会发出两条连续的 user 消息
     const last = state.chat[state.chat.length - 1];
     if (last && last.role === "user") state.chat.pop();
@@ -724,10 +841,12 @@ function renderHistoryGroup(container, label, sessions) {
 }
 
 function resetNewChat() {
+  skipTypewriter();
   state.chat = [];
   setChatSession(0);
   $("#chat-messages").innerHTML = "";
   $("#chat-empty").style.display = "";
+  hideSuggestions();
 }
 
 function toggleBatchMode() {
@@ -776,6 +895,8 @@ async function batchDelete() {
 }
 
 function loadChatSession(id, messages) {
+  skipTypewriter();
+  hideSuggestions();
   state.chat = messages.map((m) => ({
     role: m.role === "assistant" ? "assistant" : "user",
     content: m.raw_text,
@@ -849,6 +970,7 @@ function collectFormConfig() {
     reply_style: $("#cfg-reply-style").value,
     screenshot_keep: Number($("#cfg-screenshot-keep").value) || 0,
     search_read_pages: $("#cfg-read-pages").checked ? 1 : 0,
+    update_channel: $("#cfg-update-channel").value,
   };
 }
 
@@ -918,6 +1040,8 @@ async function loadSettings() {
   $("#cfg-screenshot-keep").value = c.screenshot_keep ?? 0;
   // 没配置过时默认开启（和后端 config.get("search_read_pages", 1) 保持一致）
   $("#cfg-read-pages").checked = c.search_read_pages === undefined ? true : !!c.search_read_pages;
+  // 更新通道默认 stable（只提示正式版）
+  $("#cfg-update-channel").value = c.update_channel === "beta" ? "beta" : "stable";
 
   refreshModelDatalists();
   $("#cfg-text-model").value = c.text_model || $("#cfg-text-model").value;
@@ -982,16 +1106,27 @@ function renderVersionBadge(info) {
     tag.textContent = "可更新";
     badge.appendChild(tag);
     badge.classList.add("updatable");
-    badge.title = `发现新版本 v${String(info.latest).replace(/^v/i, "")}（当前 v${name}），点击直接下载更新`;
+    const suffix = info.latest_prerelease ? "（预发布版）" : "";
+    badge.title = `发现新版本 v${String(info.latest).replace(/^v/i, "")}${suffix}` +
+      `（当前 v${name}），点击直接下载更新`;
     // 点击**直接下载并覆盖到本地**，不再跳转 GitHub（用户要求）
     badge.onclick = applyLocalUpdate;
   } else {
     // 已是最新 / 连不上 GitHub / 还在检测：只显示版本名称
     badge.classList.remove("updatable");
     badge.onclick = null;
-    badge.title = info && info.error
-      ? `ChatSight v${name}（更新检测：${info.error}）`
-      : `ChatSight v${name}${info && info.pending ? "（正在检测更新…）" : "，已是最新版本"}`;
+    // 稳定通道下若远端有更新的预发布版，如实说明"按通道不提示"，而不是假装已是最新
+    const held = info && info.latest && info.latest_prerelease && !info.has_update;
+    if (held) {
+      badge.title = `ChatSight v${name}（远端有预发布版 v${info.latest}，` +
+        `当前 stable 通道不提示；想尝鲜可在设置里切到 beta）`;
+    } else if (info && info.error) {
+      badge.title = `ChatSight v${name}（更新检测：${info.error}）`;
+    } else if (info && info.pending) {
+      badge.title = `ChatSight v${name}（正在检测更新…）`;
+    } else {
+      badge.title = `ChatSight v${name}（已是最新版本）`;
+    }
   }
   badge.hidden = false;
 }

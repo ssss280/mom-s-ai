@@ -49,6 +49,7 @@
     <div class="chat-area" id="chat-area">
       <div class="chat-empty" id="chat-empty">有什么可以帮你的？</div>
       <div id="chat-messages"></div>
+      <div id="chat-suggestions" hidden></div>
     </div>
 
     <div class="chat-input-wrap">
@@ -189,6 +190,17 @@
         <label>截图保留数量:</label>
         <input type="number" id="cfg-screenshot-keep" min="0" max="100000" step="10">
         <span class="hint">0 = 永久保留（默认）；填正数则只保留最近这么多张，节省磁盘</span>
+      </div>
+
+      <h2>更新</h2>
+      <div class="form-grid">
+        <label>更新通道:</label>
+        <select id="cfg-update-channel">
+          <option value="stable">stable（只提示正式版，推荐）</option>
+          <option value="beta">beta（预发布版也提示，用来尝鲜测试版）</option>
+        </select>
+        <span class="hint">左侧版本徽标显示「可更新」时点一下就会**直接下载覆盖到本地**；
+          beta 通道才会收到带 -beta / -rc 的测试版提示</span>
       </div>
 
       <button class="btn btn-primary" id="btn-save-settings">保存设置</button>

@@ -248,6 +248,76 @@ body {
 .sl-dropped { color: #a12622; }
 .sl-error { color: #a12622; font-size: 12px; margin-top: 4px; }
 
+/* ---------- 加载动画（三个跳动的点）---------- */
+
+.msg-loading {
+  display: inline-flex;
+  gap: 5px;
+  align-items: center;
+  padding: 14px 16px;
+}
+
+.dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--muted);
+  animation: dot-bounce 1.2s infinite ease-in-out;
+}
+.dot:nth-child(2) { animation-delay: 0.15s; }
+.dot:nth-child(3) { animation-delay: 0.3s; }
+
+@keyframes dot-bounce {
+  0%, 60%, 100% { transform: translateY(0); opacity: 0.4; }
+  30% { transform: translateY(-5px); opacity: 1; }
+}
+
+/* ---------- 打字机光标 ---------- */
+
+.typing-cursor {
+  display: inline-block;
+  width: 2px;
+  height: 1em;
+  background: var(--fg);
+  margin-left: 2px;
+  vertical-align: text-bottom;
+  animation: cursor-blink 0.8s step-end infinite;
+}
+
+@keyframes cursor-blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+/* ---------- 推荐追问 ---------- */
+
+#chat-suggestions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 8px 4px 0;
+}
+
+.chat-sug-chip {
+  font-family: inherit;
+  font-size: 13px;
+  color: var(--fg);
+  background: var(--bubble);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: 7px 14px;
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
+}
+.chat-sug-chip:hover {
+  background: var(--hover);
+  border-color: #c0c0c0;
+}
+
 /* ---------- AI 对话 ---------- */
 
 .chat-area {

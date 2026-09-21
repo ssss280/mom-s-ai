@@ -69,6 +69,7 @@ def read_pages_flag(value) -> bool:
 # 配置里这些字段是"枚举/范围"值，写进非法值不会崩但行为会变得莫名其妙，统一收敛
 OCR_METHODS = ("auto", "vision", "tesseract")
 REPLY_STYLES = ("friendly", "professional", "humorous", "concise", "empathetic")
+UPDATE_CHANNELS = ("stable", "beta")   # stable=只提示正式版；beta=预发布版也提示
 REPLY_COUNT_RANGE = (1, 10)         # 推荐回复条数：下限 1（0 会返回空列表），上限 10
 SCREENSHOT_KEEP_RANGE = (0, 10000)  # 0 = 永久保留
 
@@ -91,6 +92,8 @@ def sanitize_config(raw: dict, base: dict = None) -> dict:
     merged["screenshot_keep"] = _coerce_int(merged.get("screenshot_keep"),
                                             *SCREENSHOT_KEEP_RANGE, default=0)
     merged["search_read_pages"] = 1 if read_pages_flag(merged.get("search_read_pages", 1)) else 0
+    merged["update_channel"] = _coerce_choice(merged.get("update_channel"),
+                                              UPDATE_CHANNELS, "stable")
     return merged
 
 
@@ -116,7 +119,7 @@ CONFIG_FIELDS = (
     "api_provider", "api_key", "api_base_url", "text_model",
     "vision_provider", "vision_api_key", "vision_base_url", "vision_model",
     "ocr_method", "reply_count", "reply_style", "screenshot_keep",
-    "search_read_pages",
+    "search_read_pages", "update_channel",
 )
 
 # 每次对话最多带上最近多少条消息，避免上下文无限增长
@@ -384,6 +387,43 @@ def chat():
         return jsonify(payload)
     except Exception as e:
         return err(e)
+
+
+@app.post("/api/chat/suggest-questions")
+def suggest_questions():
+    """根据最近对话生成 3 个推荐追问，供前端展示为可点击的快捷问题。"""
+    try:
+        if not model.is_configured:
+            return jsonify({"questions": []})
+
+        body = request.get_json(force=True)
+        raw = body.get("messages", []) if isinstance(body, dict) else []
+        if not isinstance(raw, list) or not raw:
+            return jsonify({"questions": []})
+
+        messages = [
+            {"role": str(m.get("role") or "user"), "content": str(m.get("content") or "")[:200]}
+            for m in raw
+            if isinstance(m, dict) and str(m.get("content") or "").strip()
+        ][-6:]
+        if not messages:
+            return jsonify({"questions": []})
+
+        prompt = (
+            "根据上面的对话，生成 3 个用户可能会接着问的简短问题。"
+            "要求：每个问题一行，不超过 20 字，用中文，直接列出问题本身，不要编号、不要解释。"
+        )
+        response = model.client.chat.completions.create(
+            model=config.get("text_model", "gpt-4o-mini"),
+            messages=messages + [{"role": "user", "content": prompt}],
+            max_tokens=200,
+            temperature=0.8,
+        )
+        text = (response.choices[0].message.content or "").strip()
+        questions = [q.strip() for q in text.split("\n") if q.strip()][:3]
+        return jsonify({"questions": questions})
+    except Exception:
+        return jsonify({"questions": []})
 
 
 # ---------- 识别（上传 / 截屏 / OCR） ----------

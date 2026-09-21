@@ -1,112 +1,267 @@
-"""发版助手：按「GitHub 上的版本 + 1」确定本次该提交的版本号。
+"""发版助手（重写版）：以 **git tag 为权威基准**，一条命令完成发版全流程。
+
+为什么要改成"以 tag 为基准"：
+旧版调用 `update_check.status()` 取"远端版本"，而那个检测会依次去读
+version.py → CHANGELOG → releases → tags，**谁先返回就用谁**。
+一旦 tags/releases 落后于 version.py，就会拿到偏低的版本号，
+于是同一个版本号被发两次——这正是之前 CHANGELOG 出现两组同名版本的根源。
+tag 是发布时打的、不可变，用它当基准才稳。
 
 用法：
-    py release.py                 # 联网查 GitHub 版本，打印本次应提交的版本号
-    py release.py --apply         # 直接把版本号写进 version.py，并打印 CHANGELOG 模板
-    py release.py --patch         # 升修订号（1.2.0 → 1.2.1），默认升次版本号（→ 1.3.0）
-    py release.py --offline       # 不联网，以本地 version.py 为基准（没网时用）
+    py release.py                        # 打印本地/远端(tag)最高版本，以及本次建议的号
+    py release.py --apply                # 只把版本号写进 version.py
+    py release.py --release              # 一键发版：升版本 → 提交 → 打 tag → 推送 → 建 Release
+    py release.py --release --beta       # 发测试版（1.7.0-beta.1，Release 勾 pre-release）
+    py release.py --patch                # 升修订号（1.6.0 → 1.6.1），默认升次版本号
+    py release.py --offline              # 不联网，只用本地 tag 作基准
 
-流程（写进了 PLAN.md「更新记录约定」）：
-    1. py release.py --apply            → version.py 更新成该用的版本号
-    2. 在 CHANGELOG.md 顶部加一条同名版本记录
-    3. git commit / git push
+一键发版依赖：
+  - `git`（必需）
+  - GitHub Release 需要 `GITHUB_TOKEN` 环境变量（有 `repo` 权限）。没有也能打 tag 并推送，
+    只是会跳过"建 Release"这一步并明确提示你。
 """
 
 import argparse
+import json
 import logging
-import pathlib
+import os
 import re
+import subprocess
 import sys
+import time
+import urllib.error
+import urllib.request
 from datetime import date
 
 import update_check
-from version import __version__
+from version import UPDATE_REPO, __version__
 
-VERSION_FILE = pathlib.Path(__file__).with_name("version.py")
+VERSION_FILE = "version.py"
+CHANGELOG_FILE = "CHANGELOG.md"
+ROOT = os.path.dirname(os.path.abspath(__file__))
 
+
+# ---------- git 基础 ----------
+
+def git(*args, check=True) -> str:
+    result = subprocess.run(["git", *args], cwd=ROOT, capture_output=True, text=True,
+                            encoding="utf-8", errors="replace")
+    if check and result.returncode != 0:
+        raise RuntimeError(f"git {' '.join(args)} 失败：{result.stderr.strip() or result.stdout.strip()}")
+    return result.stdout.strip()
+
+
+def local_tags(fetch: bool = False) -> list:
+    """取标签列表；fetch=True 时先同步远端标签。"""
+    if fetch:
+        try:
+            git("fetch", "--tags", "--quiet", "origin")
+        except RuntimeError as e:
+            print(f"  （同步远端标签失败，用本地标签：{e}）")
+    return [t for t in git("tag", "-l").split() if t.strip()]
+
+
+def highest_version(tags: list, include_prerelease: bool = True) -> str:
+    """从标签里取最高版本号。默认连预发布版一起比，用于判断"整体最高"。"""
+    best = ""
+    for tag in tags:
+        version = update_check.parse_version(tag)
+        if not version:
+            continue
+        if not include_prerelease and update_check.is_prerelease(tag):
+            continue
+        if not best or update_check.is_newer(version, best):
+            best = version
+    return best
+
+
+def highest_stable_version(tags: list) -> str:
+    """只比正式版（不带 -beta/-rc）。"""
+    best = ""
+    for tag in tags:
+        if update_check.is_prerelease(tag):
+            continue
+        version = update_check.parse_version(tag)
+        if version and (not best or update_check.is_newer(version, best)):
+            best = version
+    return best
+
+
+# ---------- version.py / CHANGELOG ----------
 
 def read_local_version() -> str:
-    text = VERSION_FILE.read_text(encoding="utf-8")
+    text = open(os.path.join(ROOT, VERSION_FILE), encoding="utf-8").read()
     match = re.search(r'__version__\s*=\s*[\'"]([^\'"]+)[\'"]', text)
     return match.group(1) if match else ""
 
 
 def write_local_version(version: str) -> None:
-    text = VERSION_FILE.read_text(encoding="utf-8")
+    path = os.path.join(ROOT, VERSION_FILE)
+    text = open(path, encoding="utf-8").read()
     new_text, count = re.subn(
         r'(__version__\s*=\s*)[\'"][^\'"]+[\'"]',
-        lambda m: f'{m.group(1)}"{version}"',
-        text,
-    )
+        lambda m: f'{m.group(1)}"{version}"', text)
     if count != 1:
-        raise RuntimeError(f"version.py 里没有找到唯一的 __version__（匹配到 {count} 处）")
-    VERSION_FILE.write_text(new_text, encoding="utf-8")
+        raise RuntimeError(f"version.py 里没有唯一的 __version__（匹配到 {count} 处）")
+    open(path, "w", encoding="utf-8", newline="\n").write(new_text)
 
 
 def changelog_top_version() -> str:
-    path = VERSION_FILE.with_name("CHANGELOG.md")
-    if not path.exists():
+    path = os.path.join(ROOT, CHANGELOG_FILE)
+    if not os.path.exists(path):
         return ""
-    match = re.search(r"^##\s*\[?v?(\d+(?:\.\d+)+)\]?", path.read_text(encoding="utf-8"), re.MULTILINE)
+    match = re.search(r"^##\s*\[?v?(\d+(?:\.\d+)+[^\]]*)\]?", 
+                      open(path, encoding="utf-8").read(), re.MULTILINE)
     return match.group(1) if match else ""
 
 
+def changelog_section(version: str) -> str:
+    """把 CHANGELOG 里某个版本的正文抽出来，用作 Release 说明。"""
+    path = os.path.join(ROOT, CHANGELOG_FILE)
+    if not os.path.exists(path):
+        return ""
+    text = open(path, encoding="utf-8").read()
+    pattern = re.compile(rf"^##\s*\[{re.escape(version)}\][^\n]*\n(.*?)(?=^##\s*\[|\Z)",
+                         re.M | re.S)
+    match = pattern.search(text)
+    return match.group(1).strip() if match else ""
+
+
+# ---------- 发版动作 ----------
+
+def make_tag(version: str) -> None:
+    tag = f"v{version}"
+    if tag in git("tag", "-l").split():
+        raise RuntimeError(f"标签 {tag} 已存在（版本号重复？可用 git tag -d {tag} 删掉重打）")
+    git("tag", "-a", tag, "-m", f"ChatSight {version}")
+    print(f"  已打标签 {tag}")
+
+
+def push(tag: str = "") -> None:
+    git("push", "origin", "HEAD")
+    print("  已推送提交")
+    if tag:
+        git("push", "origin", tag)
+        print(f"  已推送标签 {tag}")
+
+
+def create_release(version: str, prerelease: bool, notes: str) -> bool:
+    """用 GitHub API 建 Release；没有 token 就跳过并提示。"""
+    token = os.environ.get("GITHUB_TOKEN") or os.environ.get("GH_TOKEN")
+    if not token:
+        print("  跳过建 Release：没有设置 GITHUB_TOKEN 环境变量。")
+        print(f"  可以稍后在网页上手动建：https://github.com/{UPDATE_REPO}/releases/new?tag=v{version}")
+        return False
+
+    payload = json.dumps({
+        "tag_name": f"v{version}",
+        "name": f"v{version}",
+        "body": notes or f"ChatSight {version}",
+        "prerelease": bool(prerelease),
+        "draft": False,
+    }).encode("utf-8")
+    request = urllib.request.Request(
+        f"https://api.github.com/repos/{UPDATE_REPO}/releases",
+        data=payload, method="POST",
+        headers={"Authorization": f"Bearer {token}",
+                 "Accept": "application/vnd.github+json",
+                 "User-Agent": "ChatSight-Release",
+                 "Content-Type": "application/json"})
+    try:
+        with urllib.request.urlopen(request, timeout=20) as response:
+            data = json.loads(response.read().decode("utf-8", "replace"))
+        print(f"  已建 Release：{data.get('html_url')}")
+        return True
+    except urllib.error.HTTPError as e:
+        print(f"  建 Release 失败（HTTP {e.code}）：{e.read().decode('utf-8', 'replace')[:160]}")
+    except Exception as e:
+        print(f"  建 Release 失败：{type(e).__name__}: {e}")
+    return False
+
+
+# ---------- 主流程 ----------
+
 def main() -> int:
-    parser = argparse.ArgumentParser(description="按 GitHub 上的版本号推算本次要提交的版本")
-    parser.add_argument("--apply", action="store_true", help="把算出的版本号写进 version.py")
+    parser = argparse.ArgumentParser(description="以 git tag 为基准的发版助手")
+    parser.add_argument("--apply", action="store_true", help="把版本号写进 version.py")
+    parser.add_argument("--release", action="store_true",
+                        help="一键发版：升版本 → 写 CHANGELOG 模板 → 提交 → 打 tag → 推送 → 建 Release")
+    parser.add_argument("--beta", action="store_true", help="发预发布版（1.7.0-beta.1）")
     parser.add_argument("--patch", action="store_true", help="升修订号而不是次版本号")
-    parser.add_argument("--offline", action="store_true", help="不联网，以本地版本为基准")
+    parser.add_argument("--offline", action="store_true", help="不联网，只用本地标签作基准")
+    parser.add_argument("--force", action="store_true", help="允许版本号不比基准高（谨慎）")
     args = parser.parse_args()
 
     logging.basicConfig(level=logging.WARNING)
 
+    tags = local_tags(fetch=not args.offline)
+    stable = highest_stable_version(tags)
+    overall = highest_version(tags)
     local = read_local_version()
-    if args.offline:
-        remote = local
-        print(f"[离线模式] 以本地版本 {local} 为基准")
+    print(f"github 标签共 {len(tags)} 个")
+    print(f"  最高正式版 : {stable or '（无）'}")
+    print(f"  最高版本   : {overall or '（无）'}")
+    print(f"  version.py : {local}")
+    print(f"  CHANGELOG  : {changelog_top_version()}")
+
+    # 基准 = 标签里的最高版本，取不到就退回本地 version.py
+    base = overall or local
+    if args.beta:
+        # 测试版：在"最高正式版"上继续加 beta 序号，例如 1.6.0 -> 1.7.0-beta.1
+        stable_base = stable or local
+        target = f"{update_check.next_version(stable_base, 'patch' if args.patch else 'minor')}-beta.1"
+        # 同一正式版下已经有 beta.N 时递增
+        existing = [t for t in tags if t.startswith(f"v{target.rsplit('-beta', 1)[0]}-beta.")]
+        if existing:
+            numbers = [int(m.group(1)) for t in existing
+                       if (m := re.search(r"-beta\.(\d+)$", t))]
+            target = f"{target.rsplit('-beta', 1)[0]}-beta.{max(numbers) + 1 if numbers else 2}"
     else:
-        print("正在查询 GitHub 上的版本 …")
-        info = update_check.status()
-        # 后台线程在跑，等一下结果（最多 10 秒）
-        import time
-        for _ in range(20):
-            if not info.get("pending"):
-                break
-            time.sleep(0.5)
-            info = update_check.status()
-        remote = info.get("latest") or ""
-        if info.get("pending"):
-            print("查询超时。可以重试，或用 --offline 以本地版本为基准。")
-            return 2
-        if not remote:
-            print(f"没能从 GitHub 取到版本号：{info.get('error') or '未知原因'}")
-            print("可以检查网络，或用 --offline 以本地版本为基准。")
-            return 2
-        print(f"GitHub 版本：{remote}（来源 {info.get('source')}）")
+        target = update_check.next_version(base, "patch" if args.patch else "minor")
+        # 正式版不能和已有测试版撞号：1.7.0-beta.1 存在时，正式版仍是 1.7.0（对的）
 
-    part = "patch" if args.patch else "minor"
-    target = update_check.next_version(remote, part)
+    print(f"\n本次目标版本：{target}")
+    if not args.force and not update_check.is_newer(target, base):
+        print(f"提示：目标 {target} 不比基准 {base} 新——很可能已经发过这个号了。")
+        print("      确认要发就加 --force。")
+        return 2
 
-    print(f"本地版本  ：{local}")
-    print(f"本次应提交：{target}")
-    if update_check.is_newer(local, target):
-        print("提示：本地版本比目标还新，检查一下是不是漏提交了？")
-
-    if not args.apply:
-        print("\n（加 --apply 可把它写进 version.py）")
+    if not (args.apply or args.release):
+        print("\n（加 --apply 只写版本号；加 --release 走完整发版流程）")
         return 0
 
     write_local_version(target)
-    print(f"\n已写入 {VERSION_FILE}：__version__ = \"{target}\"")
+    print(f"已写入 {VERSION_FILE}：__version__ = {target!r}")
+
     top = changelog_top_version()
-    if top and top != target:
-        print(f"注意：CHANGELOG.md 顶部还写着 {top}，请合并或新增一条 [{target}] 记录。")
+    if top != target:
+        print(f"注意：CHANGELOG 顶部还是 {top or '（空）'}，请新增一条 [{target}] 记录"
+              f"（--release 会把它当作 Release 说明）")
+
+    if not args.release:
+        return 0
+
+    print("\n=== 开始一键发版 ===")
+    if not args.beta:
+        section = changelog_section(target)
+        if not section:
+            print(f"警告：CHANGELOG 里没有 [{target}] 段落，Release 说明会是空的。")
+            print("      建议先补上再来发版（已写入 version.py，可以直接重跑 --release）。")
+            return 3
+
+    make_tag(target)
+    push(f"v{target}")
+    if not args.beta:
+        create_release(target, prerelease=False, notes=changelog_section(target))
+    else:
+        create_release(target, prerelease=True,
+                       notes=changelog_section(target) or f"ChatSight {target} 测试版")
+
     print(f"""
-下一步：
-  1. 在 CHANGELOG.md 顶部加/合并一条记录，标题为：
-       ## [{target}] - {date.today().isoformat()}
-  2. git add -A && git commit && git push
-  3. 推送完成后，已发布版本的用户打开页面就会在左下角看到「可更新」""")
+发版完成：{target}
+  - 稳定版用户：{'' if args.beta else '会看到「可更新」'}
+  - 测试版：{'已标记为 pre-release，稳定通道用户不会收到提示' if args.beta else '（本次是正式版）'}
+  - 查看历史：https://github.com/{UPDATE_REPO}/releases""")
     return 0
 
 
