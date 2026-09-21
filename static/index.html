@@ -23,7 +23,11 @@
   <div id="history-list"></div>
   <div class="history-actions">
     <button class="btn btn-mini" id="btn-history-refresh">刷新</button>
-    <button class="btn btn-mini" id="btn-history-delete">删除</button>
+    <button class="btn btn-mini" id="btn-batch-toggle">批量管理</button>
+  </div>
+  <div class="history-batch" hidden id="history-batch">
+    <button class="btn btn-mini" id="btn-batch-select-all">全选</button>
+    <button class="btn btn-mini" id="btn-batch-delete" disabled>批量删除</button>
   </div>
 
   <nav class="nav nav-bottom">
@@ -53,6 +57,8 @@
         <label class="chk" title="开启后先联网搜索，再让 AI 依据搜索结果回答并标注来源">
           <input type="checkbox" id="chat-search"> 联网搜索
         </label>
+        <button class="btn btn-ghost" id="btn-search-log"
+                title="查看后台联网搜索记录：每次搜了什么词、打了哪些源、留下了什么">搜索记录</button>
         <button class="btn btn-primary" id="btn-chat-send">发送</button>
       </div>
     </div>
@@ -203,6 +209,23 @@
     </div>
     <p class="win-hint">窗口被浏览器挡住也能截到；点一行即可截取该窗口，然后拖拽框选聊天区域。</p>
     <div id="window-list"></div>
+  </div>
+</div>
+
+<!-- 后台联网搜索记录（排查用） -->
+<div id="searchlog-modal" hidden>
+  <div class="win-box">
+    <div class="win-head">
+      <span>联网搜索记录</span>
+      <div class="win-head-actions">
+        <button class="btn btn-mini" id="btn-searchlog-only">只看有问题</button>
+        <button class="btn btn-mini" id="btn-searchlog-refresh">刷新</button>
+        <button class="btn btn-mini" id="btn-searchlog-clear">清空</button>
+        <button class="btn btn-mini" id="btn-searchlog-close">关闭</button>
+      </div>
+    </div>
+    <p class="win-hint" id="searchlog-hint"></p>
+    <div id="searchlog-list"></div>
   </div>
 </div>
 

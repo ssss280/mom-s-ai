@@ -1,0 +1,95 @@
+{
+  "metrics": {
+    "cases": 25,
+    "no_result_rate": 0.0,
+    "low_relevance_rate": 0.0,
+    "thin_result_rate": 0.04,
+    "hit_rate_strict": 0.96,
+    "hit_rate_loose": 0.96,
+    "mean_term_coverage": 0.973,
+    "domain_hit_rate": 0.471,
+    "avg_results": 5.72,
+    "avg_good_results": 5.28,
+    "thin_after_fix_rate": 0.04,
+    "tier1_rate": 0.68,
+    "tier2_rate": 0.32,
+    "distinct_domains": 91,
+    "top1_hit_rate": 1,
+    "latency_p50": 0.86,
+    "latency_p90": 2.13,
+    "latency_max": 2.4,
+    "over_budget_rate": 0.0,
+    "link_checked": 40,
+    "link_alive_rate": 0.875,
+    "link_dead_count": 3,
+    "link_unknown_count": 2,
+    "page_fetch_success_rate": 0.96,
+    "engine_share": {
+      "bing_news": 14,
+      "duckduckgo": 8,
+      "bing_cn": 3
+    },
+    "score_keyword_consistency": 0.682,
+    "engine_health": {
+      "bing_cn": {
+        "ok": 23,
+        "blocked": 0,
+        "error": 0,
+        "empty": 0,
+        "found": 227,
+        "avg_ms": 293,
+        "last": "22:17:13"
+      },
+      "bing_news": {
+        "ok": 20,
+        "blocked": 0,
+        "error": 0,
+        "empty": 3,
+        "found": 111,
+        "avg_ms": 761,
+        "last": "22:17:14"
+      },
+      "wikipedia": {
+        "ok": 5,
+        "blocked": 0,
+        "error": 0,
+        "empty": 3,
+        "found": 21,
+        "avg_ms": 1169,
+        "last": "22:17:12"
+      },
+      "duckduckgo": {
+        "ok": 8,
+        "blocked": 0,
+        "error": 0,
+        "empty": 0,
+        "found": 80,
+        "avg_ms": 1273,
+        "last": "22:17:12"
+      },
+      "bing_web": {
+        "ok": 2,
+        "blocked": 0,
+        "error": 0,
+        "empty": 0,
+        "found": 20,
+        "avg_ms": 820,
+        "last": "22:17:01"
+      }
+    }
+  },
+  "scores": {
+    "total": 95.1,
+    "parts": {
+      "命中正确性": 33.6,
+      "非空率": 20.0,
+      "链接有效性": 13.1,
+      "正文可读": 9.6,
+      "延迟": 10.0,
+      "引擎均衡": 8.8
+    }
+  },
+  "run": "03-final-verify",
+  "seed": 20260101,
+  "cases": 25
+}

@@ -1,0 +1,191 @@
+[
+  {
+    "url": "http://www.shandong.gov.cn/col/col99081/index.html",
+    "status": 200,
+    "kind": "text/html",
+    "error": "",
+    "ms": 55
+  },
+  {
+    "url": "https://bajiu.cn/ditu/",
+    "status": 200,
+    "kind": "text/html",
+    "error": "",
+    "ms": 138
+  },
+  {
+    "url": "https://chatgpt.com/",
+    "status": 0,
+    "kind": "",
+    "error": "URLError",
+    "ms": 5006
+  },
+  {
+    "url": "https://chatgpt.com/features",
+    "status": 0,
+    "kind": "",
+    "error": "URLError",
+    "ms": 5007
+  },
+  {
+    "url": "https://cn.ubuntu.com/download",
+    "status": 200,
+    "kind": "text/html; charset=utf-8",
+    "error": "",
+    "ms": 1359
+  },
+  {
+    "url": "https://deepseek.net/zh",
+    "status": 200,
+    "kind": "text/html; charset=UTF-8",
+    "error": "",
+    "ms": 2387
+  },
+  {
+    "url": "https://en.wikipedia.org/wiki/ChatGPT",
+    "status": 200,
+    "kind": "text/html; charset=UTF-8",
+    "error": "",
+    "ms": 430
+  },
+  {
+    "url": "https://forecast.weather.com.cn/town/weathern/101010100.shtml",
+    "status": 200,
+    "kind": "text/html",
+    "error": "",
+    "ms": 551
+  },
+  {
+    "url": "https://hzfw.12306.cn/zgzfw/resources/web/ypcx.html",
+    "status": 200,
+    "kind": "text/html;charset=UTF-8",
+    "error": "",
+    "ms": 158
+  },
+  {
+    "url": "https://openai.com/index/chatgpt/",
+    "status": 0,
+    "kind": "",
+    "error": "URLError",
+    "ms": 5008
+  },
+  {
+    "url": "https://openai.com/zh-Hans-CN/index/start-using-chatgpt-instantly/",
+    "status": 0,
+    "kind": "",
+    "error": "URLError",
+    "ms": 5005
+  },
+  {
+    "url": "https://platform.deepseek.com/api_keys",
+    "status": 200,
+    "kind": "text/html; charset=utf-8",
+    "error": "",
+    "ms": 163
+  },
+  {
+    "url": "https://rust-lang.org/",
+    "status": 200,
+    "kind": "text/html; charset=utf-8",
+    "error": "",
+    "ms": 486
+  },
+  {
+    "url": "https://rust-lang.org/zh-CN/",
+    "status": 200,
+    "kind": "text/html; charset=utf-8",
+    "error": "",
+    "ms": 487
+  },
+  {
+    "url": "https://ubuntu.com/download",
+    "status": 200,
+    "kind": "text/html; charset=utf-8",
+    "error": "",
+    "ms": 960
+  },
+  {
+    "url": "https://ubuntu.com/download/desktop",
+    "status": 200,
+    "kind": "text/html; charset=utf-8",
+    "error": "",
+    "ms": 1382
+  },
+  {
+    "url": "https://www.12306.cn/en/index.html",
+    "status": 200,
+    "kind": "text/html",
+    "error": "",
+    "ms": 53
+  },
+  {
+    "url": "https://www.12306.cn/index/",
+    "status": 200,
+    "kind": "text/html",
+    "error": "",
+    "ms": 43
+  },
+  {
+    "url": "https://www.deepseek.com/en/platform/",
+    "status": 200,
+    "kind": "text/html",
+    "error": "",
+    "ms": 110
+  },
+  {
+    "url": "https://www.runoob.com/python3/python3-tutorial.html",
+    "status": 200,
+    "kind": "text/html; charset=UTF-8",
+    "error": "",
+    "ms": 125
+  },
+  {
+    "url": "https://www.runoob.com/rust/rust-tutorial.html",
+    "status": 200,
+    "kind": "text/html; charset=UTF-8",
+    "error": "",
+    "ms": 65
+  },
+  {
+    "url": "https://www.tianqi.com/beijing/",
+    "status": 200,
+    "kind": "text/html; charset=utf-8",
+    "error": "",
+    "ms": 108
+  },
+  {
+    "url": "https://www.tianqi.com/beijing/today/",
+    "status": 200,
+    "kind": "text/html; charset=utf-8",
+    "error": "",
+    "ms": 227
+  },
+  {
+    "url": "https://www.weather.com.cn/weather/101010100.shtml",
+    "status": 200,
+    "kind": "text/html",
+    "error": "",
+    "ms": 91
+  },
+  {
+    "url": "https://www.weather.com.cn/weathern/101010100.shtml",
+    "status": 200,
+    "kind": "text/html",
+    "error": "",
+    "ms": 86
+  },
+  {
+    "url": "https://zh.wikipedia.org/wiki/ChatGPT",
+    "status": 200,
+    "kind": "text/html; charset=UTF-8",
+    "error": "",
+    "ms": 1659
+  },
+  {
+    "url": "https://zivatar.org/zh/beijing/",
+    "status": 200,
+    "kind": "text/html",
+    "error": "",
+    "ms": 1040
+  }
+]

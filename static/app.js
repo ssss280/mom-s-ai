@@ -48,6 +48,17 @@ function showError(e) {
   toast(msg);
 }
 
+// 搜索结果里的标题/摘要是**外部网页内容**，直接拼进 innerHTML 会被注入脚本。
+// 任何来自搜索结果的字符串都必须先过这个函数。
+function escapeHtml(value) {
+  return String(value == null ? "" : value)
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#39;");
+}
+
 function setSession(id) {
   state.sessionId = id;
   localStorage.setItem("chatsight_session", String(id));
@@ -71,7 +82,10 @@ function showPage(key) {
 }
 
 document.querySelectorAll(".nav-item").forEach((el) =>
-  el.addEventListener("click", () => showPage(el.dataset.page))
+  el.addEventListener("click", () => {
+    if (el.dataset.page === "chat") resetNewChat();
+    showPage(el.dataset.page);
+  })
 );
 
 // ---------- AI 对话 ----------
@@ -383,6 +397,93 @@ $("#btn-window").addEventListener("click", openWindowPicker);
 $("#btn-window-refresh").addEventListener("click", openWindowPicker);
 $("#btn-window-cancel").addEventListener("click", closeWindowPicker);
 
+// ---------- 联网搜索记录（排查"搜出来为什么不对"）----------
+// 数据来自 /api/search/log：每次搜索用了哪个查询词、打了哪些源、每个源什么状态、
+// 留下了什么、丢了什么。比翻 data/app.log 直观得多。
+let searchLogOnlyProblems = false;
+
+function searchLogStateLabel(state) {
+  return {
+    ok: "正常", empty: "无结果", blocked: "被拦", error: "失败",
+    cooling: "冷却跳过", cached: "缓存命中",
+  }[state] || state;
+}
+
+function renderSearchLog(data) {
+  const list = $("#searchlog-list");
+  const records = data.records || [];
+  const shown = searchLogOnlyProblems
+    ? records.filter(r => !r.returned || r.status === "low_relevance")
+    : records;
+  $("#searchlog-hint").textContent =
+    `共 ${data.count} 条记录（${data.problem_count} 条有问题）` +
+    `${searchLogOnlyProblems ? `，当前只显示 ${shown.length} 条有问题的` : ""} · ` +
+    `文件：${data.path}`;
+  if (!shown.length) {
+    list.innerHTML = `<p class="win-hint">暂无记录。开启「联网搜索」发一条消息后这里就有内容了。</p>`;
+    return;
+  }
+  list.innerHTML = shown.map(record => {
+    const engines = (record.engines || []).map(e =>
+      `<span class="sl-chip ${e.state}">${escapeHtml(e.engine)}=${searchLogStateLabel(e.state)}` +
+      `${e.found ? ` ${e.found}条` : ""}${e.ms ? ` ${e.ms}ms` : ""}</span>`).join("");
+    const results = (record.results || []).map(item =>
+      `<li><b>${item.score.toFixed(2)}</b> [${escapeHtml(item.engine)}] ` +
+      `<span class="sl-site">${escapeHtml(item.site)}</span> ${escapeHtml(item.title)}</li>`).join("");
+    const dropped = (record.dropped || []).slice(0, 3).map(item =>
+      `<li class="sl-dropped">分低丢弃 ${item.score.toFixed(2)} ${escapeHtml(item.title)}</li>`).join("");
+    const overflow = (record.overflow || []).slice(0, 3).map(item =>
+      `<li class="sl-overflow">超出名额 ${item.score.toFixed(2)} ${escapeHtml(item.title)}</li>`).join("");
+    const bad = !record.returned || record.status === "low_relevance";
+    return `<div class="sl-item ${bad ? "sl-bad" : ""}">
+      <div class="sl-head">
+        <span class="sl-time">${escapeHtml(record.time || "")}</span>
+        <span class="sl-query">${escapeHtml(record.query || "")}</span>
+        <span class="sl-meta">→ 「${escapeHtml(record.query_used || record.query || "")}」 ` +
+        `返回 ${record.returned} 条 · ${record.elapsed}s</span>
+      </div>
+      <div class="sl-engines">${engines || "(未调用引擎)"}</div>
+      ${record.error ? `<div class="sl-error">${escapeHtml(record.error)}</div>` : ""}
+      ${results ? `<ul class="sl-results">${results}</ul>` : ""}
+      ${dropped || overflow ? `<ul class="sl-extra">${dropped}${overflow}</ul>` : ""}
+    </div>`;
+  }).join("");
+}
+
+async function openSearchLog() {
+  $("#searchlog-modal").hidden = false;
+  try {
+    const response = await fetch(`/api/search/log?limit=30`);
+    const data = await response.json();
+    if (data.error) { toast(data.error); return; }
+    renderSearchLog(data);
+  } catch (e) {
+    toast("读取搜索记录失败：" + e.message);
+  }
+}
+
+function closeSearchLog() {
+  $("#searchlog-modal").hidden = true;
+}
+
+$("#btn-search-log").addEventListener("click", openSearchLog);
+$("#btn-searchlog-close").addEventListener("click", closeSearchLog);
+$("#btn-searchlog-refresh").addEventListener("click", openSearchLog);
+$("#btn-searchlog-only").addEventListener("click", () => {
+  searchLogOnlyProblems = !searchLogOnlyProblems;
+  $("#btn-searchlog-only").textContent = searchLogOnlyProblems ? "看全部" : "只看有问题";
+  openSearchLog();
+});
+$("#btn-searchlog-clear").addEventListener("click", async () => {
+  try {
+    await fetch("/api/search/log/clear", { method: "POST" });
+    toast("已清空搜索记录");
+    openSearchLog();
+  } catch (e) {
+    toast("清空失败：" + e.message);
+  }
+});
+
 const crop = { dragging: false, x1: 0, y1: 0, x2: 0, y2: 0 };
 
 function openCropModal(data) {
@@ -576,14 +677,99 @@ async function refreshHistory() {
       list.appendChild(empty);
       return;
     }
+    const groups = { chat: [], recognition: [] };
     data.sessions.forEach((s) => {
-      const item = document.createElement("div");
-      item.className = "history-item" + (s.id === state.selectedSession ? " selected" : "");
-      item.textContent = s.title;
-      item.title = `${s.title}\n${(s.updated_at || "").slice(0, 16)}`;
-      item.addEventListener("click", () => loadSession(s.id));
-      list.appendChild(item);
+      const type = s.type === "chat" ? "chat" : "recognition";
+      groups[type].push(s);
     });
+    renderHistoryGroup(list, "对话记录", groups.chat);
+    renderHistoryGroup(list, "识别记录", groups.recognition);
+  } catch (e) {
+    showError(e);
+  }
+}
+
+function renderHistoryGroup(container, label, sessions) {
+  if (!sessions.length) return;
+  const header = document.createElement("div");
+  header.className = "history-group-header";
+  header.textContent = label;
+  container.appendChild(header);
+  sessions.forEach((s) => {
+    const row = document.createElement("div");
+    row.className = "history-row";
+    row.dataset.id = s.id;
+
+    const cb = document.createElement("input");
+    cb.type = "checkbox";
+    cb.className = "history-check";
+    cb.addEventListener("change", updateBatchCount);
+
+    const item = document.createElement("div");
+    item.className = "history-item" + (s.id === state.selectedSession ? " selected" : "");
+    item.textContent = s.title;
+    item.title = `${s.title}\n${(s.updated_at || "").slice(0, 16)}`;
+    item.addEventListener("click", () => {
+      if (state.batchMode) {
+        cb.checked = !cb.checked;
+        updateBatchCount();
+      } else {
+        loadSession(s.id);
+      }
+    });
+
+    row.append(cb, item);
+    container.appendChild(row);
+  });
+}
+
+function resetNewChat() {
+  state.chat = [];
+  setChatSession(0);
+  $("#chat-messages").innerHTML = "";
+  $("#chat-empty").style.display = "";
+}
+
+function toggleBatchMode() {
+  state.batchMode = !state.batchMode;
+  document.getElementById("history-list").classList.toggle("batch-mode", state.batchMode);
+  $("#history-batch").hidden = !state.batchMode;
+  $("#btn-batch-select-all").textContent = "全选";
+  updateBatchCount();
+}
+
+function selectAllBatch() {
+  const checks = document.querySelectorAll(".history-check");
+  const allChecked = [...checks].every((c) => c.checked);
+  checks.forEach((c) => (c.checked = !allChecked));
+  $("#btn-batch-select-all").textContent = allChecked ? "全选" : "取消全选";
+  updateBatchCount();
+}
+
+function updateBatchCount() {
+  const count = document.querySelectorAll(".history-check:checked").length;
+  $("#btn-batch-delete").textContent = count ? `删除 (${count})` : "批量删除";
+  $("#btn-batch-delete").disabled = count === 0;
+}
+
+async function batchDelete() {
+  const ids = [...document.querySelectorAll(".history-check:checked")]
+    .map((cb) => Number(cb.closest(".history-row").dataset.id));
+  if (!ids.length) return;
+  if (!confirm(`确定要删除选中的 ${ids.length} 条记录吗？`)) return;
+  try {
+    await postJSON("/api/sessions/batch-delete", { ids });
+    if (ids.includes(state.sessionId)) setSession(0);
+    if (ids.includes(state.chatSessionId)) {
+      setChatSession(0);
+      resetNewChat();
+    }
+    if (ids.includes(state.selectedSession)) state.selectedSession = null;
+    state.batchMode = false;
+    document.getElementById("history-list").classList.remove("batch-mode");
+    $("#history-batch").hidden = true;
+    await refreshHistory();
+    setStatus(`已删除 ${ids.length} 条记录`);
   } catch (e) {
     showError(e);
   }
@@ -600,21 +786,6 @@ function loadChatSession(id, messages) {
   state.chat.forEach((m) => appendMsg(m.role === "assistant" ? "ai" : "user", m.content));
   showPage("chat");
   setStatus(`已加载对话记录，共 ${messages.length} 条消息`);
-}
-
-async function restoreChatSession() {
-  // 刷新页面后把上次的对话接回来；记录被删掉了就当作新对话
-  if (!state.chatSessionId) return;
-  try {
-    const data = await api(`/api/sessions/${state.chatSessionId}`);
-    if (!data.messages.length) {
-      setChatSession(0);
-      return;
-    }
-    loadChatSession(state.chatSessionId, data.messages);
-  } catch (e) {
-    setChatSession(0);
-  }
 }
 
 async function loadSession(id) {
@@ -657,25 +828,9 @@ async function loadSession(id) {
 }
 
 $("#btn-history-refresh").addEventListener("click", refreshHistory);
-
-$("#btn-history-delete").addEventListener("click", async () => {
-  if (!state.selectedSession) {
-    toast("请先在左侧选择一个会话");
-    return;
-  }
-  if (!confirm("确定要删除此会话记录吗？")) return;
-  const id = state.selectedSession;
-  try {
-    await api(`/api/sessions/${id}`, { method: "DELETE" });
-    if (state.sessionId === id) setSession(0);
-    if (state.chatSessionId === id) setChatSession(0);
-    state.selectedSession = null;
-    await refreshHistory();
-    setStatus("会话已删除");
-  } catch (e) {
-    showError(e);
-  }
-});
+$("#btn-batch-toggle").addEventListener("click", toggleBatchMode);
+$("#btn-batch-select-all").addEventListener("click", selectAllBatch);
+$("#btn-batch-delete").addEventListener("click", batchDelete);
 
 // ---------- 设置 ----------
 
@@ -827,8 +982,9 @@ function renderVersionBadge(info) {
     tag.textContent = "可更新";
     badge.appendChild(tag);
     badge.classList.add("updatable");
-    badge.title = `发现新版本 v${String(info.latest).replace(/^v/i, "")}（当前 v${name}），点击查看`;
-    badge.onclick = () => window.open(info.url || "", "_blank", "noopener");
+    badge.title = `发现新版本 v${String(info.latest).replace(/^v/i, "")}（当前 v${name}），点击直接下载更新`;
+    // 点击**直接下载并覆盖到本地**，不再跳转 GitHub（用户要求）
+    badge.onclick = applyLocalUpdate;
   } else {
     // 已是最新 / 连不上 GitHub / 还在检测：只显示版本名称
     badge.classList.remove("updatable");
@@ -854,13 +1010,52 @@ async function checkUpdate(attempt = 0) {
   }
 }
 
+// 本地内建更新：把 GitHub 上的文件下载回本地覆盖，不跳浏览器。
+// 后端会拒绝"远端比本地旧"的降级覆盖，并把原因返回（HTTP 409），这里如实显示。
+async function applyLocalUpdate() {
+  const badge = $("#version-badge");
+  const previous = badge ? badge.textContent : "";
+  if (badge) { badge.textContent = "正在下载更新…"; badge.onclick = null; }
+  toast("正在从 GitHub 下载更新…");
+  try {
+    const response = await fetch("/api/update/apply", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({}),
+    });
+    const result = await response.json();
+    if (result.blocked === "downgrade") {
+      toast("远端版本比本地旧，已拒绝覆盖（避免降级）");
+      alert("没有下载覆盖：\n\n" + (result.error || "远端版本比本地旧"));
+    } else if (result.ok) {
+      const added = (result.add || []).length;
+      const overwritten = (result.overwrite || []).length;
+      alert(
+        `更新完成：新增 ${added} 个文件、覆盖 ${overwritten} 个文件。\n` +
+        `远端版本：${result.remote_version}（本地原为 ${result.local_version}）\n` +
+        (result.backup ? `被覆盖的文件已备份到：\n${result.backup}\n` : "") +
+        `\n请重启程序（关掉窗口重新运行 启动.bat）让新代码生效。`
+      );
+      toast("更新完成，请重启程序");
+    } else {
+      toast("更新失败：" + (result.error || "未知原因"));
+      alert("更新失败：\n\n" + (result.error || "未知原因"));
+    }
+  } catch (e) {
+    toast("更新失败：" + e.message);
+    alert("更新失败：" + e.message);
+  } finally {
+    if (badge && previous) badge.textContent = previous;
+    checkUpdate();
+  }
+}
+
 // ---------- 启动 ----------
 
 (async function init() {
   try {
     await loadSettings();
     await refreshHistory();
-    await restoreChatSession();
   } catch (e) {
     showError(e);
   }

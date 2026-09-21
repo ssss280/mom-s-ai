@@ -1,0 +1,90 @@
+{
+  "current(现行)": {
+    "auc": 0.985,
+    "pos_mean": 0.641,
+    "neg_mean": 0.065,
+    "best": {
+      "t": 0.2,
+      "precision": 0.984,
+      "recall": 0.96,
+      "f1": 0.972
+    },
+    "at_0.30": {
+      "precision": 0.991,
+      "recall": 0.905,
+      "f1": 0.946
+    },
+    "at_0.20": {
+      "precision": 0.984,
+      "recall": 0.96,
+      "f1": 0.972
+    },
+    "pos_pass_0.30": 0.905
+  },
+  "idf_pool": {
+    "auc": 0.977,
+    "pos_mean": 0.511,
+    "neg_mean": 0.047,
+    "best": {
+      "t": 0.15,
+      "precision": 0.973,
+      "recall": 0.873,
+      "f1": 0.921
+    },
+    "at_0.30": {
+      "precision": 0.987,
+      "recall": 0.611,
+      "f1": 0.755
+    },
+    "at_0.20": {
+      "precision": 0.99,
+      "recall": 0.786,
+      "f1": 0.876
+    },
+    "pos_pass_0.30": 0.611
+  },
+  "plain_coverage": {
+    "auc": 0.976,
+    "pos_mean": 0.683,
+    "neg_mean": 0.108,
+    "best": {
+      "t": 0.26,
+      "precision": 0.975,
+      "recall": 0.929,
+      "f1": 0.951
+    },
+    "at_0.30": {
+      "precision": 0.975,
+      "recall": 0.921,
+      "f1": 0.947
+    },
+    "at_0.20": {
+      "precision": 0.847,
+      "recall": 0.968,
+      "f1": 0.904
+    },
+    "pos_pass_0.30": 0.921
+  },
+  "weighted_entity": {
+    "auc": 0.927,
+    "pos_mean": 0.57,
+    "neg_mean": 0.13,
+    "best": {
+      "t": 0.19,
+      "precision": 0.873,
+      "recall": 0.984,
+      "f1": 0.925
+    },
+    "at_0.30": {
+      "precision": 0.856,
+      "recall": 0.802,
+      "f1": 0.828
+    },
+    "at_0.20": {
+      "precision": 0.873,
+      "recall": 0.984,
+      "f1": 0.925
+    },
+    "pos_pass_0.30": 0.802
+  }
+}

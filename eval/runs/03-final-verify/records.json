@@ -1,0 +1,3118 @@
+[
+  {
+    "id": "geo-hongkong-mtr",
+    "category": "fact",
+    "question": "香港地铁东铁线经过哪些站？",
+    "history": [],
+    "query": "香港地铁东铁线经过哪些站",
+    "query_used": "香港地铁东铁线经过哪些站",
+    "expected_terms": "东铁线|East Rail;站|罗湖|落马洲|金钟|红磡;港铁|MTR",
+    "expected_domains": [
+      "mtr.com.hk"
+    ],
+    "wrong_premise": false,
+    "retrieved": 6,
+    "good_count": 3,
+    "weak_count": 3,
+    "engines": [
+      "bing_cn",
+      "bing_news"
+    ],
+    "tier_score": 2,
+    "engine": "bing_news",
+    "low_relevance": false,
+    "error": "",
+    "latency": 0.98,
+    "snippet_grade": {
+      "hit": 3,
+      "total": 3,
+      "detail": [
+        [
+          "东铁线"
+        ],
+        [
+          "站",
+          "金钟",
+          "红磡"
+        ],
+        [
+          "港铁"
+        ]
+      ]
+    },
+    "full_grade": {
+      "hit": 3,
+      "total": 3,
+      "detail": [
+        [
+          "东铁线"
+        ],
+        [
+          "站",
+          "罗湖",
+          "金钟",
+          "红磡"
+        ],
+        [
+          "港铁"
+        ]
+      ]
+    },
+    "domain_hit": false,
+    "hosts": [
+      "zaobao.com.sg",
+      "news.qq.com",
+      "zaobao.com.sg",
+      "baike.baidu.com",
+      "baike.baidu.com",
+      "immd.gov.hk"
+    ],
+    "pages_fetched": 3,
+    "page_chars": 2335,
+    "results": [
+      {
+        "rank": 1,
+        "title": "港铁东铁线过海段通车",
+        "url": "https://www.zaobao.com.sg/news/china/story20220516-1273077",
+        "site": "zaobao.com.sg",
+        "score": 0.494,
+        "engine": "bing_news",
+        "snippet": "香港铁路有限公司（港铁）东铁线过海段昨天正式通车，是香港第四条过海铁路，贯通新界东北、九龙中及香港岛。港铁东铁线新建了会展站，该站邻近香港会议展览中心，并连接原有的红磡站和金钟站，形成过海段，横跨维多利亚港，将铁路服务带入湾仔商贸 ..."
+      },
+      {
+        "rank": 2,
+        "title": "东铁线站点+1！香港市民盼早日通车",
+        "url": "https://news.qq.com/rain/a/20260712A09KAG00",
+        "site": "news.qq.com",
+        "score": 0.383,
+        "engine": "bing_news",
+        "snippet": "香港特区政府日前公布港铁白石角车站综合发展项目的最新进展。 据介绍，新车站将坐落于香港教育大学运动中心与香港科学园之间，并建行人天桥，横跨吐露港公路，最快3分钟可步行至科学园及附近社区，兼顾逾4.4万名居民及上班族的出行需求。 新车站距离 ..."
+      },
+      {
+        "rank": 3,
+        "title": "林郑出席东铁线过海段通车仪式 体验一程过海",
+        "url": "https://www.zaobao.com.sg/realtime/china/story20220514-1272573",
+        "site": "zaobao.com.sg",
+        "score": 0.367,
+        "engine": "bing_news",
+        "snippet": "东铁线过海段明天（15日）通车，港铁今早（14日）在会展站举行庆祝典礼。香港特首林郑月娥与嘉宾们乘搭东铁列车由红磡站过海到会展站，率先体验一程过海，之后从会展站再乘坐东铁列车到金钟站，体验这条全长六公里的新建铁路。 据香港政府新闻处官网 ..."
+      },
+      {
+        "rank": 4,
+        "title": "香港特别行政区_百度百科",
+        "url": "https://baike.baidu.com/item/%E9%A6%99%E6%B8%AF%E7%89%B9%E5%88%AB%E8%A1%8C%E6%94%BF%E5%8C%BA/24510970",
+        "site": "baike.baidu.com",
+        "score": 0.188,
+        "engine": "bing_cn",
+        "snippet": "香港自古以来就是中国的领土，1842~1997年曾受英国殖民统治。 二战以后，香港经济和社会迅速发展，不仅跻身“亚洲四小龙”行列， …"
+      },
+      {
+        "rank": 5,
+        "title": "香港十八区_百度百科",
+        "url": "https://baike.baidu.com/item/%E9%A6%99%E6%B8%AF%E5%8D%81%E5%85%AB%E5%8C%BA/7265721",
+        "site": "baike.baidu.com",
+        "score": 0.188,
+        "engine": "bing_cn",
+        "snippet": "香港十八区是中国香港的基层行政区划体系，由香港岛的4个区（中西区、东区、南区、湾仔区）、九龙半岛的5个区（九龙城区、观 …"
+      },
+      {
+        "rank": 6,
+        "title": "主页 | 入境事务处",
+        "url": "https://www.immd.gov.hk/hks/index.html",
+        "site": "immd.gov.hk",
+        "score": 0.171,
+        "engine": "bing_cn",
+        "snippet": "4 天之前 · 入境事务处已参与通讯事务管理局办公室推出的「短讯发送人登记制」 出生登记电子服务 人才入境计划 协助在外香港居民 …"
+      }
+    ]
+  },
+  {
+    "id": "entity-tiangong",
+    "category": "entity",
+    "question": "天宫空间站现在有几个舱段？",
+    "history": [],
+    "query": "天宫空间站现在有几个舱段",
+    "query_used": "天宫空间站现在有几个舱段",
+    "expected_terms": "天宫;空间站;舱|问天|梦天|天和|三舱",
+    "expected_domains": [
+      "cnsa.gov.cn",
+      "gov.cn"
+    ],
+    "wrong_premise": false,
+    "retrieved": 6,
+    "good_count": 6,
+    "weak_count": 0,
+    "engines": [
+      "bing_news"
+    ],
+    "tier_score": 2,
+    "engine": "bing_news",
+    "low_relevance": false,
+    "error": "",
+    "latency": 0.58,
+    "snippet_grade": {
+      "hit": 3,
+      "total": 3,
+      "detail": [
+        [
+          "天宫"
+        ],
+        [
+          "空间站"
+        ],
+        [
+          "舱",
+          "天和"
+        ]
+      ]
+    },
+    "full_grade": {
+      "hit": 3,
+      "total": 3,
+      "detail": [
+        [
+          "天宫"
+        ],
+        [
+          "空间站"
+        ],
+        [
+          "舱",
+          "问天",
+          "天和"
+        ]
+      ]
+    },
+    "domain_hit": false,
+    "hosts": [
+      "news.ifeng.com",
+      "msn.cn",
+      "yangtse.com",
+      "zaobao.com.sg",
+      "sc.people.com.cn",
+      "focus.scol.com.cn"
+    ],
+    "pages_fetched": 2,
+    "page_chars": 3576,
+    "results": [
+      {
+        "rank": 1,
+        "title": "中国将架设巡天望远镜 视场角是哈勃三百多倍(图)",
+        "url": "https://news.ifeng.com/c/7fdtjTjlpiy",
+        "site": "news.ifeng.com",
+        "score": 0.455,
+        "engine": "bing_news",
+        "snippet": "中国空间站三个舱段均为20吨级；有两类机械臂，人机配合可实现空间站建造维修 全国政协委员、中国载人航天工程总设计师周建平8日接受采访，披露了2020年前后建成的中国空间站和今明两年将实施的天宫二号空间实验室的任务。 未来空间站选拔航天员 更青睐 ..."
+      },
+      {
+        "rank": 2,
+        "title": "中国天宫空间站可支持3名航天员长期驻留，资金投入约733亿元",
+        "url": "https://www.msn.cn/zh-cn/%E7%A7%91%E5%AD%A6/%E5%A4%A9%E6%96%87%E5%AD%A6/%E4%B8%AD%E5%9B%BD%E5%A4%A9%E5%AE%AB%E7%A9%BA%E9%97%B4%E7%AB%99%E5%8F%AF%E6%94%AF%E6%8C%813%E5%90%8D%E8%88%AA%E5%A4%A9%E5%91%98%E9%95%BF%E6%9C%9F%E9%A9%BB%E7%95%99-%E8%B5%84%E9%87%91%E6%8A%95%E5%85%A5%E7%BA%A6733%E4%BA%BF%E5%85%83/ar-AA2bt0QU",
+        "site": "msn.cn",
+        "score": 0.418,
+        "engine": "bing_news",
+        "snippet": "中国空间站\"天宫\"作为国家太空实验室，自2021年4月天和核心舱发射入轨以来，已逐步建立起完整的在轨运行体系与科学实验平台。截至2026年9月3日，空间站正由中国航天员朱杨柱、张志远和黎家盈组成的神舟二十三号乘组值守，他们于2026年5月25日进驻空间站，与神舟二十一号乘组完成第八次\"太空会师\"。天宫空间站目前可支持3名航天员长期驻留，乘组轮换期间可短暂容纳 ..."
+      },
+      {
+        "rank": 3,
+        "title": "面对面丨舷窗裂纹、极限出舱 他们直面考验书写中国航天新篇章",
+        "url": "https://www.yangtse.com/news/yw/202609/t20260914_392417.html",
+        "site": "yangtse.com",
+        "score": 0.364,
+        "engine": "bing_news",
+        "snippet": "浩瀚天宫，接力不息。此刻，神舟二十三号航天员乘组接替神舟二十一号航天员乘组驻守中国空间站，正在有序推进各项在轨任务。就在不久前，完成210天太空驻留的神舟二十一号航天员乘组受到褒奖：张陆获颁“二级航天功勋奖章”，首次飞天的武飞、张洪章被授予“英雄航天员”荣誉称号并获颁“三级航天功勋奖章”。在轨期间，神舟二十一号乘组经历和见证了我国载人航天工程史上首次太空应急行动。他们返回时乘坐的飞船正是此前应急发"
+      },
+      {
+        "rank": 4,
+        "title": "“天宫”升级计划：中国打造“太空母港” 挑战国际空间站",
+        "url": "https://www.zaobao.com.sg/news/china/story20231005-1439962",
+        "site": "zaobao.com.sg",
+        "score": 0.314,
+        "engine": "bing_news",
+        "snippet": "（北京/巴库综合讯）中国推出替代国际空间站方案，计划将中国空间站“天宫”太空舱数量扩大一倍。 综合路透社、美国太空新闻网报道，中国空间技术研究院（CAST）研究员张峤星期三（10月4日）在阿塞拜疆首都巴库举行的第74届国际宇航大会（IAC）上说 ..."
+      },
+      {
+        "rank": 5,
+        "title": "中国空间站预留了舱段级国际合作资源",
+        "url": "https://sc.people.com.cn/n2/2022/0308/c345460-35164488.html",
+        "site": "sc.people.com.cn",
+        "score": 0.314,
+        "engine": "bing_news",
+        "snippet": "全国政协委员、中国载人航天工程副总设计师杨利伟近日在接受媒体采访时表示，普通人进驻中国空间站不是技术问题，主要看需求，此外，已有国家提出航天员联合飞行申请，中国也在工程上预留了国际合作资源，小到试验，大到舱段级合作，中国载人航天对 ..."
+      },
+      {
+        "rank": 6,
+        "title": "“天宫课堂·港澳专场”，有什么不一样？",
+        "url": "https://focus.scol.com.cn/zgsz/202609/83319139.html",
+        "site": "focus.scol.com.cn",
+        "score": 0.286,
+        "engine": "bing_news",
+        "snippet": "从2021年12月的第一课，到今天“天宫课堂·港澳专场”开讲，不到5年时间，中国空间站从“在轨组装建造”走到“长期有人驻留”，从“关键技术验证”走向“常态化运营”。如果把历次天宫课堂连成一条线，你会发现，每一课的“不一样”背后，藏着的正是中国空间站一年一个样的硬核成长。"
+      }
+    ]
+  },
+  {
+    "id": "trend-lightfair-2026",
+    "category": "trend",
+    "question": "2026年有哪些照明展会值得参加？",
+    "history": [],
+    "query": "2026年有哪些照明展会值得参加",
+    "query_used": "2026年有哪些照明展会值得参加",
+    "expected_terms": "照明|灯饰|灯具;展会|展览|博览会;2026",
+    "expected_domains": [],
+    "wrong_premise": false,
+    "retrieved": 6,
+    "good_count": 6,
+    "weak_count": 0,
+    "engines": [
+      "duckduckgo"
+    ],
+    "tier_score": 1,
+    "engine": "duckduckgo",
+    "low_relevance": false,
+    "error": "",
+    "latency": 2.4,
+    "snippet_grade": {
+      "hit": 3,
+      "total": 3,
+      "detail": [
+        [
+          "照明"
+        ],
+        [
+          "展会",
+          "展览",
+          "博览会"
+        ],
+        [
+          "2026"
+        ]
+      ]
+    },
+    "full_grade": {
+      "hit": 3,
+      "total": 3,
+      "detail": [
+        [
+          "照明",
+          "灯饰"
+        ],
+        [
+          "展会",
+          "展览",
+          "博览会"
+        ],
+        [
+          "2026"
+        ]
+      ]
+    },
+    "domain_hit": null,
+    "hosts": [
+      "zhihu.com",
+      "fanxstar.com",
+      "osfair.com",
+      "qufair.com",
+      "jufair.com",
+      "haozhanhui.com"
+    ],
+    "pages_fetched": 1,
+    "page_chars": 2000,
+    "results": [
+      {
+        "rank": 1,
+        "title": "2026 年有哪些值得参加的国际科技展会？ - 知乎",
+        "url": "https://www.zhihu.com/question/1971581210577864012",
+        "site": "zhihu.com",
+        "score": 0.89,
+        "engine": "duckduckgo",
+        "snippet": "2026尼日利亚国际照明展览会 Nigeria International Lighting Expo 展览时间 2026年9月16-18日 展览地点 尼日利亚·拉各斯 西非顶级会展场馆——地标中心 (Landmark Centre) 组织单位 万盛展览 // 中盛国际商务 (中山)有限公司"
+      },
+      {
+        "rank": 2,
+        "title": "2026年你不可错过的五大全球照明展 - fanxstar.com",
+        "url": "https://www.fanxstar.com/zh-CN/blog/top-5-global-lighting-fairs-you-must-visit-in-2026/",
+        "site": "fanxstar.com",
+        "score": 0.745,
+        "engine": "duckduckgo",
+        "snippet": "2026年，对欧洲B2B买家而言，最重要的照明展会是哪个？ 如果我已经去过香港，还值得参加GILE吗？ 我应该提前多久报名参加这些展会？ 在评估照明展的参展商时，我应该关注哪些认证？"
+      },
+      {
+        "rank": 3,
+        "title": "2026年照明,Led国际展会排期与海外参展指南 - 出海展览",
+        "url": "https://osfair.com/industries/led-lighting/2026",
+        "site": "osfair.com",
+        "score": 0.645,
+        "engine": "duckduckgo",
+        "snippet": "2026年照明,LED有哪些海外展会值得关注？ 可重点关注德国法兰克福照明及建筑电气展览会、中东迪拜电力能源展、德国杜塞尔多夫零售业展览会、巴西圣保罗照明展览会、印尼雅加达照明展览会，并结合企业产品类别、目标市场和客户类型筛选适合参展的项目。 2026年照明,LED企业适合去哪些国家参展 ..."
+      },
+      {
+        "rank": 4,
+        "title": "2026年LED照明展会列表-去展网 - qufair.com",
+        "url": "https://www.qufair.com/fl/97-0-2026/",
+        "site": "qufair.com",
+        "score": 0.46,
+        "engine": "duckduckgo",
+        "snippet": "为您提供最新2026年照明,LED展会排期表,照明,LED展会信息,照明,LED展会时间,照明,LED展会门票,照明,LED展会推广,去展网专注打造一站式展会网络服务平台"
+      },
+      {
+        "rank": 5,
+        "title": "中国照明展会_2026年中国照明展会时间表_排期表_展会一览表-聚展",
+        "url": "https://www.jufair.com/i-lighting-led/n-cn/",
+        "site": "jufair.com",
+        "score": 0.46,
+        "engine": "duckduckgo",
+        "snippet": "聚展网为您提供2026年中国照明展会的详尽时间表和排期，让您轻松掌握所有即将举办的照明展会动态。我们还提供门票预订、展位预订、展会会刊获取以及展商名录查询等会展服务，让您参展体验顺畅无忧。"
+      },
+      {
+        "rank": 6,
+        "title": "2026年照明展会信息_2026年照明展览计划-好展会信息网",
+        "url": "https://www.haozhanhui.com/zhanlanjihua/2026_%E7%85%A7%E6%98%8E_c_1.html",
+        "site": "haozhanhui.com",
+        "score": 0.46,
+        "engine": "duckduckgo",
+        "snippet": "2026-04-10 【光电技术】 【成都】 TILE2026西部（成都）照明博览会 2026-04-24 【光电技术】 【沈阳】 2026第27届东北国际照明展览会 2026-03-26 【光电技术】 【扬州】 2026第十四届中国扬州户外照明展览会"
+      }
+    ]
+  },
+  {
+    "id": "longtail-obscure",
+    "category": "longtail",
+    "question": "烟台市芝罘区政务服务中心上班时间",
+    "history": [],
+    "query": "烟台市芝罘区政务服务中心上班时间",
+    "query_used": "烟台市芝罘区政务服务中心上班时间",
+    "expected_terms": "烟台|芝罘;政务|服务|大厅;时间|上班|工作日|上午|下午",
+    "expected_domains": [],
+    "wrong_premise": false,
+    "retrieved": 6,
+    "good_count": 6,
+    "weak_count": 0,
+    "engines": [
+      "bing_cn",
+      "bing_news"
+    ],
+    "tier_score": 2,
+    "engine": "bing_news",
+    "low_relevance": false,
+    "error": "",
+    "latency": 0.76,
+    "snippet_grade": {
+      "hit": 3,
+      "total": 3,
+      "detail": [
+        [
+          "烟台",
+          "芝罘"
+        ],
+        [
+          "政务",
+          "服务",
+          "大厅"
+        ],
+        [
+          "下午"
+        ]
+      ]
+    },
+    "full_grade": {
+      "hit": 3,
+      "total": 3,
+      "detail": [
+        [
+          "烟台",
+          "芝罘"
+        ],
+        [
+          "政务",
+          "服务",
+          "大厅"
+        ],
+        [
+          "时间",
+          "下午"
+        ]
+      ]
+    },
+    "domain_hit": null,
+    "hosts": [
+      "jiaodong.net",
+      "jiaodong.net",
+      "news.shm.com.cn",
+      "zhifu.gov.cn",
+      "shandong.gov.cn",
+      "whlyj.yantai.gov.cn"
+    ],
+    "pages_fetched": 3,
+    "page_chars": 5344,
+    "results": [
+      {
+        "rank": 1,
+        "title": "芝罘区政务服务中心办事大厅升级改造",
+        "url": "https://www.jiaodong.net/news/system/2020/06/30/014061580.shtml",
+        "site": "jiaodong.net",
+        "score": 0.813,
+        "engine": "bing_news",
+        "snippet": "胶东在线6月30日讯(通讯员 董士杰) 7月1日起，烟台市芝罘区政务服务中心办事大厅将正式开始升级改造。改造完成后，芝罘区政务服务环境不仅在硬件设施上实现质的提升，软件服务上也将实现办事流程优化，进一步提升政务服务效能，方便企业、群众办事，为 ..."
+      },
+      {
+        "rank": 2,
+        "title": "烟台市芝罘区跨省政务通办“套餐”全新上线",
+        "url": "https://www.jiaodong.net/news/system/2022/03/25/014288793.shtml",
+        "site": "jiaodong.net",
+        "score": 0.66,
+        "engine": "bing_news",
+        "snippet": "胶东在线3月25日讯(记者 王向荣 通讯员 陈怡炜)烟台市芝罘区政务服务跨省事项“套餐办”全新上线，实现了政务服务异地打包办。 首批30项“套餐办”事项清单来了 在前期“跨省通办”合作基础上，芝罘区行政审批服务局不断深化合作关系，在各合作县(市、区 ..."
+      },
+      {
+        "rank": 3,
+        "title": "芝罘区依托政务服务中心批复成立全市首个企业服务中心",
+        "url": "https://news.shm.com.cn/2026-01/24/content_5472093.htm",
+        "site": "news.shm.com.cn",
+        "score": 0.537,
+        "engine": "bing_news",
+        "snippet": "芝罘区依托政务服务中心批复成立全市首个企业服务中心，将每月7日、17日、27日设立为企业服务日—— “芝企之家”成为企业“得力帮办” 水母网讯（YMG全媒体记者 钟嘉琳）1月21日下午，芝罘区举办企业服务中心专题新闻发布会。记者在会上获悉，芝罘区 ..."
+      },
+      {
+        "rank": 4,
+        "title": "烟台市芝罘区人民政府",
+        "url": "https://www.zhifu.gov.cn/",
+        "site": "zhifu.gov.cn",
+        "score": 0.443,
+        "engine": "bing_cn",
+        "snippet": "2026年9月10日 · 烟台市政府网站 市发展改革委 市教育局 市科技局 市工业和信息化局 市民政局 市公安局 市司法局 市财政局 市人力 …"
+      },
+      {
+        "rank": 5,
+        "title": "山东省人民政府 烟台市",
+        "url": "http://www.shandong.gov.cn/col/col99081/index.html",
+        "site": "shandong.gov.cn",
+        "score": 0.347,
+        "engine": "bing_cn",
+        "snippet": "2024年1月17日 · 山东省烟台市人民政府官方网站，提供政务信息、政策解读和服务指南等内容。[END]> <|ipynb_marker|> END OF …"
+      },
+      {
+        "rank": 6,
+        "title": "Yantai - 烟台市文化和旅游局",
+        "url": "https://whlyj.yantai.gov.cn/",
+        "site": "whlyj.yantai.gov.cn",
+        "score": 0.28,
+        "engine": "bing_cn",
+        "snippet": "3 天之前 · 烟台中心区再添两处亲水打卡地 2026-09-18 烟台市划定9个重点停车组团实施精准治理 破解滨海一线停车难题 2026-09-18 …"
+      }
+    ]
+  },
+  {
+    "id": "geo-china-railway-12306",
+    "category": "howto",
+    "question": "12306 候补购票怎么用？",
+    "history": [],
+    "query": "12306 候补购票怎么用",
+    "query_used": "12306 候补购票怎么用",
+    "expected_terms": "候补;12306;购票|下单|兑现|车票",
+    "expected_domains": [
+      "12306.cn"
+    ],
+    "wrong_premise": false,
+    "retrieved": 2,
+    "good_count": 2,
+    "weak_count": 0,
+    "engines": [
+      "bing_news"
+    ],
+    "tier_score": 2,
+    "engine": "bing_news",
+    "low_relevance": false,
+    "error": "",
+    "latency": 0.64,
+    "snippet_grade": {
+      "hit": 3,
+      "total": 3,
+      "detail": [
+        [
+          "候补"
+        ],
+        [
+          "12306"
+        ],
+        [
+          "购票",
+          "兑现"
+        ]
+      ]
+    },
+    "full_grade": {
+      "hit": 3,
+      "total": 3,
+      "detail": [
+        [
+          "候补"
+        ],
+        [
+          "12306"
+        ],
+        [
+          "购票",
+          "兑现",
+          "车票"
+        ]
+      ]
+    },
+    "domain_hit": false,
+    "hosts": [
+      "finance.sina.com.cn",
+      "hb.ifeng.com"
+    ],
+    "pages_fetched": 2,
+    "page_chars": 4000,
+    "results": [
+      {
+        "rank": 1,
+        "title": "如何提高候补购票兑现成功率？看铁路12306怎么说",
+        "url": "https://finance.sina.com.cn/roll/2026-05-03/doc-inhwrsvc0619248.shtml",
+        "site": "finance.sina.com.cn",
+        "score": 0.92,
+        "engine": "bing_news",
+        "snippet": "当车次无票时，很多人会使用候补购票的功能。那么如何提高候补购票的兑现成功率？听听铁路12306怎么说。 铁路12306有关负责人表示，候补购票是一项免费服务，在票款之外不收取任何手续费。铁路12306按照购票人提交的候补订单生效的时间顺序，由系统自动 ..."
+      },
+      {
+        "rank": 2,
+        "title": "开售即“秒光”、候补如何“更成功”……铁路12306回应候补购票热点",
+        "url": "https://hb.ifeng.com/c/8sjp0PagGYr",
+        "site": "hb.ifeng.com",
+        "score": 0.92,
+        "engine": "bing_news",
+        "snippet": "新华社北京4月29日电 题：开售即“秒光”、候补如何“更成功”……铁路12306回应候补购票热点 新华社记者樊曦 临近“五一 ..."
+      }
+    ]
+  },
+  {
+    "id": "price-deepseek-api",
+    "category": "price",
+    "question": "DeepSeek API 现在什么价格？",
+    "history": [],
+    "query": "DeepSeek API 现在什么价格",
+    "query_used": "DeepSeek API 现在什么价格",
+    "expected_terms": "DeepSeek;价格|定价|pricing|元|美元|token;输入|输出|百万",
+    "expected_domains": [
+      "deepseek.com",
+      "platform.deepseek.com"
+    ],
+    "wrong_premise": false,
+    "retrieved": 6,
+    "good_count": 6,
+    "weak_count": 0,
+    "engines": [
+      "bing_cn",
+      "bing_news"
+    ],
+    "tier_score": 2,
+    "engine": "bing_news",
+    "low_relevance": false,
+    "error": "",
+    "latency": 0.78,
+    "snippet_grade": {
+      "hit": 3,
+      "total": 3,
+      "detail": [
+        [
+          "deepseek"
+        ],
+        [
+          "价格",
+          "定价",
+          "元",
+          "token"
+        ],
+        [
+          "输入",
+          "百万"
+        ]
+      ]
+    },
+    "full_grade": {
+      "hit": 3,
+      "total": 3,
+      "detail": [
+        [
+          "deepseek"
+        ],
+        [
+          "价格",
+          "定价",
+          "元",
+          "美元",
+          "token"
+        ],
+        [
+          "输入",
+          "输出",
+          "百万"
+        ]
+      ]
+    },
+    "domain_hit": true,
+    "hosts": [
+      "finance.sina.com.cn",
+      "finance.eastmoney.com",
+      "stcn.com",
+      "dzwww.com",
+      "finance.sina.com.cn",
+      "deepseek.com"
+    ],
+    "pages_fetched": 2,
+    "page_chars": 4000,
+    "results": [
+      {
+        "rank": 1,
+        "title": "DeepSeek预告全面上调API价格且涨幅较大",
+        "url": "https://finance.sina.com.cn/roll/2026-08-07/doc-inimmihx3585204.shtml",
+        "site": "finance.sina.com.cn",
+        "score": 0.493,
+        "engine": "bing_news",
+        "snippet": "与此前针对高峰时段调整价格不同，本次指向API服务整体定价。DeepSeek尚未披露涨价幅度、生效时间及不同模型的具体价格，但“整体上调”和“预计涨幅较大”的表述，意味着其以低价著称的API商业策略可能迎来重要变化。"
+      },
+      {
+        "rank": 2,
+        "title": "DeepSeek发布API调价公告，新价格8月17日生效",
+        "url": "https://finance.eastmoney.com/a/202608133840738352.html",
+        "site": "finance.eastmoney.com",
+        "score": 0.493,
+        "engine": "bing_news",
+        "snippet": "8月13日，DeepSeek发布公告称，随着DeepSeek V4全系列模型正式版上线，其将对API价格进行更新调整。此次调整将采用峰谷定价，空闲时段价格为高峰时段价格的一半。高峰时段为北京时间 9:00-12:00、14:00-18:00（其余为空闲时段）。新价格将于北京时间 2026年8月17日 00:00 ..."
+      },
+      {
+        "rank": 3,
+        "title": "创大模型价格新低！DeepSeek API输入缓存降至首发价十分之一",
+        "url": "https://www.stcn.com/article/detail/3821826.html",
+        "site": "stcn.com",
+        "score": 0.493,
+        "engine": "bing_news",
+        "snippet": "DeepSeek正在重新定义大模型普惠的边界。 4月26日，DeepSeek官方发布API价格调整公告，全系API输入缓存命中价格降至首发价的十分之一，V4‑Pro更叠加限时2.5折，百万Tokens输入缓存命中低至0.025元，创全球大模型价格新低。 根据DeepSeek官方API定价页面公示，本次降价 ..."
+      },
+      {
+        "rank": 4,
+        "title": "海量财经丨告别“价格屠夫”？DeepSeek拟大幅涨价背后：大模型API正 ...",
+        "url": "https://www.dzwww.com/xinwen/jjxw/202608/t20260806_17999489.htm",
+        "site": "dzwww.com",
+        "score": 0.493,
+        "engine": "bing_news",
+        "snippet": "8月6日，DeepSeek一则简短公告在开发者社区激起波澜：平台计划近期整体上调API服务定价，预计涨幅较大。距离7月中旬引入高峰翻倍计费仅过去三周，从精细化调度到全面涨价，被业界称为“价格屠夫”的DeepSeek，正释放出低价策略进入拐点的明确信号。 回顾 ..."
+      },
+      {
+        "rank": 5,
+        "title": "DeepSeek V4将正式上线，高峰时段API价格翻倍",
+        "url": "https://finance.sina.com.cn/roll/2026-06-30/doc-inifehiu4848444.shtml",
+        "site": "finance.sina.com.cn",
+        "score": 0.493,
+        "engine": "bing_news",
+        "snippet": "6月29日，DeepSeek发送给用户的升级提醒邮件显示，DeepSeek V4正式版计划于7月中旬正式上线，与之而来的则是更多功能优化和性能提升，以及峰谷时定价机制。 根据邮件，北京时间每日9:00至12:00、14:00至18:00被列为高峰时段，调用价格为平时的2倍。同时，DeepSeek表示 ..."
+      },
+      {
+        "rank": 6,
+        "title": "DeepSeek | API Platform",
+        "url": "https://www.deepseek.com/en/platform/",
+        "site": "deepseek.com",
+        "score": 0.489,
+        "engine": "bing_cn",
+        "snippet": "2026年8月13日 · DeepSeek is an AI research company focused on building world-leading general artificial intelligence. We develop …"
+      }
+    ]
+  },
+  {
+    "id": "edge-followup-where",
+    "category": "edge-followup",
+    "question": "那地点呢？",
+    "history": [
+      "2026香港国际秋季灯饰展"
+    ],
+    "query": "2026香港国际秋季灯饰展 地点",
+    "query_used": "2026香港国际秋季灯饰展 地点",
+    "expected_terms": "香港;会展|展览|博览|会议展览中心|HKTDC|位置|地点",
+    "expected_domains": [],
+    "wrong_premise": false,
+    "retrieved": 5,
+    "good_count": 5,
+    "weak_count": 0,
+    "engines": [
+      "bing_news"
+    ],
+    "tier_score": 2,
+    "engine": "bing_news",
+    "low_relevance": false,
+    "error": "",
+    "latency": 0.42,
+    "snippet_grade": {
+      "hit": 2,
+      "total": 2,
+      "detail": [
+        [
+          "香港"
+        ],
+        [
+          "会展",
+          "展览",
+          "博览",
+          "会议展览中心"
+        ]
+      ]
+    },
+    "full_grade": {
+      "hit": 2,
+      "total": 2,
+      "detail": [
+        [
+          "香港"
+        ],
+        [
+          "会展",
+          "展览",
+          "博览",
+          "会议展览中心"
+        ]
+      ]
+    },
+    "domain_hit": null,
+    "hosts": [
+      "pjtime.com",
+      "hm.people.com.cn",
+      "finance.ifeng.com",
+      "admin5.com",
+      "finance.sina.com.cn"
+    ],
+    "pages_fetched": 2,
+    "page_chars": 2753,
+    "results": [
+      {
+        "rank": 1,
+        "title": "创意设计 智照未来 | 雷曼拓享亮相2026香港秋灯展",
+        "url": "http://www.pjtime.com/2025/10/382928591528.shtml",
+        "site": "pjtime.com",
+        "score": 0.845,
+        "engine": "bing_news",
+        "snippet": "10月27日， 2025年香港国际秋季灯饰展（简称：香港秋灯展）在香港会议展览中心盛大启幕。雷曼光电全资子公司拓享科技（简称：雷曼拓享）亮相1E-F27展位，全面展示公司在智慧照明各领域的技术实力与创新成果。 本届展会以“创意设计，智照未来”为主题 ..."
+      },
+      {
+        "rank": 2,
+        "title": "香港举办灯饰展云集约3000环球商家",
+        "url": "https://hm.people.com.cn/n1/2025/1028/c42272-40591262.html",
+        "site": "hm.people.com.cn",
+        "score": 0.768,
+        "engine": "bing_news",
+        "snippet": "新华社香港10月27日电 由香港贸易发展局主办的第27届香港国际秋季灯饰展27日起在香港会展中心举行，连同第10届香港国际户外及科技照明博览，两项展览吸引来自20个国家及地区约3000个商家参与。 第10届香港国际户外及科技照明博览将于10月28日至31日在亚洲 ..."
+      },
+      {
+        "rank": 3,
+        "title": "秋季四大科技展10月举行 汇聚超过6,200家展商",
+        "url": "https://finance.ifeng.com/c/8nJMtuP4IAu",
+        "site": "finance.ifeng.com",
+        "score": 0.741,
+        "engine": "bing_news",
+        "snippet": "贸发局将于10月举行秋季四大科技展，包括香港秋季电子产品展、国际电子组件及生产技术展、香港国际秋季灯饰展及香港国际户外及科技照明博览 四项展览汇聚来自27个国家及地区超过6,200家展商 香港秋季电子产品展聚焦AI人工智能与机械人科技等领域，特设 ..."
+      },
+      {
+        "rank": 4,
+        "title": "上海三思亮相第17届香港国际春季灯饰展：以陶瓷技术驱动“智照 ...",
+        "url": "https://www.admin5.com/article/20260428/1061761.shtml",
+        "site": "admin5.com",
+        "score": 0.718,
+        "engine": "bing_news",
+        "snippet": "2026年4月20日至23日，第17届香港国际春季灯饰展暨智慧照明博览在香港会议展览中心举行。本届展会以“智照绿色未来”为主题，并首次设立“光影研究所”沉浸式展示区，集中呈现照明行业在智能化与绿色化方向的前沿探索。作为全球照明与科技融合领域的 ..."
+      },
+      {
+        "rank": 5,
+        "title": "拿下香港灯饰展首个特别合作城市，中山灯饰“抱团”闯全球",
+        "url": "https://finance.sina.com.cn/roll/2026-04-06/doc-inhtprnh1388109.shtml",
+        "site": "finance.sina.com.cn",
+        "score": 0.677,
+        "engine": "bing_news",
+        "snippet": "近日，香港贸易发展局正式官宣，中山成为2026香港国际春季灯饰展暨智慧照明博览首个特别合作城市。这一合作的落地，标志着中山灯饰产业将以城市名片的身份，亮相这场全球顶级灯饰行业盛会，全方位展现区域产业集群优势与智能制造实力。 2025香港国际 ..."
+      }
+    ]
+  },
+  {
+    "id": "price-iphone17",
+    "category": "price",
+    "question": "iPhone 17 国行起售价多少钱？",
+    "history": [],
+    "query": "iPhone 17 国行起售价多少钱",
+    "query_used": "iPhone 17 国行起售价多少钱",
+    "expected_terms": "iPhone 17|iPhone17;元|起售|价格;苹果|Apple|官网",
+    "expected_domains": [
+      "apple.com.cn",
+      "apple.com"
+    ],
+    "wrong_premise": false,
+    "retrieved": 6,
+    "good_count": 5,
+    "weak_count": 1,
+    "engines": [
+      "bing_cn",
+      "bing_news"
+    ],
+    "tier_score": 2,
+    "engine": "bing_news",
+    "low_relevance": false,
+    "error": "",
+    "latency": 1.07,
+    "snippet_grade": {
+      "hit": 3,
+      "total": 3,
+      "detail": [
+        [
+          "iphone 17"
+        ],
+        [
+          "元",
+          "起售",
+          "价格"
+        ],
+        [
+          "苹果",
+          "apple",
+          "官网"
+        ]
+      ]
+    },
+    "full_grade": {
+      "hit": 3,
+      "total": 3,
+      "detail": [
+        [
+          "iphone 17"
+        ],
+        [
+          "元",
+          "起售",
+          "价格"
+        ],
+        [
+          "苹果",
+          "apple",
+          "官网"
+        ]
+      ]
+    },
+    "domain_hit": true,
+    "hosts": [
+      "news.qq.com",
+      "sohu.com",
+      "news.qq.com",
+      "finance.sina.com.cn",
+      "zhuanlan.zhihu.com",
+      "apple.com"
+    ],
+    "pages_fetched": 3,
+    "page_chars": 3503,
+    "results": [
+      {
+        "rank": 1,
+        "title": "iPhone 18 Pro/17 Pro系列价格对比：国行涨价1000元起！",
+        "url": "https://news.qq.com/rain/a/20260910A023KQ00",
+        "site": "news.qq.com",
+        "score": 1.0,
+        "engine": "bing_news",
+        "snippet": "快科技9月10日消息，苹果2026秋季发布会落下帷幕，iPhone 18 Pro、iPhone 18 Pro Max国行售价正式公布，两款机型依旧256GB起步。对比上代iPhone 17 Pro系列，各存储档位均出现不同程度涨价，顶配版本涨幅进一步扩大。iPhone 18 Pro国行起售价9999元，iPhone 18 Pro Max起售价10999元。上代iPhone 17 Pro 256GB"
+      },
+      {
+        "rank": 2,
+        "title": "苹果官网公布iPhone 18系列及首款折叠屏iPhone Duo国行价格",
+        "url": "https://www.sohu.com/a/1074054736_362225",
+        "site": "sohu.com",
+        "score": 0.717,
+        "engine": "bing_news",
+        "snippet": "苹果（中国）官网近日正式公布了三款新机的国行售价，分别为iPhone 18 Pro、iPhone 18 Pro Max以及首款折叠屏机型iPhone Duo。此次定价覆盖了从高端直板旗舰到创新形态产品的完整布局，为消费者提供了多样化选择。 作为新一代直板旗舰，iPhone 18 Pro的起售价定为9999元，提供256GB至2TB的四种存储配置。其中256GB版本与起售价持平，512GB版本售价1"
+      },
+      {
+        "rank": 3,
+        "title": "苹果首款折叠屏手机来了！iPhone Duo国行定价15999元起，最高售价26499 ...",
+        "url": "https://news.qq.com/rain/a/20260910A02PMH00",
+        "site": "news.qq.com",
+        "score": 0.575,
+        "engine": "bing_news",
+        "snippet": "9月10日凌晨，苹果秋季新品发布会，iPhone 18 Pro / Pro Max、iPhone Duo、AirPods 5、Apple Watch Series 12 和 Apple Watch Ultra 4 同时亮相。其中最大的“Surprise”，就是苹果首款折叠 iPhone——iPhone Duo。苹果官网也已公布 iPhone Duo 的国行价格信息，定价为 15999 元起。256"
+      },
+      {
+        "rank": 4,
+        "title": "存储暴涨下苹果不会仁慈！iPhone 18 Pro系列价格预测：国行万元起步没 ...",
+        "url": "https://finance.sina.com.cn/tech/discovery/2026-08-07/doc-inimnkur3225853.shtml",
+        "site": "finance.sina.com.cn",
+        "score": 0.55,
+        "engine": "bing_news",
+        "snippet": "快科技8月7日消息，全球存储芯片价格持续大幅上涨，居高不下的元件成本直接倒逼各家手机厂商不得不上调产品售价，把陡增的成本压力部分转嫁给终端消费者，现在就连苹果也准备在新一代iPhone产品上采取类似的提价策略。 现在，《华尔街日报》和专业研究 ..."
+      },
+      {
+        "rank": 5,
+        "title": "2026年苹果iPhone手机推荐哪一款性价比最高？（8000字 ...",
+        "url": "https://zhuanlan.zhihu.com/p/417034557",
+        "site": "zhuanlan.zhihu.com",
+        "score": 0.358,
+        "engine": "bing_cn",
+        "snippet": "2026年8月15日 · 1、根据功能、规格与个人需求挑选系列 最新的iPhone共有iPhone 17、iPhone Air、iPhone 17 Pro以及 iPhone 17 …"
+      },
+      {
+        "rank": 6,
+        "title": "iPhone - Apple",
+        "url": "https://www.apple.com/iphone/",
+        "site": "apple.com",
+        "score": 0.252,
+        "engine": "bing_cn",
+        "snippet": "iPhone has evolved to include the first foldable iPhone with a dual display system. When open, iPhone Duo features the largest, …"
+      }
+    ]
+  },
+  {
+    "id": "news-latest-ai",
+    "category": "news",
+    "question": "最近 AI 大模型有什么新发布？",
+    "history": [],
+    "query": "最近 AI 大模型有什么新发布",
+    "query_used": "最近 AI 大模型有什么新发布",
+    "expected_terms": "AI|大模型|模型;发布|推出|上线|更新;2026|2025",
+    "expected_domains": [],
+    "wrong_premise": false,
+    "retrieved": 6,
+    "good_count": 6,
+    "weak_count": 0,
+    "engines": [
+      "bing_news"
+    ],
+    "tier_score": 2,
+    "engine": "bing_news",
+    "low_relevance": false,
+    "error": "",
+    "latency": 0.93,
+    "snippet_grade": {
+      "hit": 3,
+      "total": 3,
+      "detail": [
+        [
+          "ai",
+          "大模型",
+          "模型"
+        ],
+        [
+          "发布"
+        ],
+        [
+          "2026"
+        ]
+      ]
+    },
+    "full_grade": {
+      "hit": 3,
+      "total": 3,
+      "detail": [
+        [
+          "ai",
+          "大模型",
+          "模型"
+        ],
+        [
+          "发布",
+          "上线"
+        ],
+        [
+          "2026"
+        ]
+      ]
+    },
+    "domain_hit": null,
+    "hosts": [
+      "myzaker.com",
+      "sohu.com",
+      "iimedia.cn",
+      "yicai.com",
+      "news.qq.com",
+      "36kr.com"
+    ],
+    "pages_fetched": 2,
+    "page_chars": 3103,
+    "results": [
+      {
+        "rank": 1,
+        "title": "大模型的进步，为什么越来越难衡量了？",
+        "url": "https://www.myzaker.com/article/6aabbedb8e9f09376d471889",
+        "site": "myzaker.com",
+        "score": 0.586,
+        "engine": "bing_news",
+        "snippet": "近期，数学家陶哲轩在个人博客上发布了一封罕见的公开信。 共同签署的还有彼得 · 舒尔策、邓煜、许埈珥等另外 24 位菲尔兹奖得主。 数学家们承认，大模型在最近几个月取得明显进步，已经解决多个数学领域的重要问题。 紧接着，他们却发出警告：AI 公司把数学难题当成衡量模型能力的基准，正在伤害数学研究本身。 陶哲轩说，这份声明来自 25 位数学家在一周内的密集讨论。通常，这类学术倡议需要几个月协调。此次"
+      },
+      {
+        "rank": 2,
+        "title": "为什么AI还没有真正发现新科学？答案可能不在模型里",
+        "url": "https://www.sohu.com/a/1074453522_362225",
+        "site": "sohu.com",
+        "score": 0.495,
+        "engine": "bing_news",
+        "snippet": "9月10日消息，AI距离自主发现新科学还有多远？在2026 Inclusion·外滩大会主论坛上，普林斯顿大学人工智能创新中心主任王梦迪给出了自己的判断。 她表示，今天的大模型已经掌握了大量人类知识，但在真正的科学发现上仍然存在明显局限：大模型更擅长找到“最可能”的答案，而真正的新发现，往往藏在概率分布的长尾里。 王梦迪14岁考入清华大学、24岁进入普林斯顿、29岁成为普林斯顿最年轻的终身教授，如"
+      },
+      {
+        "rank": 3,
+        "title": "7月21日AI新产品讯息：阿里最新一代大模型千问3.8将至，正式版预计 ...",
+        "url": "https://www.iimedia.cn/c1088/113192.html",
+        "site": "iimedia.cn",
+        "score": 0.495,
+        "engine": "bing_news",
+        "snippet": "2022至2026年全球AI漫剧行业投融资整体呈活跃态势，2026年进入理性整合阶段，呈现“事件数回落、金额提升”的特征。根据全球领先的新经济产业第三方数据挖掘和分析机构iiMedia Research（艾媒咨询）最新发布的《2026年全球AI漫剧行业投融资数据分析简报》显示 ..."
+      },
+      {
+        "rank": 4,
+        "title": "AI调用量连续20周超美国，中国大模型靠什么抢市场？",
+        "url": "https://www.yicai.com/news/103367653.html",
+        "site": "yicai.com",
+        "score": 0.418,
+        "engine": "bing_news",
+        "snippet": "前述内容由第一财经“星翼大模型”智能生成，相关AI内容力求但不保证准确性、时效性、完整性等。请用户注意甄别，第一财经不承担由此产生的任何责任。 如您有疑问或需要更多信息，可以联系我们 yonghu@yicai.com 大模型开始算ROI。 过去两周，AI行业像被按下了快进键。 9月1日到9月11日，海内外7家头部模型厂商迭代了新模型。过去，大模型的升级周期以年计算，后来缩短到几个月，如今已经开始以"
+      },
+      {
+        "rank": 5,
+        "title": "马斯克点赞Kimi K3大模型；千问发布首款AI智能体耳机；小米披露机器 ...",
+        "url": "https://news.qq.com/rain/a/20260719A03VL200",
+        "site": "news.qq.com",
+        "score": 0.418,
+        "engine": "bing_news",
+        "snippet": "为你精选过去一周最值得关注的AI新闻和国内外热门AI投融资事件，帮助大家及时了解全球AI市场动向。 雷军：小米具身基座模型 Xiaomi-Robotics-1 今天正式发布，在具身基座模型领域，初步验证了Scaling Law效应。 10万小时真实操作预训练数据和跨本体数据后训练，让 ..."
+      },
+      {
+        "rank": 6,
+        "title": "当AI大模型被重新定价：云知声发布U2，迎来「DeepSeek时刻」",
+        "url": "https://www.36kr.com/p/3844393508047108",
+        "site": "36kr.com",
+        "score": 0.418,
+        "engine": "bing_news",
+        "snippet": "原生智能体时代，大模型是干净利落的生产力。 大模型行业长期沉浸在一种近乎默认正确的共识。 要大参数，模型才强；要足够长的上下文，能力才会全面；要有足够复杂的推理链条，才能显示其智能水平。 所以过去几年，从千亿参数到万亿参数，从几十万 ..."
+      }
+    ]
+  },
+  {
+    "id": "edge-followup-year",
+    "category": "edge-followup",
+    "question": "2026年的呢",
+    "history": [
+      "香港灯具展是什么时候"
+    ],
+    "query": "香港灯具展是什么时候 2026年",
+    "query_used": "香港灯具展是什么时候 2026年",
+    "expected_terms": "香港|Hong Kong;灯|照明|Lighting;展;2026",
+    "expected_domains": [],
+    "wrong_premise": false,
+    "retrieved": 6,
+    "good_count": 6,
+    "weak_count": 0,
+    "engines": [
+      "duckduckgo"
+    ],
+    "tier_score": 1,
+    "engine": "duckduckgo",
+    "low_relevance": false,
+    "error": "",
+    "latency": 1.78,
+    "snippet_grade": {
+      "hit": 4,
+      "total": 4,
+      "detail": [
+        [
+          "香港",
+          "hong kong"
+        ],
+        [
+          "灯",
+          "照明",
+          "lighting"
+        ],
+        [
+          "展"
+        ],
+        [
+          "2026"
+        ]
+      ]
+    },
+    "full_grade": {
+      "hit": 4,
+      "total": 4,
+      "detail": [
+        [
+          "香港",
+          "hong kong"
+        ],
+        [
+          "灯",
+          "照明",
+          "lighting"
+        ],
+        [
+          "展"
+        ],
+        [
+          "2026"
+        ]
+      ]
+    },
+    "domain_hit": null,
+    "hosts": [
+      "showguide.cn",
+      "jufair.com",
+      "jufair.com",
+      "sohu.com",
+      "zhuanlan.zhihu.com",
+      "toutiao.com"
+    ],
+    "pages_fetched": 3,
+    "page_chars": 5918,
+    "results": [
+      {
+        "rank": 1,
+        "title": "2026年中国香港国际春季灯饰展览会 (HONG KONG ... - showguide",
+        "url": "https://www.showguide.cn/zhanhui/hktdc.html",
+        "site": "showguide.cn",
+        "score": 0.55,
+        "engine": "duckduckgo",
+        "snippet": "主办单位：中国香港贸易发展局,展会时间：2026年4月20日-23日,展会地点：中国香港会议展览中心。中国香港灯饰照明展,灯饰照明展,亚洲灯饰照明展,HONG KONG INTERNATIONAL LIGHTING FAIR (SPRING EDITION)展 盈拓国际展览在线提供展位预订。"
+      },
+      {
+        "rank": 2,
+        "title": "香港秋季照明灯饰展 (Hongkong Lighting Fair)2026逛展指南：时间地点/门票多少钱-聚展",
+        "url": "https://www.jufair.com/information/286463.html",
+        "site": "jufair.com",
+        "score": 0.383,
+        "engine": "duckduckgo",
+        "snippet": "本资讯由聚展网工作人员整理编辑，聚展网是一家汇集全球展会时间地点、展位申请、门票购买、展商名录及展会会刊的服务平台，如有转载请注明来源。 参考资料： 香港秋季照明灯饰展 Hongkong Lighting Fair 举办地区： 香港 举办地址： 香港湾仔区博览道1号 展览 ..."
+      },
+      {
+        "rank": 3,
+        "title": "香港秋季照明灯饰展2026_门票_时间_会刊_香港秋灯展-聚展",
+        "url": "https://www.jufair.com/exhibition/hongkong-lighting-au/",
+        "site": "jufair.com",
+        "score": 0.383,
+        "engine": "duckduckgo",
+        "snippet": "香港秋季照明灯饰展（Hongkong Lighting Fair）作为亚洲规模领先的灯饰专业展会，与香港户外及科技照明展览会同期举办，组成全球最大的灯饰商贸平台。展会覆盖家居、商业、工业及户外照明全品类，汇聚创新产品与前沿技术，核心看点包括\"互联照明\"等新兴展区。其差异化价值在于庞大的买家 ..."
+      },
+      {
+        "rank": 4,
+        "title": "2026年香港秋季灯饰展_照明_展览会_买家 - 搜狐",
+        "url": "https://www.sohu.com/a/974802447_121986596",
+        "site": "sohu.com",
+        "score": 0.383,
+        "engine": "duckduckgo",
+        "snippet": "香港秋季灯饰展览会 上届参展商：3000多家 上届采购商：40632人次 上届展览面积：66700平方米 香港秋季灯饰展览会 Hong Kong International Lighting Fair 展会时间：2026年10月27-30日 展会地点：香港湾仔会展中心 主办单位：香港贸发局 组展单位：广州明胜展览服务有限公司 展会介绍： 香港贸发局主办的香港 ..."
+      },
+      {
+        "rank": 5,
+        "title": "香港贸发局主办・2026 香港国际春季灯饰展暨智慧照明博览",
+        "url": "https://zhuanlan.zhihu.com/p/1998051970309695064",
+        "site": "zhuanlan.zhihu.com",
+        "score": 0.383,
+        "engine": "duckduckgo",
+        "snippet": "基础信息 展会全称：第 18 届香港国际春季灯饰展（LIGHTING Spring 2026） 展会时间：2026 年 4 月 20 日 - 23 日（每日 9:00-18:00） 展会地点：香港会议展览中心，地址：香港 湾仔区 博览道 1 号 主办单位：香港贸易发展局（HKTDC） 同期举办：香港 智慧照明 博览（Smart Lighting Expo） 组展单位： 广西古氏展览 ..."
+      },
+      {
+        "rank": 6,
+        "title": "2026 香港国际春季灯饰展（春季） - 今日头条",
+        "url": "https://www.toutiao.com/article/7598073775065776667/",
+        "site": "toutiao.com",
+        "score": 0.383,
+        "engine": "duckduckgo",
+        "snippet": "基础信息 展会全称：第 18 届香港国际春季灯饰展（LIGHTING Spring 2026） 展会时间：2026 年 4 月 20 日 - 23 日（每日 9:00-18:00） 展会地点：香港会议展览中心，地址：香港湾仔区博览道 1 号 主办单位：香港贸易发展局（HKTDC） 同期举办：香港智慧照明博览（Smart Lighting Expo） 组展单位：广西古氏展览有限 ..."
+      }
+    ]
+  },
+  {
+    "id": "fact-noise-standard",
+    "category": "fact",
+    "question": "中国声环境功能区标准里 1 类区夜间噪声限值是多少分贝？",
+    "history": [],
+    "query": "中国声环境功能区标准里 1 类区夜间噪声限值是多少分贝",
+    "query_used": "中国声环境功能区标准里 1 类区夜间噪声限值是多少分贝",
+    "expected_terms": "1类|一类|1 类;夜间;45;声环境|噪声",
+    "expected_domains": [
+      "mee.gov.cn",
+      "gov.cn"
+    ],
+    "wrong_premise": false,
+    "retrieved": 6,
+    "good_count": 6,
+    "weak_count": 0,
+    "engines": [
+      "duckduckgo"
+    ],
+    "tier_score": 1,
+    "engine": "duckduckgo",
+    "low_relevance": false,
+    "error": "",
+    "latency": 2.14,
+    "snippet_grade": {
+      "hit": 4,
+      "total": 4,
+      "detail": [
+        [
+          "1类"
+        ],
+        [
+          "夜间"
+        ],
+        [
+          "45"
+        ],
+        [
+          "声环境",
+          "噪声"
+        ]
+      ]
+    },
+    "full_grade": {
+      "hit": 4,
+      "total": 4,
+      "detail": [
+        [
+          "1类",
+          "1 类"
+        ],
+        [
+          "夜间"
+        ],
+        [
+          "45"
+        ],
+        [
+          "声环境",
+          "噪声"
+        ]
+      ]
+    },
+    "domain_hit": true,
+    "hosts": [
+      "easylearn.baidu.com",
+      "wenku.baidu.com",
+      "ailegal.baidu.com",
+      "sohu.com",
+      "baike.baidu.com",
+      "mee.gov.cn"
+    ],
+    "pages_fetched": 1,
+    "page_chars": 1485,
+    "results": [
+      {
+        "rank": 1,
+        "title": "根据我国声环境质量标准，不同类别区域昼间和夜间的噪_百度题库",
+        "url": "https://easylearn.baidu.com/edu-page/tiangong/questiondetail?id=1817828849871759843",
+        "site": "easylearn.baidu.com",
+        "score": 0.688,
+        "engine": "duckduckgo",
+        "snippet": "根据《中华人民共和国声环境质量标准》（GB 3096-2008），我国声环境功能区分为以下五种类型，各类区域噪声限值如下（单位：分贝）： 0类：昼间50分贝，夜间40分贝； 1类：昼间55分贝，夜间45分贝； 2类：昼间60分贝，夜间50分贝； 3类：昼间65分贝，夜间55分贝； 4类：昼间70分贝，夜间55分贝 ..."
+      },
+      {
+        "rank": 2,
+        "title": "中国声环境功能区分类标准及噪声限值详解 - 百度文库",
+        "url": "https://wenku.baidu.com/view/d1844561128884868762caaedd3383c4bb4cb4e7.html",
+        "site": "wenku.baidu.com",
+        "score": 0.682,
+        "engine": "duckduckgo",
+        "snippet": "3类功能区明确为工业生产、仓储物流集中区域。 ห้องสมุดไป่ตู้业园区、物流基地等典型区域执行该类标准，其噪声限值相对宽松，但要求企业采取有效措施防止噪声扩散。 值得注意的是，3类区与居住区之间应设置缓冲带。"
+      },
+      {
+        "rank": 3,
+        "title": "国家夜间噪声标准-法行宝-法律依据",
+        "url": "https://ailegal.baidu.com/legalarticle/qadetail?id=114d7e29c541ec250309",
+        "site": "ailegal.baidu.com",
+        "score": 0.63,
+        "engine": "duckduckgo",
+        "snippet": "1.夜间时间界定：根据《中华人民共和国环境噪声污染防治法》，\"夜间\"指晚二十二点至晨六点。 2.不同环境功能区夜间噪声排放标准：0类至4类声环境功能区，夜间噪声排放标准分别为40分贝、45分贝、50分贝、55分贝，4类区中4a类为55分贝、4b类为60分贝。 3.特殊规定：夜间突发噪声最大值不准超过 ..."
+      },
+      {
+        "rank": 4,
+        "title": "分贝仪测试噪声标准，多少分贝算扰民？国家标准与维权指南_测量_昼间_夜间",
+        "url": "https://www.sohu.com/a/894733223_100262162",
+        "site": "sohu.com",
+        "score": 0.63,
+        "engine": "duckduckgo",
+        "snippet": "一、认识我们的\"耳朵守护神\"——噪声标准👂 二、不同区域，标准不同：五类声环境功能区详解🗺️ 《声环境质量标准》将我国的声环境功能区划分为以下5类，并规定了相应的昼间和夜间噪声限值 (单位：等效声级 LAeq: dB)： 0 类声环境功能区： 指康复疗养区等特别需要安静的区域。 标准：昼 ..."
+      },
+      {
+        "rank": 5,
+        "title": "1类声环境功能区 - 百度百科",
+        "url": "https://baike.baidu.com/item/1%E7%B1%BB%E5%A3%B0%E7%8E%AF%E5%A2%83%E5%8A%9F%E8%83%BD%E5%8C%BA/67236105",
+        "site": "baike.baidu.com",
+        "score": 0.597,
+        "engine": "duckduckgo",
+        "snippet": "1类声环境功能区是根据《声环境质量标准》 (GB3096-2008)与《声环境功能区划分技术规范》 (GB/T15190-2014)划分的声环境功能区类别之一，指以居民住宅、医疗卫生、文化教育、科研设计、行政办公为主要功能，需要保持安静的区域。该区域执行严格的声环境质量标准，昼间（6:00-22:00）噪声限值为55分贝 ..."
+      },
+      {
+        "rank": 6,
+        "title": "PDF 声环境质量标准",
+        "url": "https://www.mee.gov.cn/ywgz/fgbz/bz/bzwb/wlhj/shjzlbz/200809/W020111121351590491445.pdf",
+        "site": "mee.gov.cn",
+        "score": 0.583,
+        "engine": "duckduckgo",
+        "snippet": "14623—93)的 修订, 与原标准相比主要修改内容如下:——— 扩大了标准适用区域, 将乡村地区纳入标准适用范围;——— 将环境质量标准与测量方法标准合并为一项标准;——— 明确了交通干线的定义, 对交通干线两侧4 类区环境噪声限值作了调整;——— 提出了声环境功能区监测和噪声敏感建筑物监测 ..."
+      }
+    ]
+  },
+  {
+    "id": "time-2026-worldcup",
+    "category": "time",
+    "question": "2026年世界杯在哪些国家举办？",
+    "history": [],
+    "query": "2026年世界杯在哪些国家举办",
+    "query_used": "2026年世界杯在哪些国家举办",
+    "expected_terms": "美国|加拿大|墨西哥;世界杯|World Cup;2026;三国|联合",
+    "expected_domains": [
+      "fifa.com"
+    ],
+    "wrong_premise": false,
+    "retrieved": 6,
+    "good_count": 6,
+    "weak_count": 0,
+    "engines": [
+      "bing_news"
+    ],
+    "tier_score": 2,
+    "engine": "bing_news",
+    "low_relevance": false,
+    "error": "",
+    "latency": 0.76,
+    "snippet_grade": {
+      "hit": 4,
+      "total": 4,
+      "detail": [
+        [
+          "美国",
+          "加拿大",
+          "墨西哥"
+        ],
+        [
+          "世界杯"
+        ],
+        [
+          "2026"
+        ],
+        [
+          "三国",
+          "联合"
+        ]
+      ]
+    },
+    "full_grade": {
+      "hit": 4,
+      "total": 4,
+      "detail": [
+        [
+          "美国",
+          "加拿大",
+          "墨西哥"
+        ],
+        [
+          "世界杯"
+        ],
+        [
+          "2026"
+        ],
+        [
+          "三国",
+          "联合"
+        ]
+      ]
+    },
+    "domain_hit": false,
+    "hosts": [
+      "sohu.com",
+      "zaobao.com.sg",
+      "sohu.com",
+      "voachinese.com",
+      "bbc.com",
+      "zaobao.com.sg"
+    ],
+    "pages_fetched": 3,
+    "page_chars": 4440,
+    "results": [
+      {
+        "rank": 1,
+        "title": "2026年世界杯预选赛：揭幕战前瞻与球队深度分析",
+        "url": "https://www.sohu.com/a/1078535584_122001004",
+        "site": "sohu.com",
+        "score": 0.622,
+        "engine": "bing_news",
+        "snippet": "2026年世界杯预选赛即将拉开帷幕，各支球队正在为这个全球最大的足球盛事做最后的准备。作为足球界的盛会，世界杯不仅是球员们展示自己技艺的舞台，也是国家荣誉的象征。本文将对即将到来的揭幕战进行全面分析，带您深入了解参赛队伍的基本面、数据分析及最终比分预测。 一、揭幕战基本情况揭幕战定于2026年6月7号在美国洛杉矶的SoFi体育场举行，这座现代化的体育场将为球迷们提供无与伦比的观赛体验。揭幕战的参赛"
+      },
+      {
+        "rank": 2,
+        "title": "“世界杯应属于全世界” 国际足联考虑世界杯扩军至64队",
+        "url": "https://www.zaobao.com.sg/news/sports/story20260713-9355669",
+        "site": "zaobao.com.sg",
+        "score": 0.589,
+        "engine": "bing_news",
+        "snippet": "（纽约综合电）国际足联主席因凡蒂诺（Infantino）说，2026年世界杯结束后，国际足球联合会将评估男足世界杯扩军至64支球队的计划，并强调世界杯应该“属于全世界”，但没有透露更多细节。 2026年世界杯由加拿大、墨西哥和美国联合举办，首次有48支球队参赛 ..."
+      },
+      {
+        "rank": 3,
+        "title": "2026年世界杯：谁将捧起大力神杯？球队分析与赛果预测",
+        "url": "https://www.sohu.com/a/1075364314_122001004",
+        "site": "sohu.com",
+        "score": 0.511,
+        "engine": "bing_news",
+        "snippet": "2026年世界杯即将拉开帷幕，各支球队的备战情况成为球迷热议的话题。作为世界足球的盛会，2026年世界杯将于6月在美国、加拿大和墨西哥联合举行。这是世界杯历史上首次由三国共同主办，赛事规模空前庞大，吸引了全球的目光。本文将对各参赛队伍的基本面进行深入分析，并对比赛结果进行预测，帮助你了解哪些球队有可能捧起大力神杯。 主题与背景 2026年世界杯的比赛时间定于6月到7月，地点包括美国、加拿大和墨西哥"
+      },
+      {
+        "rank": 4,
+        "title": "阿根廷将与西班牙争夺2026年世界杯冠军",
+        "url": "https://www.voachinese.com/a/argentina-spain-set-up-2026-world-cup-final-clash-20260715/8172213.html",
+        "site": "voachinese.com",
+        "score": 0.511,
+        "engine": "bing_news",
+        "snippet": "阿根廷和西班牙将在2026年世界杯决赛中相遇。阿根廷在半决赛中以2比1击败英格兰，西班牙则以2比0战胜法国。 星期三(7月15日)在亚特兰大举行的一场激动人心的比赛中，英格兰的安东尼·戈登(Anthony Gordon)在第55分钟破门，使阿根廷一度落后。梅西领衔的阿根廷队 ..."
+      },
+      {
+        "rank": 5,
+        "title": "更多比赛，更多争议——该如何评价2026年FIFA世界杯？",
+        "url": "https://www.bbc.com/zhongwen/articles/clyxj2pky5go/simp",
+        "site": "bbc.com",
+        "score": 0.494,
+        "engine": "bing_news",
+        "snippet": "国际足协 (FIFA) 主席詹尼·因凡蒂诺（Gianni Infantino，恩芬天奴）此前承诺，2026年世界杯将成为“人类历史上最盛大的活动”。 因凡蒂诺将这场在美国、墨西哥和加拿大举行的赛事，比作一个月内举行的104场“超级杯”（Super Bowl）美式足球。 这是一个大胆的宣言 ..."
+      },
+      {
+        "rank": 6,
+        "title": "2026世界杯揭幕战三红卡 东道主墨西哥2比0胜九人南非",
+        "url": "https://www.zaobao.com.sg/news/sports/story20260612-9193366",
+        "site": "zaobao.com.sg",
+        "score": 0.494,
+        "engine": "bing_news",
+        "snippet": "（墨西哥城综合电）2026年世界杯首战在新加坡时间星期五（6月12日）正式开踢，东道主之一墨西哥以2比0力克南非，取得A组开门红，也打破揭幕战不胜的“魔咒”。 29岁的前锋奎尼奥内斯（Quinones）出生于哥伦比亚，在个人世界杯首秀开场仅仅九分钟后便取得 ..."
+      }
+    ]
+  },
+  {
+    "id": "entity-chatsight",
+    "category": "entity",
+    "question": "ChatSight 是什么软件？",
+    "history": [],
+    "query": "ChatSight 是什么软件",
+    "query_used": "ChatSight 是什么软件",
+    "expected_terms": "ChatSight;截图|识别|OCR|回复|聊天;软件|工具",
+    "expected_domains": [],
+    "wrong_premise": false,
+    "retrieved": 6,
+    "good_count": 3,
+    "weak_count": 3,
+    "engines": [
+      "bing_cn"
+    ],
+    "tier_score": 2,
+    "engine": "bing_cn",
+    "low_relevance": false,
+    "error": "",
+    "latency": 0.86,
+    "snippet_grade": {
+      "hit": 1,
+      "total": 3,
+      "detail": [
+        [],
+        [],
+        [
+          "软件"
+        ]
+      ]
+    },
+    "full_grade": {
+      "hit": 1,
+      "total": 3,
+      "detail": [
+        [],
+        [],
+        [
+          "软件"
+        ]
+      ]
+    },
+    "domain_hit": null,
+    "hosts": [
+      "docs.iqunix.com",
+      "aiqicha.baidu.com",
+      "wenku.baidu.com",
+      "ev.iqunix.com",
+      "docs.iqunix.com",
+      "iqunix.com"
+    ],
+    "pages_fetched": 0,
+    "page_chars": 0,
+    "results": [
+      {
+        "rank": 1,
+        "title": "IQUNIX机械键盘驱动软件 | IQUNIX SUPPORT",
+        "url": "https://docs.iqunix.com/IQUNIX_exe_20260106",
+        "site": "docs.iqunix.com",
+        "score": 0.575,
+        "engine": "bing_cn",
+        "snippet": "IQUNIX机械键盘驱动软件 ——更新至20260106 适用IQUNIX旗下 NATURE 80 OG80 F97 X81 LOTUS ZX75 ZONEX75（包含金属版 …"
+      },
+      {
+        "rank": 2,
+        "title": "铝厂键盘iqunix驱动 - 爱企查",
+        "url": "https://aiqicha.baidu.com/details/ugknowledge?id=52a5c9c8c7d2092eb886e17b0c73dd55",
+        "site": "aiqicha.baidu.com",
+        "score": 0.5,
+        "engine": "bing_cn",
+        "snippet": "2026年9月8日 · 铝厂键盘驱动主要在官网网页端操作，不用下载软件也能调，直接连键盘进官网就能设置，部分型号支持EV系列在线 …"
+      },
+      {
+        "rank": 3,
+        "title": "铝厂EV63驱动下载安装全指南：官方渠道、步骤详解与常见问题",
+        "url": "https://wenku.baidu.com/view/e00dbda50822590102020740be1e650e52eacf22.html",
+        "site": "wenku.baidu.com",
+        "score": 0.5,
+        "engine": "bing_cn",
+        "snippet": "对于EV63用户而言，通过官网下载更新驱动软件是获得新功能、优化体验的主要方式。 目前公开信息中未强调固件更新的操作，日常 …"
+      },
+      {
+        "rank": 4,
+        "title": "IQUNIX SOFTWARE",
+        "url": "https://ev.iqunix.com/",
+        "site": "ev.iqunix.com",
+        "score": 0.0,
+        "engine": "bing_cn",
+        "snippet": "2 天之前 · 提供 IQUNIX 官方驱动下载、键盘驱动更新、固件支持等服务。"
+      },
+      {
+        "rank": 5,
+        "title": "IQUNIX磁轴键盘在线驱动 | IQUNIX SUPPORT",
+        "url": "https://docs.iqunix.com/Magnet_Switch",
+        "site": "docs.iqunix.com",
+        "score": 0.0,
+        "engine": "bing_cn",
+        "snippet": "2026年8月3日 · EV系列 在线驱动网站 点击前往 IQUNIX磁轴键盘在线驱动 EV系列 在线驱动网站 点击前往 EZ系列 在线驱动网站 点 …"
+      },
+      {
+        "rank": 6,
+        "title": "IQUNIX® Official Store | Premium Hall Effect & HE Keyboards",
+        "url": "https://iqunix.com/",
+        "site": "iqunix.com",
+        "score": 0.0,
+        "engine": "bing_cn",
+        "snippet": "Experience ultra-fast actuation and precision typing with EV63, EZ63 HE, and EZ80 HE — premium magnetic mechanical keyboards …"
+      }
+    ]
+  },
+  {
+    "id": "tech-docker-install-ubuntu",
+    "category": "howto",
+    "question": "Ubuntu 上怎么安装 Docker？",
+    "history": [],
+    "query": "Ubuntu 上怎么安装 Docker",
+    "query_used": "Ubuntu 上怎么安装 Docker",
+    "expected_terms": "Docker;Ubuntu;安装|install;apt|官方|docs.docker",
+    "expected_domains": [
+      "docs.docker.com",
+      "docker.com"
+    ],
+    "wrong_premise": false,
+    "retrieved": 6,
+    "good_count": 6,
+    "weak_count": 0,
+    "engines": [
+      "bing_news"
+    ],
+    "tier_score": 2,
+    "engine": "bing_news",
+    "low_relevance": false,
+    "error": "",
+    "latency": 0.81,
+    "snippet_grade": {
+      "hit": 4,
+      "total": 4,
+      "detail": [
+        [
+          "docker"
+        ],
+        [
+          "ubuntu"
+        ],
+        [
+          "安装"
+        ],
+        [
+          "官方"
+        ]
+      ]
+    },
+    "full_grade": {
+      "hit": 4,
+      "total": 4,
+      "detail": [
+        [
+          "docker"
+        ],
+        [
+          "ubuntu"
+        ],
+        [
+          "安装",
+          "install"
+        ],
+        [
+          "apt",
+          "官方"
+        ]
+      ]
+    },
+    "domain_hit": false,
+    "hosts": [
+      "news.qq.com",
+      "blog.csdn.net",
+      "blog.csdn.net",
+      "news.qq.com",
+      "bilibili.com",
+      "github.com"
+    ],
+    "pages_fetched": 2,
+    "page_chars": 4000,
+    "results": [
+      {
+        "rank": 1,
+        "title": "如何在 Ubuntu 上安装 Docker | Linux 中国",
+        "url": "https://news.qq.com/rain/a/20240104A08TQP00",
+        "site": "news.qq.com",
+        "score": 1.0,
+        "engine": "bing_news",
+        "snippet": "导读：了解在 Ubuntu 上安装 Docker 的两种官方方法。一种很简单，但可能会给你一个稍旧的版本。另一种方法稍显复杂，但能提供最新的稳定版本。 本文字数：3333，阅读时长大约：4分钟 了解在 Ubuntu 上安装 Docker 的两种官方方法。一种很简单，但可能会给你 ..."
+      },
+      {
+        "rank": 2,
+        "title": "Linux 下 Docker 安装教程（2026）",
+        "url": "https://blog.csdn.net/xin_yao_xin/article/details/159730648",
+        "site": "blog.csdn.net",
+        "score": 1.0,
+        "engine": "bing_news",
+        "snippet": "本内容遵循CC 4.0 BY-SA版权协议 Ubuntu 版 Docker Engine 兼容 x86_64（或 amd64）、armhf、arm64， S390X 和 PPC64LE（PPC64EL）架构。 注释 在 Ubuntu 衍生发行版（如 Linux Mint）上安装并非官方 虽然支持（虽然可能有效）。 在安装Docker Engine之前，你需要卸载所有冲突包。 你的 Linux .."
+      },
+      {
+        "rank": 3,
+        "title": "史上最全 Linux 系统 Docker 安装保姆级教程（三种安装方式/centos/Ubuntu ...",
+        "url": "https://blog.csdn.net/zhuimengkaifazhe/article/details/159696764",
+        "site": "blog.csdn.net",
+        "score": 0.863,
+        "engine": "bing_news",
+        "snippet": "原创 最新推荐文章于 2026-06-21 17:51:33 发布 · 3.8k 阅读 写在前面：本文面向所有想在 Linux 上跑 Docker 的朋友，不管你是第一次接触容器，还是换了台新服务器要重新配置环境，这篇文章都能帮你从零到跑通。踩过的坑、常见的报错，文末都有汇总，建议收藏备用。"
+      },
+      {
+        "rank": 4,
+        "title": "如何在 Ubuntu 22.04 LTS 中安装 Docker和Docker Compose｜Linux 中国",
+        "url": "https://news.qq.com/rain/a/20220728A05SYC00",
+        "site": "news.qq.com",
+        "score": 0.863,
+        "engine": "bing_news",
+        "snippet": "在 Ubuntu 中使用 Docker Compose 安装 Docker 引擎的分步指导。 在这篇文章中，我们将会明白 Docker 是什么，如何在 Ubuntu 中安装 Docker 引擎。此外，我们也将会明白如何安装 Docker Compose，它是一个定义并运行多容器的 Docker 应用。 我们已经在 Ubuntu 22.04 LTS 中正式的测试 ..."
+      },
+      {
+        "rank": 5,
+        "title": "Docker Desktop安装+汉化，3秒搞定中文界面，告别英文界面焦虑",
+        "url": "https://www.bilibili.com/video/BV1hjKJ6RE18/",
+        "site": "bilibili.com",
+        "score": 0.575,
+        "engine": "bing_news",
+        "snippet": "视频仅为操作展示，以下为详细操作： Docker安装与汉化（汉化包必须与安装版本一致） 1、Docker官网下载安装 https://www.docker ..."
+      },
+      {
+        "rank": 6,
+        "title": "搬瓦工搭建 Docker 完整教程：安装、Compose 部署、踩坑全记录——新手 ...",
+        "url": "https://github.com/srar572/bandwagon-docker-deploy",
+        "site": "github.com",
+        "score": 0.575,
+        "engine": "bing_news",
+        "snippet": "刚开始折腾搬瓦工那会儿，我在一台 VPS 上装了宝塔、WordPress、各种代理工具，到后来越堆越乱，出个问题根本不知道是哪个程序在搞事。 后来全面切 Docker，思路就完全不一样了。每个应用跑在自己的容器里，彼此隔离，出问题直接删容器重拉，不影响别的东西。"
+      }
+    ]
+  },
+  {
+    "id": "edge-weather",
+    "category": "edge",
+    "question": "北京天气",
+    "history": [],
+    "query": "北京天气",
+    "query_used": "北京天气",
+    "expected_terms": "北京;天气;预报|气温|温度|°C|℃",
+    "expected_domains": [
+      "weather.com.cn",
+      "tianqi.com"
+    ],
+    "wrong_premise": false,
+    "retrieved": 6,
+    "good_count": 6,
+    "weak_count": 0,
+    "engines": [
+      "bing_cn"
+    ],
+    "tier_score": 2,
+    "engine": "bing_cn",
+    "low_relevance": false,
+    "error": "",
+    "latency": 1.27,
+    "snippet_grade": {
+      "hit": 3,
+      "total": 3,
+      "detail": [
+        [
+          "北京"
+        ],
+        [
+          "天气"
+        ],
+        [
+          "预报",
+          "温度",
+          "℃"
+        ]
+      ]
+    },
+    "full_grade": {
+      "hit": 3,
+      "total": 3,
+      "detail": [
+        [
+          "北京"
+        ],
+        [
+          "天气"
+        ],
+        [
+          "预报",
+          "气温",
+          "温度",
+          "℃"
+        ]
+      ]
+    },
+    "domain_hit": true,
+    "hosts": [
+      "weather.com.cn",
+      "weather.com.cn",
+      "nmc.cn",
+      "tianqi.com",
+      "beijing.tianqi.com",
+      "tianqi.eastday.com"
+    ],
+    "pages_fetched": 2,
+    "page_chars": 4000,
+    "results": [
+      {
+        "rank": 1,
+        "title": "北京天气预报,北京7天天气预报,北京15天天气预报,北京天气查询",
+        "url": "https://www.weather.com.cn/weather/101010100.shtml",
+        "site": "weather.com.cn",
+        "score": 1.0,
+        "engine": "bing_cn",
+        "snippet": "14 小时之前 · 北京天气预报，及时准确发布中央气象台天气信息，便捷查询北京今日天气，北京周末天气，北京一周天气预报，北京 …"
+      },
+      {
+        "rank": 2,
+        "title": "北京天气预报,北京7天天气预报,北京15天天气预报,北京天气 ...",
+        "url": "https://www.weather.com.cn/weather1dn/101010100.shtml",
+        "site": "weather.com.cn",
+        "score": 1.0,
+        "engine": "bing_cn",
+        "snippet": "14 小时之前 · 北京天气预报，及时准确发布中央气象台天气信息，便捷查询北京今日天气，北京周末天气，北京一周天气预报，北 …"
+      },
+      {
+        "rank": 3,
+        "title": "北京-天气预报",
+        "url": "https://nmc.cn/publish/forecast/ABJ/beijing.html",
+        "site": "nmc.cn",
+        "score": 1.0,
+        "engine": "bing_cn",
+        "snippet": "14 小时之前 · 当前位置： 首页 北京市 北京天气预报 省份： 北京 北京 北京 城市： 北京 北京 北京 日出 北京 日落 降水量 相对湿度 体 …"
+      },
+      {
+        "rank": 4,
+        "title": "【北京天气预报】北京天气预报一周_北京天气预报今天、7天 ...",
+        "url": "https://www.tianqi.com/beijing-beijing/44092/",
+        "site": "tianqi.com",
+        "score": 1.0,
+        "engine": "bing_cn",
+        "snippet": "14 小时之前 · 北京天气网为您提供北京天气预报详情，便捷查询北京24小时实况天气、温度趋势、风力风向、 降水预报、 紫外线强度 …"
+      },
+      {
+        "rank": 5,
+        "title": "【北京天气预报】北京天气预报一周_北京天气预报10天、15 ...",
+        "url": "https://beijing.tianqi.com/",
+        "site": "beijing.tianqi.com",
+        "score": 1.0,
+        "engine": "bing_cn",
+        "snippet": "天气网（www.tianqi.com）北京天气预报提供北京今日天气、明天天气以及北京未来一周的天气预报,可以实时查看北京天气、北京天 …"
+      },
+      {
+        "rank": 6,
+        "title": "北京天气_【北京今天天气预报】北京天气预报24小时详情 ...",
+        "url": "https://tianqi.eastday.com/beijing/",
+        "site": "tianqi.eastday.com",
+        "score": 1.0,
+        "engine": "bing_cn",
+        "snippet": "14 小时之前 · 07点 20℃ 晴 北风 1级 08点 21℃ 晴 北风 1级 09点 23℃ 晴 北风 1级 10点 25℃ 晴 东北风 1级 11点 27℃ 晴 东风 1级 12 …"
+      }
+    ]
+  },
+  {
+    "id": "premise-wrong-year",
+    "category": "premise",
+    "question": "2025年香港秋季灯饰展是什么时候？",
+    "history": [],
+    "query": "2025年香港秋季灯饰展是什么时候",
+    "query_used": "2025年香港秋季灯饰展是什么时候",
+    "expected_terms": "香港;灯饰|照明|灯;展|fair;10月|11月|月|HKTDC|贸发局",
+    "expected_domains": [],
+    "wrong_premise": false,
+    "retrieved": 5,
+    "good_count": 3,
+    "weak_count": 2,
+    "engines": [
+      "bing_cn",
+      "bing_news"
+    ],
+    "tier_score": 2,
+    "engine": "bing_news",
+    "low_relevance": false,
+    "error": "",
+    "latency": 0.77,
+    "snippet_grade": {
+      "hit": 4,
+      "total": 4,
+      "detail": [
+        [
+          "香港"
+        ],
+        [
+          "灯饰",
+          "照明",
+          "灯"
+        ],
+        [
+          "展"
+        ],
+        [
+          "10月",
+          "月"
+        ]
+      ]
+    },
+    "full_grade": {
+      "hit": 4,
+      "total": 4,
+      "detail": [
+        [
+          "香港"
+        ],
+        [
+          "灯饰",
+          "照明",
+          "灯"
+        ],
+        [
+          "展"
+        ],
+        [
+          "10月",
+          "月"
+        ]
+      ]
+    },
+    "domain_hit": null,
+    "hosts": [
+      "finance.sina.com.cn",
+      "finance.sina.com.cn",
+      "hm.people.com.cn",
+      "baike.baidu.com",
+      "stats.gov.cn"
+    ],
+    "pages_fetched": 2,
+    "page_chars": 3999,
+    "results": [
+      {
+        "rank": 1,
+        "title": "从智能天空到安全守护：佛山照明双展位亮相香港国际秋季灯饰展",
+        "url": "https://finance.sina.com.cn/roll/2025-10-27/doc-infvisym9731792.shtml",
+        "site": "finance.sina.com.cn",
+        "score": 0.844,
+        "engine": "bing_news",
+        "snippet": "10月27日-30日，第27届香港国际秋季灯饰展（以下简称“香港秋灯展”）在香港会议展览中心举行。佛山照明携两大主题展位亮相，集中展示“智能家居照明”与“适老照明”领域的最新成果，向全球客商展现“中国智造”的创新风采。 由香港贸易发展局主办的 ..."
+      },
+      {
+        "rank": 2,
+        "title": "2025 香港展首日热度攀升！茂硕电源新品与方案备受瞩目",
+        "url": "https://finance.sina.com.cn/stock/relnews/cn/2025-10-28/doc-infvkumv4550016.shtml",
+        "site": "finance.sina.com.cn",
+        "score": 0.787,
+        "engine": "bing_news",
+        "snippet": "2025 年 10 月 27 日，2025 香港国际秋季灯饰展正式启幕。茂硕电源科技股份有限公司（简称：茂硕电源，股票代码：002660）携全系列 LED 驱动电源参展，展位设于品牌廊 1E-B20 黄金位置。此次聚焦 “大功率户外照明驱动” 核心赛道，凭借多场景产品矩阵、四款首发 ..."
+      },
+      {
+        "rank": 3,
+        "title": "香港举办灯饰展云集约3000环球商家",
+        "url": "https://hm.people.com.cn/n1/2025/1028/c42272-40591262.html",
+        "site": "hm.people.com.cn",
+        "score": 0.681,
+        "engine": "bing_news",
+        "snippet": "新华社香港10月27日电 由香港贸易发展局主办的第27届香港国际秋季灯饰展27日起在香港会展中心举行，连同第10届香港国际户外及科技照明博览，两项展览吸引来自20个国家及地区约3000个商家参与。 第10届香港国际户外及科技照明博览将于10月28日至31日在亚洲 ..."
+      },
+      {
+        "rank": 4,
+        "title": "2025年_百度百科",
+        "url": "https://baike.baidu.com/item/2025%E5%B9%B4/7710344",
+        "site": "baike.baidu.com",
+        "score": 0.204,
+        "engine": "bing_cn",
+        "snippet": "2025年12月31日 · 年内举行中国人民抗日战争暨世界反法西斯战争胜利80周年阅兵和纪念台湾光复80周年大会。 另发生西藏定日6.8 …"
+      },
+      {
+        "rank": 5,
+        "title": "中华人民共和国2025年国民经济和社会发展统计公报 - 国家 ...",
+        "url": "https://www.stats.gov.cn/sj/zxfbhjd/202602/t20260228_1962662.html",
+        "site": "stats.gov.cn",
+        "score": 0.204,
+        "engine": "bing_cn",
+        "snippet": "2026年2月28日 · 2025年旅客运输总量、旅客运输周转量、公路旅客运输量、公路旅客运输周转量增速按可比口径计算。 [33]邮政行业 …"
+      }
+    ]
+  },
+  {
+    "id": "tech-git-undo-commit",
+    "category": "howto",
+    "question": "git 怎么撤销最近一次提交但保留改动？",
+    "history": [],
+    "query": "git 怎么撤销最近一次提交但保留改动",
+    "query_used": "git 怎么撤销最近一次提交但保留改动",
+    "expected_terms": "git;reset|soft|撤销|回退;HEAD|提交",
+    "expected_domains": [
+      "git-scm.com"
+    ],
+    "wrong_premise": false,
+    "retrieved": 6,
+    "good_count": 6,
+    "weak_count": 0,
+    "engines": [
+      "duckduckgo"
+    ],
+    "tier_score": 1,
+    "engine": "duckduckgo",
+    "low_relevance": false,
+    "error": "",
+    "latency": 2.13,
+    "snippet_grade": {
+      "hit": 3,
+      "total": 3,
+      "detail": [
+        [
+          "git"
+        ],
+        [
+          "reset",
+          "soft",
+          "撤销",
+          "回退"
+        ],
+        [
+          "head",
+          "提交"
+        ]
+      ]
+    },
+    "full_grade": {
+      "hit": 3,
+      "total": 3,
+      "detail": [
+        [
+          "git"
+        ],
+        [
+          "reset",
+          "soft",
+          "撤销",
+          "回退"
+        ],
+        [
+          "head",
+          "提交"
+        ]
+      ]
+    },
+    "domain_hit": false,
+    "hosts": [
+      "ask.csdn.net",
+      "cliai.tech",
+      "ask.csdn.net",
+      "comate.baidu.com",
+      "blog.csdn.net",
+      "blog.csdn.net"
+    ],
+    "pages_fetched": 1,
+    "page_chars": 1786,
+    "results": [
+      {
+        "rank": 1,
+        "title": "如何撤销最近一次Git提交但保留修改？_编程语言-CSDN问答",
+        "url": "https://ask.csdn.net/questions/9108070",
+        "site": "ask.csdn.net",
+        "score": 0.962,
+        "engine": "duckduckgo",
+        "snippet": "如何撤销最近一次Git提交但保留已修改的文件？在开发过程中，我误将未完成的更改执行了 `git commit`，但不想丢失代码修改，只想撤回提交动作。尝试使用 `git reset --hard` 会清除工作区更改，不符合需求。请问有哪些安全的方式可以撤销最近一次提交，同时保留工作目录中的修改？是否推荐使用 `git ..."
+      },
+      {
+        "rank": 2,
+        "title": "撤销上一次 git 提交但保留改动 - cliai.tech",
+        "url": "https://cliai.tech/zh/blog/undo-the-last-commit",
+        "site": "cliai.tech",
+        "score": 0.796,
+        "engine": "duckduckgo",
+        "snippet": "git reset --soft HEAD~1 会移除该提交，并把所有改动重新放回暂存区，和提交前那一刻完全一样。这是常见情况下的答案。你处于哪种情况，比用哪个参数更重要。"
+      },
+      {
+        "rank": 3,
+        "title": "如何撤销最近一次Git提交？_编程语言-CSDN问答",
+        "url": "https://ask.csdn.net/questions/9006222",
+        "site": "ask.csdn.net",
+        "score": 0.773,
+        "engine": "duckduckgo",
+        "snippet": "一、问题背景与核心目标 在日常开发中， git commit 是代码版本控制的核心操作。然而，开发者常因疏忽（如遗漏文件、提交信息错误）而需要撤销最近一次提交。关键在于：既要撤销提交记录，又要保留工作区的修改内容，以便重新调整后再次提交。 许多初学者误用 git reset --hard，导致所有更改 ..."
+      },
+      {
+        "rank": 4,
+        "title": "Git撤销最近一次Push的两种方法及对比_文心快码",
+        "url": "https://comate.baidu.com/zh/page/5okgtqzh4yj",
+        "site": "comate.baidu.com",
+        "score": 0.762,
+        "engine": "duckduckgo",
+        "snippet": "本文系统对比了Git撤销最近一次push的两种核心方案：`git revert`通过生成反向提交安全保留历史，适合团队协作；`git reset --hard`彻底删除提交但存在高风险，仅限个人分支使用。方法对比表格清晰展示了历史保留、冲突风险等关键差异，并给出不同场景下的推荐实践。扩展场景部分补充了撤销未推送 ..."
+      },
+      {
+        "rank": 5,
+        "title": "Git 撤回已经提交（甚至已 push）的代码，但把改动留在本地_git 撤销push代码,本地保留改动代码-CSDN博客",
+        "url": "https://blog.csdn.net/qq_38238956/article/details/159621555",
+        "site": "blog.csdn.net",
+        "score": 0.685,
+        "engine": "duckduckgo",
+        "snippet": "文章浏览阅读1.2k次，点赞3次，收藏5次。这篇文章介绍了如何安全撤回Git提交但保留本地代码修改的方法。核心步骤是：1）使用git reset HEAD~1回退本地提交记录；2）通过git push --force-with-lease origin main强制更新远程分支。文章特别强调这种方法适用于个人开发场景，并警告在多人协作分支上强制推送 ..."
+      },
+      {
+        "rank": 6,
+        "title": "git commit之后，撤销commit提交，却保留代码_git想消除提交记录但是不回退代码-CSDN博客",
+        "url": "https://blog.csdn.net/qq_33154343/article/details/100524686",
+        "site": "blog.csdn.net",
+        "score": 0.662,
+        "engine": "duckduckgo",
+        "snippet": "文章浏览阅读1.6w次，点赞17次，收藏54次。本文详细介绍了如何在不改变代码的情况下撤销Git中的Commit操作，包括使用`git reset --soft HEAD^`来撤销最近一次的Commit，以及如何通过`git commit --amend`修改已存在的Commit信息。文章还解释了`HEAD^`的含义，并提供了如何撤销多次Commit的方法。"
+      }
+    ]
+  },
+  {
+    "id": "premise-ai-2026",
+    "category": "premise",
+    "question": "ChatGPT 6 什么时候发布？",
+    "history": [],
+    "query": "ChatGPT 6 什么时候发布",
+    "query_used": "ChatGPT 6 什么时候发布",
+    "expected_terms": "ChatGPT|OpenAI;发布|推出|GPT-5|版本|尚未|没有|未",
+    "expected_domains": [],
+    "wrong_premise": true,
+    "retrieved": 6,
+    "good_count": 6,
+    "weak_count": 0,
+    "engines": [
+      "bing_cn"
+    ],
+    "tier_score": 2,
+    "engine": "bing_cn",
+    "low_relevance": false,
+    "error": "",
+    "latency": 0.79,
+    "snippet_grade": {
+      "hit": 2,
+      "total": 2,
+      "detail": [
+        [
+          "chatgpt",
+          "openai"
+        ],
+        [
+          "发布"
+        ]
+      ]
+    },
+    "full_grade": {
+      "hit": 2,
+      "total": 2,
+      "detail": [
+        [
+          "chatgpt",
+          "openai"
+        ],
+        [
+          "发布",
+          "推出",
+          "gpt-5",
+          "版本",
+          "没有",
+          "未"
+        ]
+      ]
+    },
+    "domain_hit": null,
+    "hosts": [
+      "chatgpt-china.org",
+      "gpt-chinese-guide.com",
+      "leedu.ac.cn",
+      "chatgpt-cnblog.com",
+      "news.qq.com",
+      "runmini.com"
+    ],
+    "pages_fetched": 2,
+    "page_chars": 4000,
+    "results": [
+      {
+        "rank": 1,
+        "title": "GPT-6 Astra 正式发布：新功能、API 价格、跑分与上线时间 ...",
+        "url": "https://www.chatgpt-china.org/guides/chatgpt/gpt-6-astra-release-features-official-guide-2026-09",
+        "site": "chatgpt-china.org",
+        "score": 1.0,
+        "engine": "bing_cn",
+        "snippet": "3 天之前 · OpenAI GPT-6 Astra 正式发布。本文依据官方资料详解上线时间、ChatGPT Plus/Pro 开放范围、Computer Use、Codex、 …"
+      },
+      {
+        "rank": 2,
+        "title": "GPT-6 Astra正式发布：新功能、API价格与国内使用指南 ...",
+        "url": "https://www.gpt-chinese-guide.com/chatgpt/gpt-6-astra-release-features-official-guide-2026-09",
+        "site": "gpt-chinese-guide.com",
+        "score": 1.0,
+        "engine": "bing_cn",
+        "snippet": "2026年9月6日 · GPT-6 Astra 已由 OpenAI 发布。本文依据官方资料整理新功能、Computer Use、Codex、公开评测、ChatGPT …"
+      },
+      {
+        "rank": 3,
+        "title": "GPT-6 Astra 已发布：套餐限额、API 价格与使用指南",
+        "url": "https://leedu.ac.cn/article/openai-astra-math-results-chatgpt-status/",
+        "site": "leedu.ac.cn",
+        "score": 1.0,
+        "engine": "bing_cn",
+        "snippet": "2026年8月2日 · GPT-6 Astra 已发布：ChatGPT 套餐、Pro 限额、API 价格与安全边界 截至 2026 年 9 月 14 日，GPT-6 Pro 已可用于 …"
+      },
+      {
+        "rank": 4,
+        "title": "GPT-6 Astra 发布：OpenAI ChatGPT 官方国内最新使用方法",
+        "url": "https://www.chatgpt-cnblog.com/guides/chatgpt/gpt-6-astra-china-usage-guide.html",
+        "site": "chatgpt-cnblog.com",
+        "score": 1.0,
+        "engine": "bing_cn",
+        "snippet": "3 天之前 · 2026 年 9 月 3 日，OpenAI 正式发布新一代旗舰模型 GPT-6 Astra。 OpenAI 将它称为“新一代智能”，并表示 Astra 在计算 …"
+      },
+      {
+        "rank": 5,
+        "title": "GPT-6 Astra上线，AGI时代真到来了吗？_腾讯新闻",
+        "url": "https://news.qq.com/rain/a/20260904A0379S00",
+        "site": "news.qq.com",
+        "score": 1.0,
+        "engine": "bing_cn",
+        "snippet": "2026年9月4日 · Astra发布前几个小时，AI圈先乱成了一团。9月3日晚间，ChatGPT、Claude和Grok几乎同时出现大范围服务异常， …"
+      },
+      {
+        "rank": 6,
+        "title": "GPT-6 什么时候发布？2026 预测与 ChatGPT 6 Agent 决策 ...",
+        "url": "https://runmini.com/zh/blog/articles/2026-gpt-6-release-prediction-chatgpt-6-ai-agent-openclaw.html",
+        "site": "runmini.com",
+        "score": 1.0,
+        "engine": "bing_cn",
+        "snippet": "2026年7月24日 · GPT-6 / ChatGPT 6 什么时候发布？ 2026 最新窗口预测、功能升级与 AI Agent 决策矩阵；含 OpenClaw 安装与场 …"
+      }
+    ]
+  },
+  {
+    "id": "compare-llm-price",
+    "category": "compare",
+    "question": "DeepSeek 和 GPT 哪个 API 更便宜？",
+    "history": [],
+    "query": "DeepSeek 和 GPT 哪个 API 更便宜",
+    "query_used": "DeepSeek 和 GPT 哪个 API 更便宜",
+    "expected_terms": "DeepSeek;GPT|OpenAI;价格|定价|便宜|成本|pricing",
+    "expected_domains": [
+      "deepseek.com",
+      "openai.com"
+    ],
+    "wrong_premise": false,
+    "retrieved": 6,
+    "good_count": 6,
+    "weak_count": 0,
+    "engines": [
+      "bing_cn",
+      "bing_news"
+    ],
+    "tier_score": 2,
+    "engine": "bing_news",
+    "low_relevance": false,
+    "error": "",
+    "latency": 0.63,
+    "snippet_grade": {
+      "hit": 3,
+      "total": 3,
+      "detail": [
+        [
+          "deepseek"
+        ],
+        [
+          "gpt",
+          "openai"
+        ],
+        [
+          "价格",
+          "定价"
+        ]
+      ]
+    },
+    "full_grade": {
+      "hit": 3,
+      "total": 3,
+      "detail": [
+        [
+          "deepseek"
+        ],
+        [
+          "gpt",
+          "openai"
+        ],
+        [
+          "价格",
+          "定价",
+          "成本",
+          "pricing"
+        ]
+      ]
+    },
+    "domain_hit": true,
+    "hosts": [
+      "finance.sina.com.cn",
+      "deepseek.com",
+      "platform.deepseek.com",
+      "news.qq.com",
+      "finance.sina.com.cn",
+      "news.qq.com"
+    ],
+    "pages_fetched": 2,
+    "page_chars": 3010,
+    "results": [
+      {
+        "rank": 1,
+        "title": "从DeepSeek V4、GPT 5.5同日更新，看中美科技生态对撞",
+        "url": "https://finance.sina.com.cn/wm/2026-04-25/doc-inhvtfma2387929.shtml",
+        "site": "finance.sina.com.cn",
+        "score": 0.55,
+        "engine": "bing_news",
+        "snippet": "4月24日凌晨，OpenAI发布了GPT-5.5。消息很快传开，焦点之一是价格。标准版API，输入每百万token五美元，输出三十美元。Pro版本的价格更高。与此同时，OpenAI将它的模型更深地嵌入了Codex，这个工具不再只是帮忙写几行代码，而是试图接管整个工作流程，从操作 ..."
+      },
+      {
+        "rank": 2,
+        "title": "DeepSeek | API Platform",
+        "url": "https://www.deepseek.com/en/platform/",
+        "site": "deepseek.com",
+        "score": 0.543,
+        "engine": "bing_cn",
+        "snippet": "2026年8月13日 · DeepSeek is an AI research company focused on building world-leading general artificial intelligence. We develop …"
+      },
+      {
+        "rank": 3,
+        "title": "DeepSeek Platform",
+        "url": "https://platform.deepseek.com/usage",
+        "site": "platform.deepseek.com",
+        "score": 0.518,
+        "engine": "bing_cn",
+        "snippet": "Join DeepSeek API platform to access our AI models, developer resources and API documentation."
+      },
+      {
+        "rank": 4,
+        "title": "横评DeepSeek、Claude、GPT、Kimi，结果大跌眼镜…",
+        "url": "https://news.qq.com/rain/a/20260427A07MS700",
+        "site": "news.qq.com",
+        "score": 0.383,
+        "engine": "bing_news",
+        "snippet": "大家好，我是冷逸。 最近，模型圈又卷起来了，A厂、O厂和鲸鱼都陆续发布了新模型。特别是DeepSeek V4，一发布就冲上了各种热搜。 好多人都在问DeepSeek V4到底在开源模型中是什么地位，又和闭源模型差多少呢？ 于是，我花了400元，实测对比了几款热门大模型 ..."
+      },
+      {
+        "rank": 5,
+        "title": "DeepSeek-V4和GPT-5.5第一波实测对决，结果出人意料！",
+        "url": "https://finance.sina.com.cn/wm/2026-04-26/doc-inhvutnk1734355.shtml",
+        "site": "finance.sina.com.cn",
+        "score": 0.383,
+        "engine": "bing_news",
+        "snippet": "【新智元导读】昨夜，GPT-5.5果然按期发布了，全网没有白等。更炸裂的是，就在同一天，DeepSeek-V4紧随其后发布了！实测后，结果出人意料。 2026年4月24日，这是属于全球AI开发者的「疯狂星期五」，也是科技史上注定被铭记的一天。 凌晨时分，OpenAI的GPT-5.5如约 ..."
+      },
+      {
+        "rank": 6,
+        "title": "DeepSeek V4系列API大幅涨价，部分价格涨幅超11倍",
+        "url": "https://news.qq.com/rain/a/20260819A05WG400",
+        "site": "news.qq.com",
+        "score": 0.383,
+        "engine": "bing_news",
+        "snippet": "人工智能模型提供商DeepSeek长期以来以超低价格著称，但这一局面即将改变。 这家中国模型厂商宣布对其V4系列模型的API定价进行大幅调整，部分场景涨幅超过1100%。不过，涨价幅度并非对所有用户一刀切——该公司推出了峰值与非峰值的差异化定价机制，鼓励 ..."
+      }
+    ]
+  },
+  {
+    "id": "en-rust-ownership",
+    "category": "en",
+    "question": "rust ownership rules explained",
+    "history": [],
+    "query": "rust ownership rules explained",
+    "query_used": "rust ownership rules explained",
+    "expected_terms": "rust;ownership|borrow|借用;规则|rules|reference",
+    "expected_domains": [
+      "doc.rust-lang.org",
+      "rust-lang.org"
+    ],
+    "wrong_premise": false,
+    "retrieved": 5,
+    "good_count": 5,
+    "weak_count": 0,
+    "engines": [
+      "duckduckgo"
+    ],
+    "tier_score": 1,
+    "engine": "duckduckgo",
+    "low_relevance": false,
+    "error": "",
+    "latency": 1.44,
+    "snippet_grade": {
+      "hit": 3,
+      "total": 3,
+      "detail": [
+        [
+          "rust"
+        ],
+        [
+          "ownership",
+          "borrow"
+        ],
+        [
+          "rules"
+        ]
+      ]
+    },
+    "full_grade": {
+      "hit": 3,
+      "total": 3,
+      "detail": [
+        [
+          "rust"
+        ],
+        [
+          "ownership",
+          "borrow"
+        ],
+        [
+          "rules",
+          "reference"
+        ]
+      ]
+    },
+    "domain_hit": true,
+    "hosts": [
+      "learningrust.org",
+      "rustfaq.org",
+      "learn.programmingline.com",
+      "doc.rust-lang.org",
+      "rustify.rs"
+    ],
+    "pages_fetched": 2,
+    "page_chars": 4000,
+    "results": [
+      {
+        "rank": 1,
+        "title": "Ownership & Borrowing · Learn Rust | LearningRust.org",
+        "url": "https://learningrust.org/lessons/06-ownership",
+        "site": "learningrust.org",
+        "score": 1.0,
+        "engine": "duckduckgo",
+        "snippet": "Rust ownership explained — understand move semantics, borrowing rules, and how Rust guarantees memory safety without a garbage collector"
+      },
+      {
+        "rank": 2,
+        "title": "The Three Rules of Ownership in Rust Explained — Rust FAQ",
+        "url": "https://www.rustfaq.org/en/the-three-rules-of-ownership-in-rust-explained/",
+        "site": "rustfaq.org",
+        "score": 1.0,
+        "engine": "duckduckgo",
+        "snippet": "Confused by Rust's ownership? We break down the three core rules simply. Stop memory errors and start writing safe, efficient Rust code now."
+      },
+      {
+        "rank": 3,
+        "title": "Rust Ownership Explained: Moves, Copy & Borrowing",
+        "url": "https://learn.programmingline.com/learn/rust/rust-ownership",
+        "site": "learn.programmingline.com",
+        "score": 1.0,
+        "engine": "duckduckgo",
+        "snippet": "A deep, example-driven guide to Rust ownership: how moves, the Copy trait, and borrowing rules prevent memory bugs without a garbage collector."
+      },
+      {
+        "rank": 4,
+        "title": "What is Ownership? - The Rust Programming Language",
+        "url": "https://doc.rust-lang.org/book/ch04-01-what-is-ownership.html",
+        "site": "doc.rust-lang.org",
+        "score": 0.985,
+        "engine": "duckduckgo",
+        "snippet": "The good news is that the more experienced you become with Rust and the rules of the ownership system, the easier you'll find it to naturally develop code that is safe and efficient. Keep at it! When "
+      },
+      {
+        "rank": 5,
+        "title": "Rust Ownership and Borrowing Explained: A Visual Guide for 2026",
+        "url": "https://rustify.rs/articles/rust-ownership-borrowing-explained",
+        "site": "rustify.rs",
+        "score": 0.963,
+        "engine": "duckduckgo",
+        "snippet": "The clearest explanation of Rust ownership, borrowing, and the borrow checker in 2026. Understand why Rust works this way and how to stop fighting the compiler."
+      }
+    ]
+  },
+  {
+    "id": "tech-python-version",
+    "category": "tech",
+    "question": "Python 现在最新的稳定版本是多少？",
+    "history": [],
+    "query": "Python 现在最新的稳定版本是多少",
+    "query_used": "Python 现在最新的稳定版本是多少",
+    "expected_terms": "Python;3.1|3.14|3.13;下载|download|发布|release",
+    "expected_domains": [
+      "python.org"
+    ],
+    "wrong_premise": false,
+    "retrieved": 6,
+    "good_count": 4,
+    "weak_count": 2,
+    "engines": [
+      "bing_cn",
+      "bing_news"
+    ],
+    "tier_score": 2,
+    "engine": "bing_news",
+    "low_relevance": false,
+    "error": "",
+    "latency": 0.62,
+    "snippet_grade": {
+      "hit": 3,
+      "total": 3,
+      "detail": [
+        [
+          "python"
+        ],
+        [
+          "3.1",
+          "3.14",
+          "3.13"
+        ],
+        [
+          "download",
+          "发布",
+          "release"
+        ]
+      ]
+    },
+    "full_grade": {
+      "hit": 3,
+      "total": 3,
+      "detail": [
+        [
+          "python"
+        ],
+        [
+          "3.1",
+          "3.14",
+          "3.13"
+        ],
+        [
+          "下载",
+          "download",
+          "发布",
+          "release"
+        ]
+      ]
+    },
+    "domain_hit": true,
+    "hosts": [
+      "news.qq.com",
+      "python.org",
+      "python.org",
+      "docs.python.org",
+      "runoob.com",
+      "pythonlang.cn"
+    ],
+    "pages_fetched": 3,
+    "page_chars": 5272,
+    "results": [
+      {
+        "rank": 1,
+        "title": "官方玩梗：Python 3.14（πthon）稳定版发布，正式支持自由线程",
+        "url": "https://news.qq.com/rain/a/20251008A0058600",
+        "site": "news.qq.com",
+        "score": 0.806,
+        "engine": "bing_news",
+        "snippet": "IT之家 10 月 7 日消息，当地时间 10 月 7 日，Python 软件基金会宣布 Python 3.14.0 正式发布，也就是用户期待已久的圆周率（约 3.14）版本，再加上谐音梗可戏称为 πthon。 这是 Python 编程语言的最新稳定版本，与 Python 3.13 相比在功能和性能上均有显著改进。IT之家 ..."
+      },
+      {
+        "rank": 2,
+        "title": "Welcome to Python.org",
+        "url": "https://www.python.org/",
+        "site": "python.org",
+        "score": 0.304,
+        "engine": "bing_cn",
+        "snippet": "The mission of the Python Software Foundation is to promote, protect, and advance the Python programming language, and to …"
+      },
+      {
+        "rank": 3,
+        "title": "Download Python | Python.org",
+        "url": "https://www.python.org/downloads/",
+        "site": "python.org",
+        "score": 0.304,
+        "engine": "bing_cn",
+        "snippet": "Starting with the Python 3.11.0, Python 3.10.7, and Python 3.9.14 releases, CPython release artifacts are signed with Sigstore. See …"
+      },
+      {
+        "rank": 4,
+        "title": "Python 3.14.7 文档",
+        "url": "https://docs.python.org/zh-cn/3/",
+        "site": "docs.python.org",
+        "score": 0.304,
+        "engine": "bing_cn",
+        "snippet": "1 天前 · Python 开发者指南 有关如何为 Python 做贡献的信息 Python 打包用户指南 与 Python 打包有关的资源 音频/视频讲座 来自社 …"
+      },
+      {
+        "rank": 5,
+        "title": "Python3 教程 | 菜鸟教程",
+        "url": "https://www.runoob.com/python3/python3-tutorial.html",
+        "site": "runoob.com",
+        "score": 0.269,
+        "engine": "bing_cn",
+        "snippet": "Python 的 3.0 版本，常被称为 Python 3000，或简称 Py3k。 相对于 Python 的早期版本，这是一个较大的升级。 为了不带入过多的累 …"
+      },
+      {
+        "rank": 6,
+        "title": "欢迎来到 Python.org - Python 编程语言",
+        "url": "https://pythonlang.cn/",
+        "site": "pythonlang.cn",
+        "score": 0.244,
+        "engine": "bing_cn",
+        "snippet": "2026年6月27日 · 使用 Python 进行计算非常简单，表达式语法也很直观：运算符 + 、 - 、 * 和 / 的作用符合预期；括号 () 可用于分组 …"
+      }
+    ]
+  },
+  {
+    "id": "en-python-asyncio",
+    "category": "en",
+    "question": "python asyncio gather vs wait difference",
+    "history": [],
+    "query": "python asyncio gather vs wait difference",
+    "query_used": "python asyncio gather vs wait difference",
+    "expected_terms": "asyncio;gather|wait;python|docs",
+    "expected_domains": [
+      "docs.python.org"
+    ],
+    "wrong_premise": false,
+    "retrieved": 6,
+    "good_count": 6,
+    "weak_count": 0,
+    "engines": [
+      "duckduckgo"
+    ],
+    "tier_score": 1,
+    "engine": "duckduckgo",
+    "low_relevance": false,
+    "error": "",
+    "latency": 1.47,
+    "snippet_grade": {
+      "hit": 3,
+      "total": 3,
+      "detail": [
+        [
+          "asyncio"
+        ],
+        [
+          "gather",
+          "wait"
+        ],
+        [
+          "python"
+        ]
+      ]
+    },
+    "full_grade": {
+      "hit": 3,
+      "total": 3,
+      "detail": [
+        [
+          "asyncio"
+        ],
+        [
+          "gather",
+          "wait"
+        ],
+        [
+          "python"
+        ]
+      ]
+    },
+    "domain_hit": false,
+    "hosts": [
+      "superfastpython.com",
+      "iditect.com",
+      "stackoverflow.com",
+      "salivity.github.io",
+      "codemia.io",
+      "stackoverflow.com"
+    ],
+    "pages_fetched": 1,
+    "page_chars": 1999,
+    "results": [
+      {
+        "rank": 1,
+        "title": "Asyncio gather () vs wait () in Python - SuperFastPython",
+        "url": "https://superfastpython.com/asyncio-gather-vs-wait/",
+        "site": "superfastpython.com",
+        "score": 1.0,
+        "engine": "duckduckgo",
+        "snippet": "The asyncio.wait () function is intended to wait for a specific condition in a collection of tasks, such as all complete, the first to complete, or the first to fail. The gather () function returns an"
+      },
+      {
+        "rank": 2,
+        "title": "Asyncio.gather vs asyncio.wait - iDiTect.com",
+        "url": "https://www.iditect.com/faq/python/asynciogather-vs-asynciowait.html",
+        "site": "iditect.com",
+        "score": 1.0,
+        "engine": "duckduckgo",
+        "snippet": "asyncio.gather and asyncio.wait are both functions provided by the asyncio library in Python for managing and awaiting multiple asynchronous tasks. They serve similar purposes but have some difference"
+      },
+      {
+        "rank": 3,
+        "title": "python - asyncio.gather vs asyncio.wait (vs asyncio.TaskGroup) - Stack ...",
+        "url": "https://stackoverflow.com/questions/42231161/asyncio-gather-vs-asyncio-wait-vs-asyncio-taskgroup",
+        "site": "stackoverflow.com",
+        "score": 0.958,
+        "engine": "duckduckgo",
+        "snippet": "asyncio.gather and asyncio.wait seem to have similar uses: I have a bunch of async things that I want to execute/wait for (not necessarily waiting for one to finish before the next one starts). Since "
+      },
+      {
+        "rank": 4,
+        "title": "asyncio.gather vs asyncio.wait in Python - python",
+        "url": "https://salivity.github.io/python/article/asyncio-gather-vs-asyncio-wait-in-python",
+        "site": "salivity.github.io",
+        "score": 0.958,
+        "engine": "duckduckgo",
+        "snippet": "Python's asyncio module provides both asyncio.gather() and asyncio.wait() to run multiple asynchronous operations concurrently. While both functions coordinate multiple awaitables, they differ fundame"
+      },
+      {
+        "rank": 5,
+        "title": "asyncio.gather vs asyncio.wait vs asyncio.TaskGroup | Codemia",
+        "url": "https://codemia.io/knowledge-hub/path/asynciogather_vs_asynciowait_vs_asynciotaskgroup",
+        "site": "codemia.io",
+        "score": 0.933,
+        "engine": "duckduckgo",
+        "snippet": "Introduction Python's asyncio module provides three primary tools for running multiple coroutines concurrently: asyncio.gather, asyncio.wait, and asyncio.TaskGroup. Each serves a different use case. g"
+      },
+      {
+        "rank": 6,
+        "title": "python 3.x - Asyncio gather difference - Stack Overflow",
+        "url": "https://stackoverflow.com/questions/73988859/asyncio-gather-difference",
+        "site": "stackoverflow.com",
+        "score": 0.933,
+        "engine": "duckduckgo",
+        "snippet": "The asyncio.gather function runs the awaitables you pass to it concurrently. That means, if I/O is happening in at least one of them that allows for useful context switches by the event loop. That in "
+      }
+    ]
+  },
+  {
+    "id": "time-nobel-2025",
+    "category": "time",
+    "question": "2025年诺贝尔文学奖颁给了谁？",
+    "history": [],
+    "query": "2025年诺贝尔文学奖颁给了谁",
+    "query_used": "2025年诺贝尔文学奖颁给了谁",
+    "expected_terms": "诺贝尔|Nobel;文学奖;2025;获奖|颁给|作家|László|Krasznahorkai|克拉斯诺霍尔卡伊",
+    "expected_domains": [
+      "nobelprize.org"
+    ],
+    "wrong_premise": false,
+    "retrieved": 6,
+    "good_count": 6,
+    "weak_count": 0,
+    "engines": [
+      "duckduckgo"
+    ],
+    "tier_score": 1,
+    "engine": "duckduckgo",
+    "low_relevance": false,
+    "error": "",
+    "latency": 1.97,
+    "snippet_grade": {
+      "hit": 4,
+      "total": 4,
+      "detail": [
+        [
+          "诺贝尔"
+        ],
+        [
+          "文学奖"
+        ],
+        [
+          "2025"
+        ],
+        [
+          "获奖",
+          "颁给",
+          "作家",
+          "lászló",
+          "krasznahorkai"
+        ]
+      ]
+    },
+    "full_grade": {
+      "hit": 4,
+      "total": 4,
+      "detail": [
+        [
+          "诺贝尔"
+        ],
+        [
+          "文学奖"
+        ],
+        [
+          "2025"
+        ],
+        [
+          "获奖",
+          "颁给",
+          "作家",
+          "lászló",
+          "krasznahorkai",
+          "克拉斯诺霍尔卡伊"
+        ]
+      ]
+    },
+    "domain_hit": false,
+    "hosts": [
+      "news.qq.com",
+      "zhuanlan.zhihu.com",
+      "wxredian.com",
+      "m.thepaper.cn",
+      "msn.cn",
+      "msn.com"
+    ],
+    "pages_fetched": 1,
+    "page_chars": 2000,
+    "results": [
+      {
+        "rank": 1,
+        "title": "刚刚!2025年诺贝尔文学奖得主揭晓!你读过他的书吗？（附历届书单）_腾讯新闻",
+        "url": "https://news.qq.com/rain/a/20251009A07E1Y00",
+        "site": "news.qq.com",
+        "score": 1.0,
+        "engine": "duckduckgo",
+        "snippet": "瑞典斯德哥尔摩当地时间2025年10月9日13:00（北京时间19:00），瑞典学院将2025年诺贝尔文学奖颁给了匈牙利作家拉斯洛·卡撒兹纳霍凯，\"以表彰他 ..."
+      },
+      {
+        "rank": 2,
+        "title": "2025年诺贝尔文学奖揭晓：匈牙利作家拉斯洛获奖丨历届获奖者大盘点",
+        "url": "https://zhuanlan.zhihu.com/p/1959729670514808772",
+        "site": "zhuanlan.zhihu.com",
+        "score": 1.0,
+        "engine": "duckduckgo",
+        "snippet": "特别推荐 听哲学课：哲学100问 2025年 诺贝尔文学奖 揭晓 匈牙利作家拉斯洛获奖 北京时间10月9日19点，瑞典学院将2025年度诺贝尔文学奖颁给 了匈牙利作家拉斯洛卡·撒兹 纳霍凯（LászlóKrasznahorkai），以表彰其在文学上的成就。 获奖理由： 以表彰\"他引人入胜且富有远见的作品，在世界末日的恐怖 ..."
+      },
+      {
+        "rank": 3,
+        "title": "WXRedian | 静嘉读书 | 2025年诺贝尔文学奖揭晓：附1901-2025历届得主及获奖词",
+        "url": "https://wxredian.com/art?id=09a166adb9a0ac4980f4fbf8ecac7cfb",
+        "site": "wxredian.com",
+        "score": 1.0,
+        "engine": "duckduckgo",
+        "snippet": "北京时间10月9日19点，瑞典学院将2025年度诺贝尔文学奖颁给了匈牙利作家拉斯洛卡·撒兹纳霍凯（LászlóKrasznahorkai），以表彰其在文学上的成就。 获奖理由：以表彰\"他引人入胜且富有远见的作品，在世界末日的恐怖中，再次证明了艺术的力量\"。"
+      },
+      {
+        "rank": 4,
+        "title": "2025年诺贝尔文学奖揭晓 - 澎湃新闻",
+        "url": "https://m.thepaper.cn/newsDetail_forward_31747426",
+        "site": "m.thepaper.cn",
+        "score": 1.0,
+        "engine": "duckduckgo",
+        "snippet": "瑞典斯德哥尔摩当地时间2025年10月9日13:00（北京时间19:00），瑞典学院将2025年诺贝尔文学奖颁给了匈牙利作家拉斯洛·卡撒兹纳霍凯，\"以表彰他引人入胜且富有远见的作品，在世界末日的恐怖中，再次证明了艺术的力量\"。 来源 | 中国新闻社"
+      },
+      {
+        "rank": 5,
+        "title": "2025年诺贝尔文学奖公布 - Msn",
+        "url": "https://www.msn.cn/zh-cn/%E8%89%BA%E6%9C%AF/%E9%80%9A%E7%94%A8/2025%E5%B9%B4%E8%AF%BA%E8%B4%9D%E5%B0%94%E6%96%87%E5%AD%A6%E5%A5%96%E5%85%AC%E5%B8%83/ar-AA1O8VBg",
+        "site": "msn.cn",
+        "score": 1.0,
+        "engine": "duckduckgo",
+        "snippet": "大家好，在今天，诺贝尔文学奖就正式公布了，在7点由瑞典文学院将2025年诺贝尔文学奖颁给了匈牙利作家拉斯洛·卡撒兹纳霍凯。 以表彰其\"在末世恐惧中仍能通过震撼人心且具先知般洞察力的作品，重申艺术力量\"的杰出成就。 后现代主义文学代表作家。"
+      },
+      {
+        "rank": 6,
+        "title": "2025年诺贝尔文学奖揭晓! - Msn",
+        "url": "https://www.msn.com/zh-cn/%E7%A4%BE%E4%BC%9A%E6%96%87%E5%8C%96%E5%92%8C%E5%8E%86%E5%8F%B2/%E4%B9%A6%E7%B1%8D%E5%92%8C%E6%96%87%E5%AD%A6/2025%E5%B9%B4%E8%AF%BA%E8%B4%9D%E5%B0%94%E6%96%87%E5%AD%A6%E5%A5%96%E6%8F%AD%E6%99%93/ar-AA1O8J8T",
+        "site": "msn.com",
+        "score": 1.0,
+        "engine": "duckduckgo",
+        "snippet": "瑞典斯德哥尔摩当地时间2025年10月9日13:00（北京时间19:00），瑞典学院将2025年诺贝尔文学奖颁给了匈牙利作家拉斯洛·卡撒兹纳霍凯，以表彰其\"在 ..."
+      }
+    ]
+  },
+  {
+    "id": "fact-lighting-fair-2026",
+    "category": "fact",
+    "question": "2026香港国际秋季灯饰展什么时候在哪办？",
+    "history": [],
+    "query": "2026香港国际秋季灯饰展什么时候在哪办",
+    "query_used": "2026香港国际秋季灯饰展什么时候在哪办",
+    "expected_terms": "香港|香港贸发局|HKTDC;灯饰|照明;会展|会议展览中心|博览道|湾仔|10月|11月",
+    "expected_domains": [
+      "hktdc.com",
+      "hklightingfair.com"
+    ],
+    "wrong_premise": false,
+    "retrieved": 6,
+    "good_count": 6,
+    "weak_count": 0,
+    "engines": [
+      "duckduckgo"
+    ],
+    "tier_score": 1,
+    "engine": "duckduckgo",
+    "low_relevance": false,
+    "error": "",
+    "latency": 1.91,
+    "snippet_grade": {
+      "hit": 3,
+      "total": 3,
+      "detail": [
+        [
+          "香港",
+          "香港贸发局",
+          "hktdc"
+        ],
+        [
+          "灯饰",
+          "照明"
+        ],
+        [
+          "会展",
+          "会议展览中心",
+          "博览道",
+          "湾仔",
+          "10月"
+        ]
+      ]
+    },
+    "full_grade": {
+      "hit": 3,
+      "total": 3,
+      "detail": [
+        [
+          "香港",
+          "香港贸发局",
+          "hktdc"
+        ],
+        [
+          "灯饰",
+          "照明"
+        ],
+        [
+          "会展",
+          "会议展览中心",
+          "博览道",
+          "湾仔",
+          "10月",
+          "11月"
+        ]
+      ]
+    },
+    "domain_hit": true,
+    "hosts": [
+      "hktdc.com",
+      "szgti.com",
+      "expofinder.com",
+      "ws-expo.com",
+      "zhanxun123.com",
+      "sohu.com"
+    ],
+    "pages_fetched": 2,
+    "page_chars": 3999,
+    "results": [
+      {
+        "rank": 1,
+        "title": "展会概览 | 香港贸发局香港国际秋季灯饰展 - Hktdc",
+        "url": "https://www.hktdc.com/event/hklightingfairae/sc/fair-at-a-glance",
+        "site": "hktdc.com",
+        "score": 1.0,
+        "engine": "duckduckgo",
+        "snippet": "香港贸发局香港国际秋季灯饰展 - 实体展 2026年10月27日 (星期二) - 2026年10月30日 (星期五) 香港会议展览中心展览 香港湾仔博览道一号（港湾道入口）"
+      },
+      {
+        "rank": 2,
+        "title": "2026 香港国际秋季灯饰展（10月27-30日·Hkcec）| 摊位预定+特装搭建 | 环球趋势 Gti",
+        "url": "https://szgti.com/exhibitions/hktdc-lighting-fair-autumn-2026/",
+        "site": "szgti.com",
+        "score": 1.0,
+        "engine": "duckduckgo",
+        "snippet": "2026 香港秋季灯饰展 10月27-30日在香港会议展览中心举办。HKTDC主办，亚洲照明行业核心展。GTI提供官方摊位+特装搭建+运输清关。"
+      },
+      {
+        "rank": 3,
+        "title": "2026香港国际秋季灯饰展_门票_时间_展位_展商 - 展查查 ExpoFinder",
+        "url": "https://www.expofinder.com/detail/jayNt5AB",
+        "site": "expofinder.com",
+        "score": 1.0,
+        "engine": "duckduckgo",
+        "snippet": "2026香港国际秋季灯饰展将于2026.10.27-10.30在中国·香港·香港会议展览中心举办。预计2,630家参展企业、4w+专业观众。展会展示优质商业照明产品、知名品牌照明系列，以及功能性和装饰性家用灯具。展查查提供官网、主办方、展商和相关展会信息。"
+      },
+      {
+        "rank": 4,
+        "title": "2026年香港国际秋季灯饰展览会Hong Kong International Lighting Fair (Autumn Edition)_万盛展览",
+        "url": "https://www.ws-expo.com/lighting/20261950110195.html",
+        "site": "ws-expo.com",
+        "score": 1.0,
+        "engine": "duckduckgo",
+        "snippet": "2026年香港国际秋季灯饰展览会,香港国际秋季灯饰展览会是由香港贸易发展局主办，旨在向来自全球的买家展出最新颖的灯饰产品，为各地商家提供优质的贸易平台，促进灯饰领域在国际间的交流与合作。经过二十余,Hong Kong International Lighting Fair (Autumn Edition)"
+      },
+      {
+        "rank": 5,
+        "title": "香港灯饰展2026_香港照明展门票_时间_地址_2026香港国际秋季灯饰展",
+        "url": "https://www.zhanxun123.com/expo-info/3435.html",
+        "site": "zhanxun123.com",
+        "score": 1.0,
+        "engine": "duckduckgo",
+        "snippet": "2026香港国际秋季灯饰展将于 2026-10-27 至 2026-10-30 在香港举办。 香港国际秋季灯饰展览会由香港贸易发展局主办，自1999年举办以来，已经成功举办了二十余届。庞大的买家和参展商数量，以及不断创新高的交易量成就了该展在行业内的显赫地位，香港国际秋季灯饰展览会已经成为亚洲区最负盛名的 ..."
+      },
+      {
+        "rank": 6,
+        "title": "2026年香港秋季灯饰展_照明_展览会_买家 - 搜狐",
+        "url": "https://www.sohu.com/a/974802447_121986596",
+        "site": "sohu.com",
+        "score": 0.79,
+        "engine": "duckduckgo",
+        "snippet": "香港贸发局主办的香港秋季灯饰展已在香港会议展览中心举行。香港贸发局去年在亚洲国际博览馆新设\"户外照明及灯饰配件世界\"展区，进一步打造更专业的国际灯饰采购平台。 上届秋季灯饰展共有来自38个国家及地区的3000 ..."
+      }
+    ]
+  },
+  {
+    "id": "fact-central-axis",
+    "category": "fact",
+    "question": "北京中轴线是什么时候列入世界遗产名录的？",
+    "history": [],
+    "query": "北京中轴线是什么时候列入世界遗产名录的",
+    "query_used": "北京中轴线是什么时候列入世界遗产名录的",
+    "expected_terms": "世界遗产|世界遗产名录|世界文化遗产;中轴线;2024|二〇二四",
+    "expected_domains": [
+      "unesco.org",
+      "gov.cn",
+      "whc.unesco.org"
+    ],
+    "wrong_premise": false,
+    "retrieved": 6,
+    "good_count": 6,
+    "weak_count": 0,
+    "engines": [
+      "bing_news"
+    ],
+    "tier_score": 2,
+    "engine": "bing_news",
+    "low_relevance": false,
+    "error": "",
+    "latency": 0.83,
+    "snippet_grade": {
+      "hit": 2,
+      "total": 3,
+      "detail": [
+        [
+          "世界遗产",
+          "世界遗产名录"
+        ],
+        [
+          "中轴线"
+        ],
+        []
+      ]
+    },
+    "full_grade": {
+      "hit": 3,
+      "total": 3,
+      "detail": [
+        [
+          "世界遗产",
+          "世界遗产名录"
+        ],
+        [
+          "中轴线"
+        ],
+        [
+          "2024"
+        ]
+      ]
+    },
+    "domain_hit": false,
+    "hosts": [
+      "zaobao.com.sg",
+      "news.qq.com",
+      "news.cnr.cn",
+      "finance.sina.com.cn",
+      "finance.sina.com.cn",
+      "news.fjsen.com"
+    ],
+    "pages_fetched": 3,
+    "page_chars": 4534,
+    "results": [
+      {
+        "rank": 1,
+        "title": "北京中轴线列入世界遗产名录",
+        "url": "https://www.zaobao.com.sg/realtime/china/story20240727-4376877",
+        "site": "zaobao.com.sg",
+        "score": 1.0,
+        "engine": "bing_news",
+        "snippet": "经过12年的努力，北京中轴线成功申遗，中国世界遗产总数至此达到59项。 综合新华社和中新社报道，联合国教科文组织第46届世界遗产大会当地时间星期六（7月27日）上午在印度新德里召开，通过决议将“北京中轴线——中国理想都城秩序的杰作”列入《世界 ..."
+      },
+      {
+        "rank": 2,
+        "title": "申遗成功，“北京中轴线”被列入《世界遗产名录》",
+        "url": "https://news.qq.com/rain/a/20240727A04KTN00?shareto=wx&devid=B89F6452-89F8-4032-8A4C-6982AF1B9027&qimei=40a27a90-51e3-4cb3-b4ee-1d646f306573&uid=101670193247&qs_signature=000201550403f1e0aea5c2b900000c5bb1a612f28fb9e19a01112856f2120119cf3782bb3b37b4a65753f38a0000000000000000&appver=17.5.1_qqnews_7.4.63&openid=o04IBALpXY-BWXjJzFDHsYsh9mkg&version=18002234&devicetype=iOS17.5.1&wuid=oDdoCt5RBeP2wVGYmzbBfBjRUYkI&QIMEI36=fakeb89f645289f840328a4c6982af1b9027",
+        "site": "news.qq.com",
+        "score": 0.958,
+        "engine": "bing_news",
+        "snippet": "新华社消息，正在印度新德里召开的联合国教科文组织第46届世界遗产大会27日通过决议，将“北京中轴线——中国理想都城秩序的杰作”列入《世界遗产名录》。 北京中轴线包含了哪些遗产点？一文解密 “北京中轴线——中国理想都城秩序的杰作”正式列入 ..."
+      },
+      {
+        "rank": 3,
+        "title": "申遗成功！北京中轴线正式列入《世界遗产名录》",
+        "url": "https://news.cnr.cn/native/gd/kx/20240727/t20240727_526818363.shtml",
+        "site": "news.cnr.cn",
+        "score": 0.958,
+        "engine": "bing_news",
+        "snippet": "今天，在印度首都新德里举行的联合国教科文组织第46届世界遗产大会上，我国申报的“北京中轴线——中国理想都城秩序的杰作”被正式列入《世界遗产名录》，截至目前，我国世界遗产数量达到59项。 北京中轴线位于北京老城中心，全长7.8公里，始建于13世纪 ..."
+      },
+      {
+        "rank": 4,
+        "title": "700岁，圈粉世界！北京中轴线，含金量还在提升！",
+        "url": "https://finance.sina.com.cn/wm/2026-07-27/doc-inikhcky9811478.shtml",
+        "site": "finance.sina.com.cn",
+        "score": 0.896,
+        "engine": "bing_news",
+        "snippet": "两年前的7月27日，“北京中轴线——中国理想都城秩序的杰作”列入《世界遗产名录》时，全球目光聚焦这条线。 由此，一眼定情，再也挪不开视线。 钟鼓楼“开朗”了，开数字沉浸展，举办击鼓表演。夏天傍晚，鼓楼院内会架起大屏幕，播放国潮动画电影 ..."
+      },
+      {
+        "rank": 5,
+        "title": "北京中轴线申遗成功两周年｜七百岁中轴线何以“圈粉”世界",
+        "url": "https://finance.sina.com.cn/jjxw/2026-07-27/doc-inikevrk8406373.shtml",
+        "site": "finance.sina.com.cn",
+        "score": 0.896,
+        "engine": "bing_news",
+        "snippet": "两年前的7月27日，“北京中轴线——中国理想都城秩序的杰作”列入《世界遗产名录》时，全球目光聚焦这条线。 由此，一眼定情，再也挪不开视线。 钟鼓楼“开朗”了，开数字沉浸展，举办击鼓表演。夏天傍晚，鼓楼院内会架起大屏幕，播放国潮动画电影 ..."
+      },
+      {
+        "rank": 6,
+        "title": "北京中轴线各遗产点庆祝申遗成功两周年",
+        "url": "https://news.fjsen.com/2026-07/28/content_32226213_0.htm",
+        "site": "news.fjsen.com",
+        "score": 0.896,
+        "engine": "bing_news",
+        "snippet": "7月27日，游客在故宫参观游览。 7月27日是“北京中轴线——中国理想都城秩序的杰作”列入《世界遗产名录》两周年。当日，故宫、中国国家博物馆、正阳门、先农坛、钟鼓楼等北京中轴线各遗产点向公众开放，部分遗产点推出新展，庆祝北京中轴线申遗成功两 ..."
+      }
+    ]
+  }
+]

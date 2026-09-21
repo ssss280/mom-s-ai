@@ -24,3 +24,6 @@ build_try_*.log
 .idea/
 Thumbs.db
 desktop.ini
+
+# 本地更新器的备份（覆盖前的原文件副本）
+data/update_backup/

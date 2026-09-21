@@ -1,0 +1,258 @@
+{
+  "seed": 20260101,
+  "cases": [
+    {
+      "id": "geo-hongkong-mtr",
+      "question": "香港地铁东铁线经过哪些站？",
+      "category": "fact",
+      "expected_terms": "东铁线|East Rail;站|罗湖|落马洲|金钟|红磡;港铁|MTR",
+      "expected_domains": [
+        "mtr.com.hk"
+      ],
+      "notes": "港铁官网有线路图。"
+    },
+    {
+      "id": "entity-tiangong",
+      "question": "天宫空间站现在有几个舱段？",
+      "category": "entity",
+      "expected_terms": "天宫;空间站;舱|问天|梦天|天和|三舱",
+      "expected_domains": [
+        "cnsa.gov.cn",
+        "gov.cn"
+      ],
+      "notes": "天和核心舱 + 问天 + 梦天，三舱构型。"
+    },
+    {
+      "id": "trend-lightfair-2026",
+      "question": "2026年有哪些照明展会值得参加？",
+      "category": "trend",
+      "expected_terms": "照明|灯饰|灯具;展会|展览|博览会;2026",
+      "expected_domains": [],
+      "notes": "泛查询，考察是否拿到展会清单类页面。"
+    },
+    {
+      "id": "longtail-obscure",
+      "question": "烟台市芝罘区政务服务中心上班时间",
+      "category": "longtail",
+      "expected_terms": "烟台|芝罘;政务|服务|大厅;时间|上班|工作日|上午|下午",
+      "expected_domains": [],
+      "notes": "长尾本地信息，考察是否返回空。"
+    },
+    {
+      "id": "geo-china-railway-12306",
+      "question": "12306 候补购票怎么用？",
+      "category": "howto",
+      "expected_terms": "候补;12306;购票|下单|兑现|车票",
+      "expected_domains": [
+        "12306.cn"
+      ],
+      "notes": "官方 12306 有候补购票说明。"
+    },
+    {
+      "id": "price-deepseek-api",
+      "question": "DeepSeek API 现在什么价格？",
+      "category": "price",
+      "expected_terms": "DeepSeek;价格|定价|pricing|元|美元|token;输入|输出|百万",
+      "expected_domains": [
+        "deepseek.com",
+        "platform.deepseek.com"
+      ],
+      "notes": "官方定价页 platform.deepseek.com。"
+    },
+    {
+      "id": "edge-followup-where",
+      "question": "那地点呢？",
+      "category": "edge-followup",
+      "history": [
+        "2026香港国际秋季灯饰展"
+      ],
+      "expected_terms": "香港;会展|展览|博览|会议展览中心|HKTDC|位置|地点",
+      "expected_domains": [],
+      "notes": "同上，验证追问拼接。"
+    },
+    {
+      "id": "price-iphone17",
+      "question": "iPhone 17 国行起售价多少钱？",
+      "category": "price",
+      "expected_terms": "iPhone 17|iPhone17;元|起售|价格;苹果|Apple|官网",
+      "expected_domains": [
+        "apple.com.cn",
+        "apple.com"
+      ],
+      "notes": "以苹果中国官网为准。"
+    },
+    {
+      "id": "news-latest-ai",
+      "question": "最近 AI 大模型有什么新发布？",
+      "category": "news",
+      "expected_terms": "AI|大模型|模型;发布|推出|上线|更新;2026|2025",
+      "expected_domains": [],
+      "notes": "时效类，考察是否返回近期内容。"
+    },
+    {
+      "id": "edge-followup-year",
+      "question": "2026年的呢",
+      "category": "edge-followup",
+      "history": [
+        "香港灯具展是什么时候"
+      ],
+      "expected_terms": "香港|Hong Kong;灯|照明|Lighting;展;2026",
+      "expected_domains": [],
+      "notes": "追问句必须拼上下文，否则必然搜出无关结果。"
+    },
+    {
+      "id": "fact-noise-standard",
+      "question": "中国声环境功能区标准里 1 类区夜间噪声限值是多少分贝？",
+      "category": "fact",
+      "expected_terms": "1类|一类|1 类;夜间;45;声环境|噪声",
+      "expected_domains": [
+        "mee.gov.cn",
+        "gov.cn"
+      ],
+      "notes": "GB 3096-2008：1类区夜间 45 dB。"
+    },
+    {
+      "id": "time-2026-worldcup",
+      "question": "2026年世界杯在哪些国家举办？",
+      "category": "time",
+      "expected_terms": "美国|加拿大|墨西哥;世界杯|World Cup;2026;三国|联合",
+      "expected_domains": [
+        "fifa.com"
+      ],
+      "notes": "美加墨三国合办。"
+    },
+    {
+      "id": "entity-chatsight",
+      "question": "ChatSight 是什么软件？",
+      "category": "entity",
+      "expected_terms": "ChatSight;截图|识别|OCR|回复|聊天;软件|工具",
+      "expected_domains": [],
+      "notes": "小众项目，允许低相关兜底，重点看是否返回空。"
+    },
+    {
+      "id": "tech-docker-install-ubuntu",
+      "question": "Ubuntu 上怎么安装 Docker？",
+      "category": "howto",
+      "expected_terms": "Docker;Ubuntu;安装|install;apt|官方|docs.docker",
+      "expected_domains": [
+        "docs.docker.com",
+        "docker.com"
+      ],
+      "notes": "官方文档 docs.docker.com 有 Ubuntu 安装步骤。"
+    },
+    {
+      "id": "edge-weather",
+      "question": "北京天气",
+      "category": "edge",
+      "expected_terms": "北京;天气;预报|气温|温度|°C|℃",
+      "expected_domains": [
+        "weather.com.cn",
+        "tianqi.com"
+      ],
+      "notes": "极短查询（真实高频用法）。"
+    },
+    {
+      "id": "premise-wrong-year",
+      "question": "2025年香港秋季灯饰展是什么时候？",
+      "category": "premise",
+      "expected_terms": "香港;灯饰|照明|灯;展|fair;10月|11月|月|HKTDC|贸发局",
+      "expected_domains": [],
+      "notes": "存在历史届次，主要是不能返回空。",
+      "wrong_premise": false
+    },
+    {
+      "id": "tech-git-undo-commit",
+      "question": "git 怎么撤销最近一次提交但保留改动？",
+      "category": "howto",
+      "expected_terms": "git;reset|soft|撤销|回退;HEAD|提交",
+      "expected_domains": [
+        "git-scm.com"
+      ],
+      "notes": "git reset --soft HEAD~1。"
+    },
+    {
+      "id": "premise-ai-2026",
+      "question": "ChatGPT 6 什么时候发布？",
+      "category": "premise",
+      "expected_terms": "ChatGPT|OpenAI;发布|推出|GPT-5|版本|尚未|没有|未",
+      "expected_domains": [],
+      "notes": "对抗用例：若不存在该版本，检索应给出最新已知版本而不是空。",
+      "wrong_premise": true
+    },
+    {
+      "id": "compare-llm-price",
+      "question": "DeepSeek 和 GPT 哪个 API 更便宜？",
+      "category": "compare",
+      "expected_terms": "DeepSeek;GPT|OpenAI;价格|定价|便宜|成本|pricing",
+      "expected_domains": [
+        "deepseek.com",
+        "openai.com"
+      ],
+      "notes": "对比类问题，至少要拿到两家的官方定价信息。"
+    },
+    {
+      "id": "en-rust-ownership",
+      "question": "rust ownership rules explained",
+      "category": "en",
+      "expected_terms": "rust;ownership|borrow|借用;规则|rules|reference",
+      "expected_domains": [
+        "doc.rust-lang.org",
+        "rust-lang.org"
+      ],
+      "notes": "英文技术查询。"
+    },
+    {
+      "id": "tech-python-version",
+      "question": "Python 现在最新的稳定版本是多少？",
+      "category": "tech",
+      "expected_terms": "Python;3.1|3.14|3.13;下载|download|发布|release",
+      "expected_domains": [
+        "python.org"
+      ],
+      "notes": "应以 python.org 官方下载页为准。"
+    },
+    {
+      "id": "en-python-asyncio",
+      "question": "python asyncio gather vs wait difference",
+      "category": "en",
+      "expected_terms": "asyncio;gather|wait;python|docs",
+      "expected_domains": [
+        "docs.python.org"
+      ],
+      "notes": "英文技术查询。"
+    },
+    {
+      "id": "time-nobel-2025",
+      "question": "2025年诺贝尔文学奖颁给了谁？",
+      "category": "time",
+      "expected_terms": "诺贝尔|Nobel;文学奖;2025;获奖|颁给|作家|László|Krasznahorkai|克拉斯诺霍尔卡伊",
+      "expected_domains": [
+        "nobelprize.org"
+      ],
+      "notes": "2025年得主为匈牙利作家 László Krasznahorkai。"
+    },
+    {
+      "id": "fact-lighting-fair-2026",
+      "question": "2026香港国际秋季灯饰展什么时候在哪办？",
+      "category": "fact",
+      "expected_terms": "香港|香港贸发局|HKTDC;灯饰|照明;会展|会议展览中心|博览道|湾仔|10月|11月",
+      "expected_domains": [
+        "hktdc.com",
+        "hklightingfair.com"
+      ],
+      "notes": "官方主办方是香港贸发局；地点在香港会议展览中心。"
+    },
+    {
+      "id": "fact-central-axis",
+      "question": "北京中轴线是什么时候列入世界遗产名录的？",
+      "category": "fact",
+      "expected_terms": "世界遗产|世界遗产名录|世界文化遗产;中轴线;2024|二〇二四",
+      "expected_domains": [
+        "unesco.org",
+        "gov.cn",
+        "whc.unesco.org"
+      ],
+      "notes": "2024年7月列入 UNESCO 世界遗产名录。"
+    }
+  ]
+}

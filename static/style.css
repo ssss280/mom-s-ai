@@ -102,6 +102,37 @@ body {
   padding: 8px 16px 0;
 }
 
+.history-batch {
+  display: flex;
+  gap: 6px;
+  padding: 4px 16px 0;
+}
+
+.history-group-header {
+  font-size: 11px;
+  color: var(--muted);
+  padding: 10px 12px 4px;
+  user-select: none;
+}
+
+.history-row {
+  display: flex;
+  align-items: center;
+  gap: 0;
+}
+
+.history-check {
+  display: none;
+  width: 16px;
+  flex-shrink: 0;
+  margin-left: 8px;
+  cursor: pointer;
+}
+
+.batch-mode .history-check {
+  display: block;
+}
+
 /* ---------- 主区域 ---------- */
 
 #main {
@@ -172,6 +203,50 @@ body {
 .mini-select:hover { background: var(--hover); }
 
 .btn:disabled { opacity: 0.5; cursor: default; }
+
+/* ---------- 联网搜索记录（排查面板）---------- */
+
+#searchlog-modal .win-box { max-width: 860px; }
+
+#searchlog-list {
+  max-height: 62vh;
+  overflow-y: auto;
+  margin-top: 10px;
+  text-align: left;
+}
+
+.sl-item {
+  border: 1px solid #e6e6e6;
+  border-radius: 10px;
+  padding: 10px 12px;
+  margin-bottom: 10px;
+  background: var(--surface);
+}
+.sl-item.sl-bad { border-color: #d9a441; background: #fffaf0; }
+
+.sl-head { display: flex; flex-wrap: wrap; gap: 8px; align-items: baseline; }
+.sl-time { color: var(--muted); font-size: 12px; }
+.sl-query { font-weight: 600; }
+.sl-meta { color: var(--muted); font-size: 12px; }
+
+.sl-engines { display: flex; flex-wrap: wrap; gap: 6px; margin: 6px 0; }
+.sl-chip {
+  font-size: 11px;
+  padding: 2px 7px;
+  border-radius: 999px;
+  background: #f0f0f0;
+  color: #555;
+}
+.sl-chip.ok { background: #e8f5e9; color: #256029; }
+.sl-chip.blocked, .sl-chip.error { background: #fdecea; color: #a12622; }
+.sl-chip.empty, .sl-chip.cooling { background: #f2f2f2; color: #777; }
+
+.sl-results, .sl-extra { margin: 6px 0 0; padding-left: 18px; font-size: 12.5px; }
+.sl-results li { margin-bottom: 3px; }
+.sl-site { color: var(--muted); }
+.sl-extra { color: var(--muted); }
+.sl-dropped { color: #a12622; }
+.sl-error { color: #a12622; font-size: 12px; margin-top: 4px; }
 
 /* ---------- AI 对话 ---------- */
 

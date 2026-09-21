@@ -215,3 +215,15 @@ class ChatStorage:
         cursor.execute("DELETE FROM sessions WHERE id = ?", (session_id,))
         conn.commit()
         conn.close()
+
+    def delete_sessions(self, ids: list):
+        if not ids:
+            return
+        conn = self._get_conn()
+        cursor = conn.cursor()
+        placeholders = ",".join("?" for _ in ids)
+        cursor.execute(f"DELETE FROM suggestions WHERE message_id IN (SELECT id FROM messages WHERE session_id IN ({placeholders}))", ids)
+        cursor.execute(f"DELETE FROM messages WHERE session_id IN ({placeholders})", ids)
+        cursor.execute(f"DELETE FROM sessions WHERE id IN ({placeholders})", ids)
+        conn.commit()
+        conn.close()

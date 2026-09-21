@@ -1,0 +1,47 @@
+{
+  "metrics": {
+    "cases": 25,
+    "no_result_rate": 0.6,
+    "low_relevance_rate": 0.16,
+    "thin_result_rate": 0.16,
+    "hit_rate_strict": 0.04,
+    "hit_rate_loose": 0.32,
+    "mean_term_coverage": 0.237,
+    "domain_hit_rate": 0.294,
+    "avg_results": 1.16,
+    "avg_good_results": 0.76,
+    "thin_after_fix_rate": 0.88,
+    "tier1_rate": 0.0,
+    "tier2_rate": 0.0,
+    "distinct_domains": 19,
+    "top1_hit_rate": 0.9,
+    "latency_p50": 2.06,
+    "latency_p90": 2.84,
+    "latency_max": 3.52,
+    "over_budget_rate": 0.0,
+    "link_checked": 27,
+    "link_alive_rate": 0.852,
+    "link_dead_count": 0,
+    "link_unknown_count": 4,
+    "page_fetch_success_rate": 0.8,
+    "engine_share": {
+      "bing": 10
+    },
+    "score_keyword_consistency": 0.505,
+    "engine_health": {}
+  },
+  "scores": {
+    "total": 43.1,
+    "parts": {
+      "命中正确性": 4.3,
+      "非空率": 8.0,
+      "链接有效性": 12.8,
+      "正文可读": 8.0,
+      "延迟": 10.0,
+      "引擎均衡": 0.0
+    }
+  },
+  "run": "05-baseline-full",
+  "seed": 20260101,
+  "cases": 25
+}

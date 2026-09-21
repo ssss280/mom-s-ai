@@ -1,0 +1,1539 @@
+[
+  {
+    "id": "geo-hongkong-mtr",
+    "category": "fact",
+    "question": "香港地铁东铁线经过哪些站？",
+    "history": [],
+    "query": "香港地铁东铁线经过哪些站",
+    "query_used": "",
+    "expected_terms": "东铁线|East Rail;站|罗湖|落马洲|金钟|红磡;港铁|MTR",
+    "expected_domains": [
+      "mtr.com.hk"
+    ],
+    "wrong_premise": false,
+    "retrieved": 0,
+    "good_count": 0,
+    "weak_count": 0,
+    "engines": [],
+    "tier_score": 0,
+    "engine": "",
+    "low_relevance": false,
+    "error": "没有找到相关结果（试了 1 种查询词，10 条都被判为不相关）",
+    "latency": 2.17,
+    "snippet_grade": {
+      "hit": 0,
+      "total": 3,
+      "detail": [
+        [],
+        [],
+        []
+      ]
+    },
+    "full_grade": {
+      "hit": 0,
+      "total": 3,
+      "detail": [
+        [],
+        [],
+        []
+      ]
+    },
+    "domain_hit": false,
+    "hosts": [],
+    "pages_fetched": 0,
+    "page_chars": 0,
+    "results": []
+  },
+  {
+    "id": "entity-tiangong",
+    "category": "entity",
+    "question": "天宫空间站现在有几个舱段？",
+    "history": [],
+    "query": "天宫空间站现在有几个舱段",
+    "query_used": "",
+    "expected_terms": "天宫;空间站;舱|问天|梦天|天和|三舱",
+    "expected_domains": [
+      "cnsa.gov.cn",
+      "gov.cn"
+    ],
+    "wrong_premise": false,
+    "retrieved": 0,
+    "good_count": 0,
+    "weak_count": 0,
+    "engines": [],
+    "tier_score": 0,
+    "engine": "",
+    "low_relevance": false,
+    "error": "没有找到相关结果（试了 1 种查询词，10 条都被判为不相关）",
+    "latency": 2.21,
+    "snippet_grade": {
+      "hit": 0,
+      "total": 3,
+      "detail": [
+        [],
+        [],
+        []
+      ]
+    },
+    "full_grade": {
+      "hit": 0,
+      "total": 3,
+      "detail": [
+        [],
+        [],
+        []
+      ]
+    },
+    "domain_hit": false,
+    "hosts": [],
+    "pages_fetched": 0,
+    "page_chars": 0,
+    "results": []
+  },
+  {
+    "id": "trend-lightfair-2026",
+    "category": "trend",
+    "question": "2026年有哪些照明展会值得参加？",
+    "history": [],
+    "query": "2026年有哪些照明展会值得参加",
+    "query_used": "",
+    "expected_terms": "照明|灯饰|灯具;展会|展览|博览会;2026",
+    "expected_domains": [],
+    "wrong_premise": false,
+    "retrieved": 0,
+    "good_count": 0,
+    "weak_count": 0,
+    "engines": [],
+    "tier_score": 0,
+    "engine": "",
+    "low_relevance": false,
+    "error": "没有找到相关结果（试了 2 种查询词，17 条都被判为不相关）",
+    "latency": 2.55,
+    "snippet_grade": {
+      "hit": 0,
+      "total": 3,
+      "detail": [
+        [],
+        [],
+        []
+      ]
+    },
+    "full_grade": {
+      "hit": 0,
+      "total": 3,
+      "detail": [
+        [],
+        [],
+        []
+      ]
+    },
+    "domain_hit": null,
+    "hosts": [],
+    "pages_fetched": 0,
+    "page_chars": 0,
+    "results": []
+  },
+  {
+    "id": "longtail-obscure",
+    "category": "longtail",
+    "question": "烟台市芝罘区政务服务中心上班时间",
+    "history": [],
+    "query": "烟台市芝罘区政务服务中心上班时间",
+    "query_used": "烟台市芝罘区政务服务中心上班",
+    "expected_terms": "烟台|芝罘;政务|服务|大厅;时间|上班|工作日|上午|下午",
+    "expected_domains": [],
+    "wrong_premise": false,
+    "retrieved": 1,
+    "good_count": 1,
+    "weak_count": 0,
+    "engines": [
+      "bing"
+    ],
+    "tier_score": 0,
+    "engine": "bing",
+    "low_relevance": false,
+    "error": "",
+    "latency": 1.78,
+    "snippet_grade": {
+      "hit": 2,
+      "total": 3,
+      "detail": [
+        [
+          "烟台"
+        ],
+        [
+          "政务",
+          "服务"
+        ],
+        []
+      ]
+    },
+    "full_grade": {
+      "hit": 2,
+      "total": 3,
+      "detail": [
+        [
+          "烟台"
+        ],
+        [
+          "政务",
+          "服务"
+        ],
+        []
+      ]
+    },
+    "domain_hit": null,
+    "hosts": [
+      "shandong.gov.cn"
+    ],
+    "pages_fetched": 0,
+    "page_chars": 0,
+    "results": [
+      {
+        "rank": 1,
+        "title": "山东省人民政府 烟台市",
+        "url": "http://www.shandong.gov.cn/col/col99081/index.html",
+        "site": "shandong.gov.cn",
+        "score": 0.331,
+        "engine": "bing",
+        "snippet": "山东省烟台市人民政府官方网站，提供政务信息、政策解读和服务指南等内容。[END]> <|ipynb_marker|> END OF DOC"
+      }
+    ]
+  },
+  {
+    "id": "geo-china-railway-12306",
+    "category": "howto",
+    "question": "12306 候补购票怎么用？",
+    "history": [],
+    "query": "12306 候补购票怎么用",
+    "query_used": "",
+    "expected_terms": "候补;12306;购票|下单|兑现|车票",
+    "expected_domains": [
+      "12306.cn"
+    ],
+    "wrong_premise": false,
+    "retrieved": 3,
+    "good_count": 0,
+    "weak_count": 3,
+    "engines": [
+      "bing"
+    ],
+    "tier_score": 0,
+    "engine": "bing",
+    "low_relevance": true,
+    "error": "未找到高相关结果，以下 3 条相关性较低，仅供参考",
+    "latency": 1.56,
+    "snippet_grade": {
+      "hit": 2,
+      "total": 3,
+      "detail": [
+        [],
+        [
+          "12306"
+        ],
+        [
+          "车票"
+        ]
+      ]
+    },
+    "full_grade": {
+      "hit": 2,
+      "total": 3,
+      "detail": [
+        [],
+        [
+          "12306"
+        ],
+        [
+          "车票"
+        ]
+      ]
+    },
+    "domain_hit": true,
+    "hosts": [
+      "12306.cn",
+      "12306.cn",
+      "hzfw.12306.cn"
+    ],
+    "pages_fetched": 2,
+    "page_chars": 1825,
+    "results": [
+      {
+        "rank": 1,
+        "title": "中国铁路12306网站",
+        "url": "https://www.12306.cn/index/",
+        "site": "12306.cn",
+        "score": 0.23,
+        "engine": "bing",
+        "snippet": "公 告 2024-12-11 关于铁路客运推广使用全面数字化的电子发票的公告 2026-08-19 关于优化铁路车票改签规则的公告 2024-01-11 外国 …"
+      },
+      {
+        "rank": 2,
+        "title": "12306 CHINA RAILWAY",
+        "url": "https://www.12306.cn/en/index.html",
+        "site": "12306.cn",
+        "score": 0.23,
+        "engine": "bing",
+        "snippet": "The 12306.cn website provides information query and ticket refund services 24 hours a day, and the ticket sales and endorsement …"
+      },
+      {
+        "rank": 3,
+        "title": "火车票余票查询 - 12306",
+        "url": "https://hzfw.12306.cn/zgzfw/resources/web/ypcx.html",
+        "site": "hzfw.12306.cn",
+        "score": 0.23,
+        "engine": "bing",
+        "snippet": "提供火车票余票查询服务，用户可快速获取列车余票信息，方便出行安排。"
+      }
+    ]
+  },
+  {
+    "id": "price-deepseek-api",
+    "category": "price",
+    "question": "DeepSeek API 现在什么价格？",
+    "history": [],
+    "query": "DeepSeek API 现在什么价格",
+    "query_used": "DeepSeek API 现在什么价格",
+    "expected_terms": "DeepSeek;价格|定价|pricing|元|美元|token;输入|输出|百万",
+    "expected_domains": [
+      "deepseek.com",
+      "platform.deepseek.com"
+    ],
+    "wrong_premise": false,
+    "retrieved": 3,
+    "good_count": 3,
+    "weak_count": 0,
+    "engines": [
+      "bing"
+    ],
+    "tier_score": 0,
+    "engine": "bing",
+    "low_relevance": false,
+    "error": "",
+    "latency": 1.05,
+    "snippet_grade": {
+      "hit": 1,
+      "total": 3,
+      "detail": [
+        [
+          "deepseek"
+        ],
+        [],
+        []
+      ]
+    },
+    "full_grade": {
+      "hit": 2,
+      "total": 3,
+      "detail": [
+        [
+          "deepseek"
+        ],
+        [
+          "pricing",
+          "token"
+        ],
+        []
+      ]
+    },
+    "domain_hit": true,
+    "hosts": [
+      "deepseek.com",
+      "deepseek.net",
+      "platform.deepseek.com"
+    ],
+    "pages_fetched": 1,
+    "page_chars": 1010,
+    "results": [
+      {
+        "rank": 1,
+        "title": "DeepSeek | API Platform",
+        "url": "https://www.deepseek.com/en/platform/",
+        "site": "deepseek.com",
+        "score": 0.329,
+        "engine": "bing",
+        "snippet": "DeepSeek is an AI research company focused on building world-leading general artificial intelligence. We develop and open-source …"
+      },
+      {
+        "rank": 2,
+        "title": "DeepSeek - 中文AI聊天",
+        "url": "https://deepseek.net/zh",
+        "site": "deepseek.net",
+        "score": 0.307,
+        "engine": "bing",
+        "snippet": "什么是 DeepSeek DeepSeek 是一家创新的人工智能（AI）公司，致力于开发先进的 AI 技术和解决方案，以应对各行业的复杂挑战。 …"
+      },
+      {
+        "rank": 3,
+        "title": "DeepSeek Platform",
+        "url": "https://platform.deepseek.com/api_keys",
+        "site": "platform.deepseek.com",
+        "score": 0.307,
+        "engine": "bing",
+        "snippet": "Join DeepSeek API platform to access our AI models, developer resources and API documentation."
+      }
+    ]
+  },
+  {
+    "id": "edge-followup-where",
+    "category": "edge-followup",
+    "question": "那地点呢？",
+    "history": [
+      "2026香港国际秋季灯饰展"
+    ],
+    "query": "2026香港国际秋季灯饰展 地点",
+    "query_used": "",
+    "expected_terms": "香港;会展|展览|博览|会议展览中心|HKTDC|位置|地点",
+    "expected_domains": [],
+    "wrong_premise": false,
+    "retrieved": 0,
+    "good_count": 0,
+    "weak_count": 0,
+    "engines": [],
+    "tier_score": 0,
+    "engine": "",
+    "low_relevance": false,
+    "error": "没有找到相关结果（试了 2 种查询词，20 条都被判为不相关）",
+    "latency": 2.68,
+    "snippet_grade": {
+      "hit": 0,
+      "total": 2,
+      "detail": [
+        [],
+        []
+      ]
+    },
+    "full_grade": {
+      "hit": 0,
+      "total": 2,
+      "detail": [
+        [],
+        []
+      ]
+    },
+    "domain_hit": null,
+    "hosts": [],
+    "pages_fetched": 0,
+    "page_chars": 0,
+    "results": []
+  },
+  {
+    "id": "price-iphone17",
+    "category": "price",
+    "question": "iPhone 17 国行起售价多少钱？",
+    "history": [],
+    "query": "iPhone 17 国行起售价多少钱",
+    "query_used": "",
+    "expected_terms": "iPhone 17|iPhone17;元|起售|价格;苹果|Apple|官网",
+    "expected_domains": [
+      "apple.com.cn",
+      "apple.com"
+    ],
+    "wrong_premise": false,
+    "retrieved": 0,
+    "good_count": 0,
+    "weak_count": 0,
+    "engines": [],
+    "tier_score": 0,
+    "engine": "",
+    "low_relevance": false,
+    "error": "没有找到相关结果（试了 2 种查询词，20 条都被判为不相关）",
+    "latency": 2.71,
+    "snippet_grade": {
+      "hit": 0,
+      "total": 3,
+      "detail": [
+        [],
+        [],
+        []
+      ]
+    },
+    "full_grade": {
+      "hit": 0,
+      "total": 3,
+      "detail": [
+        [],
+        [],
+        []
+      ]
+    },
+    "domain_hit": false,
+    "hosts": [],
+    "pages_fetched": 0,
+    "page_chars": 0,
+    "results": []
+  },
+  {
+    "id": "news-latest-ai",
+    "category": "news",
+    "question": "最近 AI 大模型有什么新发布？",
+    "history": [],
+    "query": "最近 AI 大模型有什么新发布",
+    "query_used": "",
+    "expected_terms": "AI|大模型|模型;发布|推出|上线|更新;2026|2025",
+    "expected_domains": [],
+    "wrong_premise": false,
+    "retrieved": 0,
+    "good_count": 0,
+    "weak_count": 0,
+    "engines": [],
+    "tier_score": 0,
+    "engine": "",
+    "low_relevance": false,
+    "error": "没有找到相关结果（试了 1 种查询词，10 条都被判为不相关）",
+    "latency": 1.47,
+    "snippet_grade": {
+      "hit": 0,
+      "total": 3,
+      "detail": [
+        [],
+        [],
+        []
+      ]
+    },
+    "full_grade": {
+      "hit": 0,
+      "total": 3,
+      "detail": [
+        [],
+        [],
+        []
+      ]
+    },
+    "domain_hit": null,
+    "hosts": [],
+    "pages_fetched": 0,
+    "page_chars": 0,
+    "results": []
+  },
+  {
+    "id": "edge-followup-year",
+    "category": "edge-followup",
+    "question": "2026年的呢",
+    "history": [
+      "香港灯具展是什么时候"
+    ],
+    "query": "香港灯具展是什么时候 2026年",
+    "query_used": "",
+    "expected_terms": "香港|Hong Kong;灯|照明|Lighting;展;2026",
+    "expected_domains": [],
+    "wrong_premise": false,
+    "retrieved": 0,
+    "good_count": 0,
+    "weak_count": 0,
+    "engines": [],
+    "tier_score": 0,
+    "engine": "",
+    "low_relevance": false,
+    "error": "没有找到相关结果（试了 3 种查询词，17 条都被判为不相关）",
+    "latency": 3.41,
+    "snippet_grade": {
+      "hit": 0,
+      "total": 4,
+      "detail": [
+        [],
+        [],
+        [],
+        []
+      ]
+    },
+    "full_grade": {
+      "hit": 0,
+      "total": 4,
+      "detail": [
+        [],
+        [],
+        [],
+        []
+      ]
+    },
+    "domain_hit": null,
+    "hosts": [],
+    "pages_fetched": 0,
+    "page_chars": 0,
+    "results": []
+  },
+  {
+    "id": "fact-noise-standard",
+    "category": "fact",
+    "question": "中国声环境功能区标准里 1 类区夜间噪声限值是多少分贝？",
+    "history": [],
+    "query": "中国声环境功能区标准里 1 类区夜间噪声限值是多少分贝",
+    "query_used": "",
+    "expected_terms": "1类|一类|1 类;夜间;45;声环境|噪声",
+    "expected_domains": [
+      "mee.gov.cn",
+      "gov.cn"
+    ],
+    "wrong_premise": false,
+    "retrieved": 0,
+    "good_count": 0,
+    "weak_count": 0,
+    "engines": [],
+    "tier_score": 0,
+    "engine": "",
+    "low_relevance": false,
+    "error": "没有找到相关结果（试了 1 种查询词，10 条都被判为不相关）",
+    "latency": 2.06,
+    "snippet_grade": {
+      "hit": 0,
+      "total": 4,
+      "detail": [
+        [],
+        [],
+        [],
+        []
+      ]
+    },
+    "full_grade": {
+      "hit": 0,
+      "total": 4,
+      "detail": [
+        [],
+        [],
+        [],
+        []
+      ]
+    },
+    "domain_hit": false,
+    "hosts": [],
+    "pages_fetched": 0,
+    "page_chars": 0,
+    "results": []
+  },
+  {
+    "id": "time-2026-worldcup",
+    "category": "time",
+    "question": "2026年世界杯在哪些国家举办？",
+    "history": [],
+    "query": "2026年世界杯在哪些国家举办",
+    "query_used": "世界杯在哪些国家举办",
+    "expected_terms": "美国|加拿大|墨西哥;世界杯|World Cup;2026;三国|联合",
+    "expected_domains": [
+      "fifa.com"
+    ],
+    "wrong_premise": false,
+    "retrieved": 1,
+    "good_count": 1,
+    "weak_count": 0,
+    "engines": [
+      "bing"
+    ],
+    "tier_score": 0,
+    "engine": "bing",
+    "low_relevance": false,
+    "error": "",
+    "latency": 2.24,
+    "snippet_grade": {
+      "hit": 0,
+      "total": 4,
+      "detail": [
+        [],
+        [],
+        [],
+        []
+      ]
+    },
+    "full_grade": {
+      "hit": 0,
+      "total": 4,
+      "detail": [
+        [],
+        [],
+        [],
+        []
+      ]
+    },
+    "domain_hit": false,
+    "hosts": [
+      "bajiu.cn"
+    ],
+    "pages_fetched": 1,
+    "page_chars": 238,
+    "results": [
+      {
+        "rank": 1,
+        "title": "世界地图 - 卫星地图、实景全图 - 八九网",
+        "url": "https://bajiu.cn/ditu/",
+        "site": "bajiu.cn",
+        "score": 0.307,
+        "engine": "bing",
+        "snippet": "这是世界地图网页，提供中文版的世界地图全图高清版大图，包括三维3D全球地图（World maps）、国家分布图，有国际全景电子地 …"
+      }
+    ]
+  },
+  {
+    "id": "entity-chatsight",
+    "category": "entity",
+    "question": "ChatSight 是什么软件？",
+    "history": [],
+    "query": "ChatSight 是什么软件",
+    "query_used": "",
+    "expected_terms": "ChatSight;截图|识别|OCR|回复|聊天;软件|工具",
+    "expected_domains": [],
+    "wrong_premise": false,
+    "retrieved": 0,
+    "good_count": 0,
+    "weak_count": 0,
+    "engines": [],
+    "tier_score": 0,
+    "engine": "",
+    "low_relevance": false,
+    "error": "没有找到相关结果（试了 1 种查询词，10 条都被判为不相关）",
+    "latency": 1.24,
+    "snippet_grade": {
+      "hit": 0,
+      "total": 3,
+      "detail": [
+        [],
+        [],
+        []
+      ]
+    },
+    "full_grade": {
+      "hit": 0,
+      "total": 3,
+      "detail": [
+        [],
+        [],
+        []
+      ]
+    },
+    "domain_hit": null,
+    "hosts": [],
+    "pages_fetched": 0,
+    "page_chars": 0,
+    "results": []
+  },
+  {
+    "id": "tech-docker-install-ubuntu",
+    "category": "howto",
+    "question": "Ubuntu 上怎么安装 Docker？",
+    "history": [],
+    "query": "Ubuntu 上怎么安装 Docker",
+    "query_used": "",
+    "expected_terms": "Docker;Ubuntu;安装|install;apt|官方|docs.docker",
+    "expected_domains": [
+      "docs.docker.com",
+      "docker.com"
+    ],
+    "wrong_premise": false,
+    "retrieved": 3,
+    "good_count": 0,
+    "weak_count": 3,
+    "engines": [
+      "bing"
+    ],
+    "tier_score": 0,
+    "engine": "bing",
+    "low_relevance": true,
+    "error": "未找到高相关结果，以下 3 条相关性较低，仅供参考",
+    "latency": 2.0,
+    "snippet_grade": {
+      "hit": 2,
+      "total": 4,
+      "detail": [
+        [],
+        [
+          "ubuntu"
+        ],
+        [],
+        [
+          "官方"
+        ]
+      ]
+    },
+    "full_grade": {
+      "hit": 3,
+      "total": 4,
+      "detail": [
+        [],
+        [
+          "ubuntu"
+        ],
+        [
+          "安装",
+          "install"
+        ],
+        [
+          "apt",
+          "官方"
+        ]
+      ]
+    },
+    "domain_hit": false,
+    "hosts": [
+      "ubuntu.com",
+      "cn.ubuntu.com",
+      "ubuntu.com"
+    ],
+    "pages_fetched": 3,
+    "page_chars": 5904,
+    "results": [
+      {
+        "rank": 1,
+        "title": "Download - Get Ubuntu",
+        "url": "https://ubuntu.com/download",
+        "site": "ubuntu.com",
+        "score": 0.287,
+        "engine": "bing",
+        "snippet": "The latest release of Ubuntu Desktop delivers new tools and enhancements for developers, creators, gamers, and administrators. …"
+      },
+      {
+        "rank": 2,
+        "title": "Ubuntu系统下载 | Ubuntu",
+        "url": "https://cn.ubuntu.com/download",
+        "site": "cn.ubuntu.com",
+        "score": 0.287,
+        "engine": "bing",
+        "snippet": "下载 Ubuntu 桌面、Ubuntu Server、物联网设备版、Ubuntu Core 及所有官方发行版本。 Ubuntu 是开源软件平台，可运行于 PC、服 …"
+      },
+      {
+        "rank": 3,
+        "title": "Download Ubuntu Desktop",
+        "url": "https://ubuntu.com/download/desktop",
+        "site": "ubuntu.com",
+        "score": 0.287,
+        "engine": "bing",
+        "snippet": "Ubuntu is an open source software operating system that runs from the desktop, to the cloud, to all your internet connected things."
+      }
+    ]
+  },
+  {
+    "id": "edge-weather",
+    "category": "edge",
+    "question": "北京天气",
+    "history": [],
+    "query": "北京天气",
+    "query_used": "北京天气",
+    "expected_terms": "北京;天气;预报|气温|温度|°C|℃",
+    "expected_domains": [
+      "weather.com.cn",
+      "tianqi.com"
+    ],
+    "wrong_premise": false,
+    "retrieved": 6,
+    "good_count": 6,
+    "weak_count": 0,
+    "engines": [
+      "bing"
+    ],
+    "tier_score": 0,
+    "engine": "bing",
+    "low_relevance": false,
+    "error": "",
+    "latency": 1.02,
+    "snippet_grade": {
+      "hit": 3,
+      "total": 3,
+      "detail": [
+        [
+          "北京"
+        ],
+        [
+          "天气"
+        ],
+        [
+          "预报",
+          "温度"
+        ]
+      ]
+    },
+    "full_grade": {
+      "hit": 3,
+      "total": 3,
+      "detail": [
+        [
+          "北京"
+        ],
+        [
+          "天气"
+        ],
+        [
+          "预报",
+          "气温",
+          "温度",
+          "℃"
+        ]
+      ]
+    },
+    "domain_hit": true,
+    "hosts": [
+      "weather.com.cn",
+      "tianqi.com",
+      "weather.com.cn",
+      "tianqi.com",
+      "zivatar.org",
+      "forecast.weather.com.cn"
+    ],
+    "pages_fetched": 2,
+    "page_chars": 4000,
+    "results": [
+      {
+        "rank": 1,
+        "title": "北京天气预报,北京7天天气预报,北京15天天气预报,北京天气查询",
+        "url": "https://www.weather.com.cn/weather/101010100.shtml",
+        "site": "weather.com.cn",
+        "score": 1.0,
+        "engine": "bing",
+        "snippet": "北京天气预报，及时准确发布中央气象台天气信息，便捷查询北京今日天气，北京周末天气，北京一周天气预报，北京蓝天预报，北京 …"
+      },
+      {
+        "rank": 2,
+        "title": "【北京天气预报】北京天气预报一周,北京天气预报15天,30天,今天,明天,7天,10天,未来北京一周天气预报查询—天气网",
+        "url": "https://www.tianqi.com/beijing/",
+        "site": "tianqi.com",
+        "score": 1.0,
+        "engine": "bing",
+        "snippet": "1 天前 · 天气网提供北京天气预报15天,30天,今日天气,明天天气,北京未来一周的天气预报,北京天气,北京实时天气查询,北京天气预报一 …"
+      },
+      {
+        "rank": 3,
+        "title": "北京天气预报,北京7天天气预报,北京15天天气预报,北京天气查询 - 中国天气网",
+        "url": "https://www.weather.com.cn/weathern/101010100.shtml",
+        "site": "weather.com.cn",
+        "score": 1.0,
+        "engine": "bing",
+        "snippet": "北京天气预报，及时准确发布中央气象台天气信息，便捷查询北京今日天气，北京周末天气，北京一周天气预报，北京15日天气预报， …"
+      },
+      {
+        "rank": 4,
+        "title": "【北京今天天气预报】北京天气预报24小时详情_北京天气网",
+        "url": "https://www.tianqi.com/beijing/today/",
+        "site": "tianqi.com",
+        "score": 1.0,
+        "engine": "bing",
+        "snippet": "北京10天天气 北京15天天气 北京30天天气 多云 阴 阴 阴 阴 多云 小雨 晴 22 21 21 21 21 23 24 26 东北风 东北风 东北风 北风 东北风 …"
+      },
+      {
+        "rank": 5,
+        "title": "北京天气 – 逐小时及7天预报、雷达 | Zivatar",
+        "url": "https://zivatar.org/zh/beijing/",
+        "site": "zivatar.org",
+        "score": 1.0,
+        "engine": "bing",
+        "snippet": "北京实时天气 在本页面，您可以实时关注 北京天气：当前温度与体感温度、风速与风向、湿度、气压、云量、露点以及降水概率。上 …"
+      },
+      {
+        "rank": 6,
+        "title": "【北京北京天气】北京北京今天天气预报,今天,今天天气,7天,15天天气预报,天气预报一周,天气 …",
+        "url": "https://forecast.weather.com.cn/town/weathern/101010100.shtml",
+        "site": "forecast.weather.com.cn",
+        "score": 1.0,
+        "engine": "bing",
+        "snippet": "北京北京天气预报，及时准确发布中央气象台天气信息，便捷查询北京今日天气，北京北京周末天气，北京北京一周天气预报，北京北 …"
+      }
+    ]
+  },
+  {
+    "id": "premise-wrong-year",
+    "category": "premise",
+    "question": "2025年香港秋季灯饰展是什么时候？",
+    "history": [],
+    "query": "2025年香港秋季灯饰展是什么时候",
+    "query_used": "",
+    "expected_terms": "香港;灯饰|照明|灯;展|fair;10月|11月|月|HKTDC|贸发局",
+    "expected_domains": [],
+    "wrong_premise": false,
+    "retrieved": 0,
+    "good_count": 0,
+    "weak_count": 0,
+    "engines": [],
+    "tier_score": 0,
+    "engine": "",
+    "low_relevance": false,
+    "error": "没有找到相关结果（试了 3 种查询词，30 条都被判为不相关）",
+    "latency": 3.52,
+    "snippet_grade": {
+      "hit": 0,
+      "total": 4,
+      "detail": [
+        [],
+        [],
+        [],
+        []
+      ]
+    },
+    "full_grade": {
+      "hit": 0,
+      "total": 4,
+      "detail": [
+        [],
+        [],
+        [],
+        []
+      ]
+    },
+    "domain_hit": null,
+    "hosts": [],
+    "pages_fetched": 0,
+    "page_chars": 0,
+    "results": []
+  },
+  {
+    "id": "tech-git-undo-commit",
+    "category": "howto",
+    "question": "git 怎么撤销最近一次提交但保留改动？",
+    "history": [],
+    "query": "git 怎么撤销最近一次提交但保留改动",
+    "query_used": "",
+    "expected_terms": "git;reset|soft|撤销|回退;HEAD|提交",
+    "expected_domains": [
+      "git-scm.com"
+    ],
+    "wrong_premise": false,
+    "retrieved": 0,
+    "good_count": 0,
+    "weak_count": 0,
+    "engines": [],
+    "tier_score": 0,
+    "engine": "",
+    "low_relevance": false,
+    "error": "没有找到相关结果（试了 1 种查询词，10 条都被判为不相关）",
+    "latency": 1.75,
+    "snippet_grade": {
+      "hit": 0,
+      "total": 3,
+      "detail": [
+        [],
+        [],
+        []
+      ]
+    },
+    "full_grade": {
+      "hit": 0,
+      "total": 3,
+      "detail": [
+        [],
+        [],
+        []
+      ]
+    },
+    "domain_hit": false,
+    "hosts": [],
+    "pages_fetched": 0,
+    "page_chars": 0,
+    "results": []
+  },
+  {
+    "id": "premise-ai-2026",
+    "category": "premise",
+    "question": "ChatGPT 6 什么时候发布？",
+    "history": [],
+    "query": "ChatGPT 6 什么时候发布",
+    "query_used": "ChatGPT 6 什么时候发布",
+    "expected_terms": "ChatGPT|OpenAI;发布|推出|GPT-5|版本|尚未|没有|未",
+    "expected_domains": [],
+    "wrong_premise": true,
+    "retrieved": 6,
+    "good_count": 6,
+    "weak_count": 0,
+    "engines": [
+      "bing"
+    ],
+    "tier_score": 0,
+    "engine": "bing",
+    "low_relevance": false,
+    "error": "",
+    "latency": 1.15,
+    "snippet_grade": {
+      "hit": 1,
+      "total": 2,
+      "detail": [
+        [
+          "chatgpt",
+          "openai"
+        ],
+        []
+      ]
+    },
+    "full_grade": {
+      "hit": 1,
+      "total": 2,
+      "detail": [
+        [
+          "chatgpt",
+          "openai"
+        ],
+        []
+      ]
+    },
+    "domain_hit": null,
+    "hosts": [
+      "chatgpt.com",
+      "chatgpt.com",
+      "openai.com",
+      "openai.com",
+      "zh.wikipedia.org",
+      "en.wikipedia.org"
+    ],
+    "pages_fetched": 0,
+    "page_chars": 0,
+    "results": [
+      {
+        "rank": 1,
+        "title": "ChatGPT: Chat, Work, Create & Code with AI",
+        "url": "https://chatgpt.com/",
+        "site": "chatgpt.com",
+        "score": 0.575,
+        "engine": "bing",
+        "snippet": "Use ChatGPT to answer questions, write, create images, complete work, and code—all in one place. Get started for free or download …"
+      },
+      {
+        "rank": 2,
+        "title": "ChatGPT",
+        "url": "https://chatgpt.com/features",
+        "site": "chatgpt.com",
+        "score": 0.575,
+        "engine": "bing",
+        "snippet": "Use ChatGPT to answer questions, write, create images, complete work, and code—all in one place. Get started for free or download …"
+      },
+      {
+        "rank": 3,
+        "title": "Introducing ChatGPT - OpenAI",
+        "url": "https://openai.com/index/chatgpt/",
+        "site": "openai.com",
+        "score": 0.575,
+        "engine": "bing",
+        "snippet": "2022年11月30日 · We’ve trained a model called ChatGPT which interacts in a conversational way. The dialogue format makes it …"
+      },
+      {
+        "rank": 4,
+        "title": "立即开始使用 ChatGPT | OpenAI",
+        "url": "https://openai.com/zh-Hans-CN/index/start-using-chatgpt-instantly/",
+        "site": "openai.com",
+        "score": 0.575,
+        "engine": "bing",
+        "snippet": "我们的核心使命是让 ChatGPT 等工具广泛普及，让人们体验人工智能的益处。 来自 185 个国家/地区超过 1 亿人每周使用 ChatGPT …"
+      },
+      {
+        "rank": 5,
+        "title": "ChatGPT - 维基百科，自由的百科全书",
+        "url": "https://zh.wikipedia.org/wiki/ChatGPT",
+        "site": "zh.wikipedia.org",
+        "score": 0.575,
+        "engine": "bing",
+        "snippet": "ChatGPT，中文全称 聊天生成预训练转换器[1] （英語： Chat Generative Pre-trained Transformer[2]），是 OpenAI 开发的 人工智能 …"
+      },
+      {
+        "rank": 6,
+        "title": "ChatGPT - Wikipedia",
+        "url": "https://en.wikipedia.org/wiki/ChatGPT",
+        "site": "en.wikipedia.org",
+        "score": 0.575,
+        "engine": "bing",
+        "snippet": "Italian regulators assert that ChatGPT was exposing minors to age-inappropriate content, and that OpenAI's use of ChatGPT …"
+      }
+    ]
+  },
+  {
+    "id": "compare-llm-price",
+    "category": "compare",
+    "question": "DeepSeek 和 GPT 哪个 API 更便宜？",
+    "history": [],
+    "query": "DeepSeek 和 GPT 哪个 API 更便宜",
+    "query_used": "DeepSeek 和 GPT 哪个 API 更便宜",
+    "expected_terms": "DeepSeek;GPT|OpenAI;价格|定价|便宜|成本|pricing",
+    "expected_domains": [
+      "deepseek.com",
+      "openai.com"
+    ],
+    "wrong_premise": false,
+    "retrieved": 2,
+    "good_count": 2,
+    "weak_count": 0,
+    "engines": [
+      "bing"
+    ],
+    "tier_score": 0,
+    "engine": "bing",
+    "low_relevance": false,
+    "error": "",
+    "latency": 0.72,
+    "snippet_grade": {
+      "hit": 1,
+      "total": 3,
+      "detail": [
+        [
+          "deepseek"
+        ],
+        [],
+        []
+      ]
+    },
+    "full_grade": {
+      "hit": 2,
+      "total": 3,
+      "detail": [
+        [
+          "deepseek"
+        ],
+        [],
+        [
+          "pricing"
+        ]
+      ]
+    },
+    "domain_hit": true,
+    "hosts": [
+      "deepseek.com",
+      "platform.deepseek.com"
+    ],
+    "pages_fetched": 1,
+    "page_chars": 1010,
+    "results": [
+      {
+        "rank": 1,
+        "title": "DeepSeek | API Platform",
+        "url": "https://www.deepseek.com/en/platform/",
+        "site": "deepseek.com",
+        "score": 0.383,
+        "engine": "bing",
+        "snippet": "DeepSeek is an AI research company focused on building world-leading general artificial intelligence. We develop and open-source …"
+      },
+      {
+        "rank": 2,
+        "title": "DeepSeek Platform",
+        "url": "https://platform.deepseek.com/api_keys",
+        "site": "platform.deepseek.com",
+        "score": 0.358,
+        "engine": "bing",
+        "snippet": "Join DeepSeek API platform to access our AI models, developer resources and API documentation."
+      }
+    ]
+  },
+  {
+    "id": "en-rust-ownership",
+    "category": "en",
+    "question": "rust ownership rules explained",
+    "history": [],
+    "query": "rust ownership rules explained",
+    "query_used": "",
+    "expected_terms": "rust;ownership|borrow|借用;规则|rules|reference",
+    "expected_domains": [
+      "doc.rust-lang.org",
+      "rust-lang.org"
+    ],
+    "wrong_premise": false,
+    "retrieved": 3,
+    "good_count": 0,
+    "weak_count": 3,
+    "engines": [
+      "bing"
+    ],
+    "tier_score": 0,
+    "engine": "bing",
+    "low_relevance": true,
+    "error": "未找到高相关结果，以下 3 条相关性较低，仅供参考",
+    "latency": 1.35,
+    "snippet_grade": {
+      "hit": 1,
+      "total": 3,
+      "detail": [
+        [
+          "rust"
+        ],
+        [],
+        []
+      ]
+    },
+    "full_grade": {
+      "hit": 2,
+      "total": 3,
+      "detail": [
+        [
+          "rust"
+        ],
+        [
+          "ownership"
+        ],
+        []
+      ]
+    },
+    "domain_hit": true,
+    "hosts": [
+      "rust-lang.org",
+      "rust-lang.org",
+      "runoob.com"
+    ],
+    "pages_fetched": 3,
+    "page_chars": 3194,
+    "results": [
+      {
+        "rank": 1,
+        "title": "Rust 程序设计语言",
+        "url": "https://rust-lang.org/zh-CN/",
+        "site": "rust-lang.org",
+        "score": 0.287,
+        "engine": "bing",
+        "snippet": "生产环境中的 Rust 全世界已有数百家公司在生产环境中使用 Rust，以达到快速、跨平台、低资源占用的目的。 很多著名且受欢迎的 …"
+      },
+      {
+        "rank": 2,
+        "title": "Rust Programming Language",
+        "url": "https://rust-lang.org/",
+        "site": "rust-lang.org",
+        "score": 0.287,
+        "engine": "bing",
+        "snippet": "Rust is blazingly fast and memory-efficient: with no runtime or garbage collector, it can power performance-critical services, run on …"
+      },
+      {
+        "rank": 3,
+        "title": "Rust 教程 | 菜鸟教程",
+        "url": "https://www.runoob.com/rust/rust-tutorial.html",
+        "site": "runoob.com",
+        "score": 0.287,
+        "engine": "bing",
+        "snippet": "Rust 教程 Rust 是由 Mozilla 主导开发的高性能编译型编程语言，遵循“安全、并发、实用”的设计原则。 Rust 语言由 Mozilla 开发，首 …"
+      }
+    ]
+  },
+  {
+    "id": "tech-python-version",
+    "category": "tech",
+    "question": "Python 现在最新的稳定版本是多少？",
+    "history": [],
+    "query": "Python 现在最新的稳定版本是多少",
+    "query_used": "",
+    "expected_terms": "Python;3.1|3.14|3.13;下载|download|发布|release",
+    "expected_domains": [
+      "python.org"
+    ],
+    "wrong_premise": false,
+    "retrieved": 1,
+    "good_count": 0,
+    "weak_count": 1,
+    "engines": [
+      "bing"
+    ],
+    "tier_score": 0,
+    "engine": "bing",
+    "low_relevance": true,
+    "error": "未找到高相关结果，以下 1 条相关性较低，仅供参考",
+    "latency": 2.69,
+    "snippet_grade": {
+      "hit": 1,
+      "total": 3,
+      "detail": [
+        [
+          "python"
+        ],
+        [],
+        []
+      ]
+    },
+    "full_grade": {
+      "hit": 1,
+      "total": 3,
+      "detail": [
+        [
+          "python"
+        ],
+        [],
+        []
+      ]
+    },
+    "domain_hit": false,
+    "hosts": [
+      "runoob.com"
+    ],
+    "pages_fetched": 1,
+    "page_chars": 112,
+    "results": [
+      {
+        "rank": 1,
+        "title": "Python3 教程 | 菜鸟教程",
+        "url": "https://www.runoob.com/python3/python3-tutorial.html",
+        "site": "runoob.com",
+        "score": 0.269,
+        "engine": "bing",
+        "snippet": "Python 的 3.0 版本，常被称为 Python 3000，或简称 Py3k。 相对于 Python 的早期版本，这是一个较大的升级。 为了不带入过多的累 …"
+      }
+    ]
+  },
+  {
+    "id": "en-python-asyncio",
+    "category": "en",
+    "question": "python asyncio gather vs wait difference",
+    "history": [],
+    "query": "python asyncio gather vs wait difference",
+    "query_used": "",
+    "expected_terms": "asyncio;gather|wait;python|docs",
+    "expected_domains": [
+      "docs.python.org"
+    ],
+    "wrong_premise": false,
+    "retrieved": 0,
+    "good_count": 0,
+    "weak_count": 0,
+    "engines": [],
+    "tier_score": 0,
+    "engine": "",
+    "low_relevance": false,
+    "error": "没有找到相关结果（试了 1 种查询词，10 条都被判为不相关）",
+    "latency": 1.63,
+    "snippet_grade": {
+      "hit": 0,
+      "total": 3,
+      "detail": [
+        [],
+        [],
+        []
+      ]
+    },
+    "full_grade": {
+      "hit": 0,
+      "total": 3,
+      "detail": [
+        [],
+        [],
+        []
+      ]
+    },
+    "domain_hit": false,
+    "hosts": [],
+    "pages_fetched": 0,
+    "page_chars": 0,
+    "results": []
+  },
+  {
+    "id": "time-nobel-2025",
+    "category": "time",
+    "question": "2025年诺贝尔文学奖颁给了谁？",
+    "history": [],
+    "query": "2025年诺贝尔文学奖颁给了谁",
+    "query_used": "",
+    "expected_terms": "诺贝尔|Nobel;文学奖;2025;获奖|颁给|作家|László|Krasznahorkai|克拉斯诺霍尔卡伊",
+    "expected_domains": [
+      "nobelprize.org"
+    ],
+    "wrong_premise": false,
+    "retrieved": 0,
+    "good_count": 0,
+    "weak_count": 0,
+    "engines": [],
+    "tier_score": 0,
+    "engine": "",
+    "low_relevance": false,
+    "error": "没有找到相关结果（试了 2 种查询词，1 条都被判为不相关）",
+    "latency": 2.42,
+    "snippet_grade": {
+      "hit": 0,
+      "total": 4,
+      "detail": [
+        [],
+        [],
+        [],
+        []
+      ]
+    },
+    "full_grade": {
+      "hit": 0,
+      "total": 4,
+      "detail": [
+        [],
+        [],
+        [],
+        []
+      ]
+    },
+    "domain_hit": false,
+    "hosts": [],
+    "pages_fetched": 0,
+    "page_chars": 0,
+    "results": []
+  },
+  {
+    "id": "fact-lighting-fair-2026",
+    "category": "fact",
+    "question": "2026香港国际秋季灯饰展什么时候在哪办？",
+    "history": [],
+    "query": "2026香港国际秋季灯饰展什么时候在哪办",
+    "query_used": "",
+    "expected_terms": "香港|香港贸发局|HKTDC;灯饰|照明;会展|会议展览中心|博览道|湾仔|10月|11月",
+    "expected_domains": [
+      "hktdc.com",
+      "hklightingfair.com"
+    ],
+    "wrong_premise": false,
+    "retrieved": 0,
+    "good_count": 0,
+    "weak_count": 0,
+    "engines": [],
+    "tier_score": 0,
+    "engine": "",
+    "low_relevance": false,
+    "error": "没有找到相关结果（试了 2 种查询词，20 条都被判为不相关）",
+    "latency": 2.84,
+    "snippet_grade": {
+      "hit": 0,
+      "total": 3,
+      "detail": [
+        [],
+        [],
+        []
+      ]
+    },
+    "full_grade": {
+      "hit": 0,
+      "total": 3,
+      "detail": [
+        [],
+        [],
+        []
+      ]
+    },
+    "domain_hit": false,
+    "hosts": [],
+    "pages_fetched": 0,
+    "page_chars": 0,
+    "results": []
+  },
+  {
+    "id": "fact-central-axis",
+    "category": "fact",
+    "question": "北京中轴线是什么时候列入世界遗产名录的？",
+    "history": [],
+    "query": "北京中轴线是什么时候列入世界遗产名录的",
+    "query_used": "",
+    "expected_terms": "世界遗产|世界遗产名录|世界文化遗产;中轴线;2024|二〇二四",
+    "expected_domains": [
+      "unesco.org",
+      "gov.cn",
+      "whc.unesco.org"
+    ],
+    "wrong_premise": false,
+    "retrieved": 0,
+    "good_count": 0,
+    "weak_count": 0,
+    "engines": [],
+    "tier_score": 0,
+    "engine": "",
+    "low_relevance": false,
+    "error": "没有找到相关结果（试了 2 种查询词，20 条都被判为不相关）",
+    "latency": 2.72,
+    "snippet_grade": {
+      "hit": 0,
+      "total": 3,
+      "detail": [
+        [],
+        [],
+        []
+      ]
+    },
+    "full_grade": {
+      "hit": 0,
+      "total": 3,
+      "detail": [
+        [],
+        [],
+        []
+      ]
+    },
+    "domain_hit": false,
+    "hosts": [],
+    "pages_fetched": 0,
+    "page_chars": 0,
+    "results": []
+  }
+]

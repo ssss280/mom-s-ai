@@ -1,0 +1,282 @@
+[
+  {
+    "url": "http://www.pjtime.com/2025/10/382928591528.shtml",
+    "status": 200,
+    "kind": "text/html",
+    "error": "",
+    "ms": 66
+  },
+  {
+    "url": "http://www.shandong.gov.cn/col/col99081/index.html",
+    "status": 200,
+    "kind": "text/html",
+    "error": "",
+    "ms": 160
+  },
+  {
+    "url": "https://baike.baidu.com/item/%E9%A6%99%E6%B8%AF%E5%8D%81%E5%85%AB%E5%8C%BA/7265721",
+    "status": 403,
+    "kind": "",
+    "error": "HTTP 403",
+    "ms": 166
+  },
+  {
+    "url": "https://baike.baidu.com/item/%E9%A6%99%E6%B8%AF%E7%89%B9%E5%88%AB%E8%A1%8C%E6%94%BF%E5%8C%BA/24510970",
+    "status": 403,
+    "kind": "",
+    "error": "HTTP 403",
+    "ms": 161
+  },
+  {
+    "url": "https://finance.eastmoney.com/a/202608133840738352.html",
+    "status": 200,
+    "kind": "text/html; charset=utf-8",
+    "error": "",
+    "ms": 141
+  },
+  {
+    "url": "https://finance.ifeng.com/c/8nJMtuP4IAu",
+    "status": 200,
+    "kind": "text/html; charset=utf-8",
+    "error": "",
+    "ms": 102
+  },
+  {
+    "url": "https://finance.sina.com.cn/roll/2026-04-06/doc-inhtprnh1388109.shtml",
+    "status": 200,
+    "kind": "text/html",
+    "error": "",
+    "ms": 297
+  },
+  {
+    "url": "https://finance.sina.com.cn/roll/2026-05-03/doc-inhwrsvc0619248.shtml",
+    "status": 200,
+    "kind": "text/html",
+    "error": "",
+    "ms": 39
+  },
+  {
+    "url": "https://finance.sina.com.cn/roll/2026-06-30/doc-inifehiu4848444.shtml",
+    "status": 200,
+    "kind": "text/html",
+    "error": "",
+    "ms": 257
+  },
+  {
+    "url": "https://finance.sina.com.cn/roll/2026-08-07/doc-inimmihx3585204.shtml",
+    "status": 200,
+    "kind": "text/html",
+    "error": "",
+    "ms": 45
+  },
+  {
+    "url": "https://focus.scol.com.cn/zgsz/202609/83319139.html",
+    "status": 200,
+    "kind": "text/html",
+    "error": "",
+    "ms": 399
+  },
+  {
+    "url": "https://hb.ifeng.com/c/8sjp0PagGYr",
+    "status": 200,
+    "kind": "text/html; charset=utf-8",
+    "error": "",
+    "ms": 163
+  },
+  {
+    "url": "https://hm.people.com.cn/n1/2025/1028/c42272-40591262.html",
+    "status": 0,
+    "kind": "",
+    "error": "URLError",
+    "ms": 22
+  },
+  {
+    "url": "https://news.ifeng.com/c/7fdtjTjlpiy",
+    "status": 200,
+    "kind": "text/html; charset=utf-8",
+    "error": "",
+    "ms": 75
+  },
+  {
+    "url": "https://news.qq.com/rain/a/20260712A09KAG00",
+    "status": 200,
+    "kind": "text/html; charset=utf-8",
+    "error": "",
+    "ms": 147
+  },
+  {
+    "url": "https://news.qq.com/rain/a/20260910A023KQ00",
+    "status": 200,
+    "kind": "text/html; charset=utf-8",
+    "error": "",
+    "ms": 126
+  },
+  {
+    "url": "https://news.qq.com/rain/a/20260910A02PMH00",
+    "status": 200,
+    "kind": "text/html; charset=utf-8",
+    "error": "",
+    "ms": 182
+  },
+  {
+    "url": "https://news.shm.com.cn/2026-01/24/content_5472093.htm",
+    "status": 200,
+    "kind": "text/html",
+    "error": "",
+    "ms": 357
+  },
+  {
+    "url": "https://osfair.com/industries/led-lighting/2026",
+    "status": 200,
+    "kind": "text/html;charset=utf-8",
+    "error": "",
+    "ms": 254
+  },
+  {
+    "url": "https://sc.people.com.cn/n2/2022/0308/c345460-35164488.html",
+    "status": 0,
+    "kind": "",
+    "error": "URLError",
+    "ms": 26
+  },
+  {
+    "url": "https://whlyj.yantai.gov.cn/",
+    "status": 200,
+    "kind": "text/html; charset=utf-8",
+    "error": "",
+    "ms": 388
+  },
+  {
+    "url": "https://www.admin5.com/article/20260428/1061761.shtml",
+    "status": 200,
+    "kind": "text/html",
+    "error": "",
+    "ms": 49
+  },
+  {
+    "url": "https://www.deepseek.com/en/platform/",
+    "status": 200,
+    "kind": "text/html",
+    "error": "",
+    "ms": 52
+  },
+  {
+    "url": "https://www.dzwww.com/xinwen/jjxw/202608/t20260806_17999489.htm",
+    "status": 200,
+    "kind": "text/html",
+    "error": "",
+    "ms": 67
+  },
+  {
+    "url": "https://www.fanxstar.com/zh-CN/blog/top-5-global-lighting-fairs-you-must-visit-in-2026/",
+    "status": 200,
+    "kind": "text/html; charset=utf-8",
+    "error": "",
+    "ms": 2733
+  },
+  {
+    "url": "https://www.haozhanhui.com/zhanlanjihua/2026_%E7%85%A7%E6%98%8E_c_1.html",
+    "status": 200,
+    "kind": "text/html",
+    "error": "",
+    "ms": 236
+  },
+  {
+    "url": "https://www.immd.gov.hk/hks/index.html",
+    "status": 200,
+    "kind": "text/html",
+    "error": "",
+    "ms": 580
+  },
+  {
+    "url": "https://www.jiaodong.net/news/system/2020/06/30/014061580.shtml",
+    "status": 200,
+    "kind": "text/html",
+    "error": "",
+    "ms": 164
+  },
+  {
+    "url": "https://www.jiaodong.net/news/system/2022/03/25/014288793.shtml",
+    "status": 200,
+    "kind": "text/html",
+    "error": "",
+    "ms": 185
+  },
+  {
+    "url": "https://www.jufair.com/i-lighting-led/n-cn/",
+    "status": 200,
+    "kind": "text/html; charset=utf-8",
+    "error": "",
+    "ms": 220
+  },
+  {
+    "url": "https://www.msn.cn/zh-cn/%E7%A7%91%E5%AD%A6/%E5%A4%A9%E6%96%87%E5%AD%A6/%E4%B8%AD%E5%9B%BD%E5%A4%A9%E5%AE%AB%E7%A9%BA%E9%97%B4%E7%AB%99%E5%8F%AF%E6%94%AF%E6%8C%813%E5%90%8D%E8%88%AA%E5%A4%A9%E5%91%98%E9%95%BF%E6%9C%9F%E9%A9%BB%E7%95%99-%E8%B5%84%E9%87%91%E6%8A%95%E5%85%A5%E7%BA%A6733%E4%BA%BF%E5%85%83/ar-AA2bt0QU",
+    "status": 200,
+    "kind": "text/html; charset=utf-8",
+    "error": "",
+    "ms": 178
+  },
+  {
+    "url": "https://www.qufair.com/fl/97-0-2026/",
+    "status": 200,
+    "kind": "text/html; charset=utf-8",
+    "error": "",
+    "ms": 366
+  },
+  {
+    "url": "https://www.sohu.com/a/1074054736_362225",
+    "status": 200,
+    "kind": "text/html;charset=UTF-8",
+    "error": "",
+    "ms": 139
+  },
+  {
+    "url": "https://www.stcn.com/article/detail/3821826.html",
+    "status": 200,
+    "kind": "text/html; charset=utf-8",
+    "error": "",
+    "ms": 478
+  },
+  {
+    "url": "https://www.yangtse.com/news/yw/202609/t20260914_392417.html",
+    "status": 200,
+    "kind": "text/html",
+    "error": "",
+    "ms": 144
+  },
+  {
+    "url": "https://www.zaobao.com.sg/news/china/story20220516-1273077",
+    "status": 200,
+    "kind": "text/html; charset=utf-8",
+    "error": "",
+    "ms": 737
+  },
+  {
+    "url": "https://www.zaobao.com.sg/news/china/story20231005-1439962",
+    "status": 200,
+    "kind": "text/html; charset=utf-8",
+    "error": "",
+    "ms": 516
+  },
+  {
+    "url": "https://www.zaobao.com.sg/realtime/china/story20220514-1272573",
+    "status": 200,
+    "kind": "text/html; charset=utf-8",
+    "error": "",
+    "ms": 680
+  },
+  {
+    "url": "https://www.zhifu.gov.cn/",
+    "status": 200,
+    "kind": "text/html; charset=utf-8",
+    "error": "",
+    "ms": 439
+  },
+  {
+    "url": "https://www.zhihu.com/question/1971581210577864012",
+    "status": 403,
+    "kind": "",
+    "error": "HTTP 403",
+    "ms": 1206
+  }
+]

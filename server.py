@@ -22,6 +22,7 @@ from models import ChatSightModel, PROVIDER_DEFAULTS
 from ocr import extract_chat_text
 from paths import APP_DIR, CONFIG_PATH, SCREENSHOT_DIR, ensure_writable_dir
 from storage import ChatStorage
+import local_update
 import update_check
 import web_search
 import win_capture
@@ -86,6 +87,18 @@ SEARCH_LOW_RELEVANCE_PROMPT = """重要提醒：这次联网搜索**没有找到
 2. 不要把这几条当成确凿事实，凡涉及日期、价格、地点、人名都要提醒用户自行核对；
 3. 宁可说"不确定"，也不要替它们圆场；
 4. 用中文简洁作答，不要复述这份说明。"""
+
+# 用户的口语说法没搜到、换成官方名称才搜到时用这段。
+# 用户明确要求这个"先承认没找到、再指出可能是哪个官方展会"的表达顺序。
+SEARCH_ALIAS_SYSTEM_PROMPT = """用户用的说法没有搜到内容，下面给到的是**换成官方名称后**搜到的结果。请严格按这个顺序回答：
+1. 第一句先如实说明没找到，格式照这个来："我没找到关于「{asked}」的相关内容。"
+   （用用户原来的说法，不要改写、不要说成查到了）；
+2. 第二句给出可能想搜的名称："你可能想要搜索的是{official}。" \
+如果有别名（下面的"相关展会"），可以顺带说一句它们的区别；
+3. 然后用下面的检索结果介绍「{official}」——时间、地点、主办方、同期展会等，
+   引用结果时用 [1] [2] 编号标注，**不要在正文里输出 URL**；
+4. 只讲结果里有的信息，不要编造日期/地点/价格；结果里没有的就写"建议以官方来源为准"；
+5. 用中文简洁作答，不要复述这份说明。"""
 
 
 def err(e: Exception, code: int = 500):
@@ -247,7 +260,19 @@ def chat():
                                                        count=web_search.READ_PAGES)
                         search_info["pages"] = len(pages)
                     injected = [{"role": "system", "content": SEARCH_SYSTEM_PROMPT}]
-                    if found.get("low_relevance"):
+                    suggestion = found.get("suggestion") or {}
+                    if suggestion.get("official"):
+                        # 用户的口语说法没搜到、换官方名才搜到：必须"先承认没找到，
+                        # 再指出可能是哪个官方展会"，否则用户会以为这就是他说的那个展会
+                        search_info["suggested"] = suggestion["official"]
+                        related = "、".join(suggestion.get("related") or []) or "（无）"
+                        injected.insert(0, {"role": "system", "content":
+                                            SEARCH_ALIAS_SYSTEM_PROMPT.format(
+                                                asked=found.get("asked") or found["query"],
+                                                official=suggestion["official"])
+                                            + f"\n\n相关展会：{related}\n"
+                                              f"补充说明：{suggestion.get('note', '')}"})
+                    elif found.get("low_relevance"):
                         # 没找到高相关结果时，明确告诉模型这是弱证据，别当事实用
                         injected.insert(0, {"role": "system", "content": SEARCH_LOW_RELEVANCE_PROMPT})
                     injected.append({
@@ -486,6 +511,42 @@ def sessions():
         return err(e)
 
 
+# ---------- 联网搜索的查询记录（排查用）----------
+
+@app.get("/api/search/log")
+def search_log():
+    """返回最近的联网搜索记录：用了什么查询词、打了哪些源、留下/丢了什么。
+
+    排查"搜出来为什么不对"时先看这里——比翻 app.log 直观得多。
+    （页面上的『搜索记录』按钮就调这个接口。）
+    """
+    try:
+        limit = int(request.args.get("limit") or 20)
+    except (TypeError, ValueError):
+        limit = 20
+    try:
+        records = web_search.recent_queries(max(1, min(limit, 200)))
+        problems = [r for r in records if not r.get("returned") or r.get("status") == "low_relevance"]
+        return jsonify({
+            "path": web_search.query_log_path(),
+            "count": len(records),
+            "problem_count": len(problems),
+            "engines": web_search.engine_stats(),
+            "records": records,
+        })
+    except Exception as e:
+        return err(e)
+
+
+@app.post("/api/search/log/clear")
+def search_log_clear():
+    """清空查询记录（清干净再复现一次问题）。"""
+    try:
+        return jsonify({"ok": web_search.clear_query_log()})
+    except Exception as e:
+        return err(e)
+
+
 # ---------- 版本与更新 ----------
 
 @app.get("/api/update")
@@ -503,6 +564,37 @@ def update_status():
             "current": __version__, "latest": "", "has_update": False,
             "url": update_check.REPO_URL, "source": "", "error": str(e), "pending": False,
         })
+
+
+@app.get("/api/update/local")
+def update_local_plan():
+    """预演本地内建更新：会新增/覆盖哪些文件（只读远端清单，不下载整个包）。"""
+    try:
+        return jsonify({"ok": True, "local": local_update.status(),
+                        "protected": sorted(local_update.PROTECTED_DIRS)})
+    except Exception as e:
+        return err(e)
+
+
+@app.post("/api/update/apply")
+def update_apply():
+    """**本地内建更新**：把 GitHub 上的文件下载回本地并覆盖，不跳浏览器。
+
+    点击界面上的"可更新"就走这里（用户要求直接下载覆盖、不再二次确认）。
+    安全措施见 local_update 模块：只覆盖仓库里有的文件、不动用户数据、
+    覆盖前自动备份、原子替换、并且**拒绝降级**（远端比本地旧时不写盘）。
+    """
+    body = request.get_json(silent=True) or {}
+    force = bool(body.get("force"))
+    try:
+        result = local_update.run(force=force)
+    except Exception as e:
+        return err(e)
+    if result.get("blocked") == "downgrade":
+        # 这不是"失败"，是我们主动拦下的：告诉界面原因，别让它显示成更新成功
+        return jsonify(result), 409
+    result["restart_required"] = bool(result.get("ok"))
+    return jsonify(result)
 
 
 @app.get("/api/sessions/<int:session_id>")
@@ -524,6 +616,20 @@ def session_delete(session_id):
     try:
         storage.delete_session(session_id)
         return jsonify({"ok": True})
+    except Exception as e:
+        return err(e)
+
+
+@app.post("/api/sessions/batch-delete")
+def session_batch_delete():
+    try:
+        body = request.get_json(force=True)
+        ids = body.get("ids") or []
+        ids = [int(i) for i in ids if str(i).isdigit()]
+        if not ids:
+            return jsonify({"error": "没有选择要删除的记录"}), 400
+        storage.delete_sessions(ids)
+        return jsonify({"ok": True, "deleted": len(ids)})
     except Exception as e:
         return err(e)
 

@@ -1,0 +1,6 @@
+# 评测运行的逐题产物很大（记录每次搜索的完整结果），只保留作为证据的基线/最终两次。
+# 评测脚本本身（harness/compare/engine_eval/show_queries…）要提交，题库与报告也要提交。
+runs/*
+!runs/05-baseline-full/
+!runs/03-final-verify/
+__pycache__/
