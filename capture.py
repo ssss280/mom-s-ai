@@ -20,15 +20,9 @@ def capture_full_screen():
         return img
 
 
-def capture_region(region):
-    x1, y1, x2, y2 = region
-    logger.info(f"截取区域: ({x1}, {y1}, {x2}, {y2})")
-    with mss.mss() as sct:
-        monitor = {"top": y1, "left": x1, "width": x2 - x1, "height": y2 - y1}
-        sct_img = sct.grab(monitor)
-        img = Image.frombytes("RGB", sct_img.size, sct_img.bgra, "raw", "BGRX")
-        logger.info(f"区域截图完成: {img.size}")
-        return img
+# 说明：这里原本还有一个 capture_region()，但**全仓库没有任何地方调用它**。
+# 框选识别走的是「服务端截全屏 → 前端拖拽 → /api/ocr/region 在服务端裁剪」这条路
+# （见 server.py 的 ocr_region），所以那个函数是死代码，已删除，避免两份裁剪逻辑。
 
 
 def _mtime(path: str) -> float:

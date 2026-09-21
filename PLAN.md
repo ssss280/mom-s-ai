@@ -25,7 +25,9 @@ ChatSight/
 ├── server.py            # Flask 后端 + 全部接口路由（程序入口）
 ├── version.py           # 版本号 + 更新检测目标仓库（发版时要改这里）
 ├── update_check.py      # 从 GitHub 检测新版本（后台线程 + 硬超时）
+├── local_update.py      # 本地内建更新：从 GitHub 下载文件覆盖到本地（不跳浏览器，防降级）
 ├── web_search.py        # 免密钥联网搜索（Bing 中文+资讯 RSS 主攻，维基/DDG 补英文，相关性过滤）
+├── fair_aliases.py      # 展会别名词典：按「地区 + 种类」推断官方展会名（口语说法搜不到时兜底）
 ├── eval/                # 联网搜索评测（随机题库 + 判据评分 + 报告，见 eval/REPORT.md）
 ├── release.py           # 发版助手：按「GitHub 版本 + 1」算出该提交的版本号
 ├── static/              # 网页前端（黑白极简风格）
@@ -179,6 +181,24 @@ ChatSight/
 - 比较版本号按数字段（`1.10.0 > 1.9.9`），CHANGELOG 只认 `## [x.y.z]` 标题行，
   避免把正文里 Keep a Changelog 的链接版本号当成项目版本
 
+### local_update.py - 本地内建更新（下载覆盖，不跳浏览器）
+- 入口：界面点「可更新」→ `POST /api/update/apply`；也可 `GET /api/update/local` 先预演
+- **下载通道按实测选**：`raw.githubusercontent.com` 在本机**直接超时**（10 秒读不到数据）→ 不用它；
+  优先 `codeload` 整包 zip（一次拿全），失败退到 `api.github.com` 逐文件下载
+- **只覆盖仓库里真实存在的文件**，本地多出来的文件一律保留不删
+- **不动用户数据**：`config.json`（含 API Key）、`data/`、`error/`、`.git/`、`.bld/`、`build/` 全跳过
+- **覆盖前自动备份**到 `data/update_backup/<时间戳>/`；写盘用临时文件 + `os.replace` 原子替换
+- **拒绝降级**：远端版本比本地旧时直接拦下（返回 `blocked=downgrade`，接口回 409），
+  除非显式 `force=True`。理由：实测远端曾落后本地（`web_search.py` 本地 55KB / 远端 24KB），
+  无条件覆盖会静默把新代码冲掉，而日志只会写"更新成功"
+- 更新完提示"请重启程序"，**不自动重启**
+
+### 配置校验（server.py 的 sanitize_config）
+- 设置页允许用户随便填，所以 `ocr_method` / `reply_style` / `reply_count` / `screenshot_keep`
+  **在写入和启动加载时都会收敛**到合法范围（枚举值白名单 + 数值夹取）
+- 实测不收敛的后果：`reply_count="abc"` → 用户看到「API 调用失败: slice indices...」；
+  `999` → 真的生成 146 条推荐回复（白烧 token）；`-1` → `[:-1]` 静默少给一条
+
 ### web_search.py - 免密钥联网搜索
 - `search(query, count)`：返回 `{"query", "engine", "results": [{"title","url","snippet","engine"}], "error"}`，
   任何失败都写进 `error`，不抛异常
@@ -204,10 +224,17 @@ ChatSight/
 - **评测体系（`eval/`）**：改搜索之前先在 `eval/` 上量一遍。25 道随机题库带客观判据，
   `harness.py` 抽题→跑真实搜索→评分→落盘，`compare.py` 对比前后，`check_engines.py` 巡检引擎健康。
   结论见 `eval/REPORT.md`（基线 43.1 → 优化后 85~95，空结果率 60% → 0%）
-- **搜索引擎分 4 批打**（`ENGINE_TIERS`，前一批不够数才升级；详见 CHANGELOG 1.5.0）：
-  1) `bing_cn` + `bing_news`（中文最稳最准）；2) `duckduckgo` + `wikipedia`（英文技术题主力）；
-  3) `sogou` + `baidu`；4) `bing_web` + `so360`（会给诱饵页/验证页，只当最后手段）。
+- **搜索引擎分 4 批打**（`ENGINE_TIERS`，前一批不够数才升级）：
+  **顺序不是猜的，由 `eval/engine_eval.py` 顺序实测决定**（看每个源"有贡献的题数 / 被拦次数"）；
+  批次只放 2 个源是有意的——并行猛打会把源打爆（并行打 8 个源时 so360 被拦 23/25，顺序时 25/25 全通）。
+  当前顺序：`so360`+`bing_cn` → `bing_web`+`bing_news` → `duckduckgo`+`wikipedia` → `sogou`+`baidu`。
   **纯英文查询换一套顺序**（`_ENGLISH_TIERS`）：实测 `cn.bing` 对英文技术问题不看查询词
+- **查询记录（`data/search_queries.jsonl`）**：每次搜索落一条，写明用了哪个查询词、打了哪些源、
+  每个源什么状态、留下/丢了什么。查看方式：界面「搜索记录」按钮、
+  `GET /api/search/log`、`py -3 eval/show_queries.py --detail`。排查"搜出来为什么不对"先看它
+- **别名词典兜底（`fair_aliases.py`）**：口语说法（「香港灯展」「香港文具展」）常常一条都搜不到，
+  按「地区 + 种类」推断官方名（→「香港国际秋季灯饰展」）再搜一次，并要求模型
+  **先说明"没找到关于「用户原话」的内容"、再说"你可能想搜索的是官方名"**
 - **诱饵页防御**：不带 `mkt` 的 `www.bing.com` 会给爬虫返回一整页**结构正常但完全跑题**的结果
   （搜灯饰展返回 Lady Gaga），所以主力入口必须是 `cn.bing.com` + `mkt=zh-CN`，
   且任何结果都要过相关性阈值——"解析成功"不等于"搜对了"

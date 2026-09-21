@@ -45,11 +45,70 @@ def save_config(config: dict):
         json.dump(config, f, ensure_ascii=False, indent=2)
 
 
-# 先把日志装好：下面的配置/模型/数据库初始化一旦抛异常，
-# 也需要有 app.log 和 error/ 记录可查（之前这几行跑在 setup_logging 之前，日志是空的）
+def _coerce_int(value, low: int, high: int, default: int) -> int:
+    """把配置值收敛成 [low, high] 内的整数，非法就退回默认值。"""
+    try:
+        number = int(float(value))       # 容忍 "5" / 5.0 / 5
+    except (TypeError, ValueError):
+        return default
+    return max(low, min(high, number))
+
+
+def _coerce_choice(value, choices: tuple, default: str) -> str:
+    text = str(value or "").strip().lower()
+    return text if text in choices else default
+
+
+def read_pages_flag(value) -> bool:
+    """把「读取网页正文」开关的各种写法统一成 bool。"""
+    if isinstance(value, str):
+        return value.strip().lower() not in ("0", "false", "no", "off", "")
+    return bool(value)
+
+
+# 配置里这些字段是"枚举/范围"值，写进非法值不会崩但行为会变得莫名其妙，统一收敛
+OCR_METHODS = ("auto", "vision", "tesseract")
+REPLY_STYLES = ("friendly", "professional", "humorous", "concise", "empathetic")
+REPLY_COUNT_RANGE = (1, 10)         # 推荐回复条数：下限 1（0 会返回空列表），上限 10
+SCREENSHOT_KEEP_RANGE = (0, 10000)  # 0 = 永久保留
+
+
+def sanitize_config(raw: dict, base: dict = None) -> dict:
+    """把配置里的数值/枚举字段收敛到合法范围。
+
+    为什么必须做：这些字段**用户能在设置页随便填**，而下游直接拿它们做切片和判断。
+    实测（`reply_count` 原样透传时）：
+    - `'abc'` / `3.7` → 模型侧切片抛 TypeError，用户看到「API 调用失败: slice indices...」；
+    - `999` → 真的生成 146 条推荐回复（白烧 token）；
+    - `-1` → `[: -1]` 静默少给一条，返回 3 条而不是 5 条，用户看不出哪里错了。
+    这里统一收敛：坏值退回默认，合法值原样保留。
+    """
+    merged = dict(base or {})
+    merged.update(raw or {})
+    merged["ocr_method"] = _coerce_choice(merged.get("ocr_method"), OCR_METHODS, "auto")
+    merged["reply_style"] = _coerce_choice(merged.get("reply_style"), REPLY_STYLES, "friendly")
+    merged["reply_count"] = _coerce_int(merged.get("reply_count"), *REPLY_COUNT_RANGE, default=3)
+    merged["screenshot_keep"] = _coerce_int(merged.get("screenshot_keep"),
+                                            *SCREENSHOT_KEEP_RANGE, default=0)
+    merged["search_read_pages"] = 1 if read_pages_flag(merged.get("search_read_pages", 1)) else 0
+    return merged
+
+
+# ---------- 初始化（顺序有讲究，注释见上）----------
+
 setup_logging()
 
-config = load_config()
+# 配置文件里的脏值在**启动时就收敛掉**：否则用户上次填错的值会一直跟着程序跑，
+# 直到他再点一次「保存设置」才可能被纠正
+_raw_config = load_config()
+config = sanitize_config(_raw_config)
+if config != _raw_config:
+    logger.warning(f"配置里有非法值，已自动收敛：{ {k: _raw_config.get(k) for k in config if config.get(k) != _raw_config.get(k)} }")
+    try:
+        save_config(config)
+    except Exception as e:
+        logger.warning(f"收敛后的配置写回失败（不影响运行）: {e}")
+
 model = ChatSightModel(config)
 storage = ChatStorage()
 
@@ -108,18 +167,12 @@ def err(e: Exception, code: int = 500):
 
 def screenshot_keep() -> int:
     """截图保留数量；0（默认）= 永久保留，正数 = 只留最近这么多张。"""
-    try:
-        return int(config.get("screenshot_keep", 0) or 0)
-    except (TypeError, ValueError):
-        return 0
+    return _coerce_int(config.get("screenshot_keep", 0), *SCREENSHOT_KEEP_RANGE, default=0)
 
 
 def read_pages_enabled() -> bool:
     """联网搜索时是否抓取网页正文（默认开）。配置里可以关掉。"""
-    value = config.get("search_read_pages", 1)
-    if isinstance(value, str):
-        return value.strip().lower() not in ("0", "false", "no", "off", "")
-    return bool(value)
+    return read_pages_flag(config.get("search_read_pages", 1))
 
 
 def image_url(path: str) -> str:
@@ -172,10 +225,13 @@ def update_config():
         for field in CONFIG_FIELDS:
             if field in body:
                 new_config[field] = body[field]
+        # 关键：**先收敛再保存**。设置页允许用户随便填，reply_count 填成 "abc" 会让
+        # 推荐回复直接报「API 调用失败: slice indices...」，填 999 会真的生成上百条。
+        new_config = sanitize_config(new_config)
         save_config(new_config)
         config = new_config
         model.update_config(config)
-        return jsonify({"ok": True})
+        return jsonify({"ok": True, "config": config})
     except Exception as e:
         return err(e)
 

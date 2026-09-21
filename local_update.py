@@ -251,9 +251,9 @@ def _version_tuple(text: str) -> tuple:
 def is_downgrade(remote: str, local: str) -> bool:
     """远端版本是否**比本地旧**。
 
-    必须有这道闸：实测远端仓库当时停在 1.3.0，而本地已经到 1.4.0
-    （`web_search.py` 本地 55KB、远端只有 24KB）。无条件覆盖会**把本地新代码降级冲掉**，
-    而且日志里只会写"更新成功"——这种静默倒退比更新失败危险得多。
+    必须有这道闸：实测远端仓库曾停在旧版本，而本地已经领先（`web_search.py` 本地 55KB、
+    远端只有 24KB）。无条件覆盖会**把本地新代码降级冲掉**，而且日志里只会写"更新成功"
+    ——这种静默倒退比更新失败危险得多。
     """
     if not remote or not local:
         return False
