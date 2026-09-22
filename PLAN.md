@@ -1,4 +1,4 @@
-# ChatSight - 桌面聊天识别与智能推荐工具
+# ChatSight - 聊天识别与 AI 回复助手（**网页版**）
 
 > ## 🚫 AI / 贡献者必读：改版本号前必须先问人
 >
@@ -39,7 +39,7 @@ ChatSight/
 ├── web_search.py        # 免密钥联网搜索（Bing 中文+资讯 RSS 主攻，维基/DDG 补英文，相关性过滤）
 ├── fair_aliases.py      # 展会别名词典：按「地区 + 种类」推断官方展会名（口语说法搜不到时兜底）
 ├── eval/                # 联网搜索评测（随机题库 + 判据评分 + 报告，见 eval/REPORT.md）
-├── release.py           # 发版助手：按「GitHub 版本 + 1」算出该提交的版本号
+├── release.py           # 发版助手：以 git 标签为基准算下一个版本号（改号必须带 --approved）
 ├── static/              # 网页前端（黑白极简风格）
 │   ├── index.html       # 页面结构
 │   ├── app.js           # 前端逻辑（对话、识别、框选、历史、设置）
@@ -54,8 +54,13 @@ ChatSight/
 ├── config.json          # 用户配置（含 API Key，已被 .gitignore 排除）
 ├── config.example.json  # 配置模板
 ├── requirements.txt     # Python 依赖
-├── PLAN.md              # 本计划文件（不可删除）
+├── AGENTS.md            # AI 助手行为守则（入口文件，第一条：改版本号前先问人）
+├── PROJECT.md           # 项目主框架：主流程 / 阶段门禁 / 单一事实源地图 / 路线图
+├── PLAN.md              # 本计划文件：架构与模块设计取舍（不可删除）
 ├── CHANGELOG.md         # 更新记录（每次改动都必须登记，见下）
+├── README.md            # 使用者视角：安装、运行、功能与自检
+├── tools/               # 项目级门禁脚本（**纳入版本控制**，与 .bld/ 不同）
+│   └── check_docs.py    # 文档一致性：版本号 / --approved 命令 / 过时规则 / 架构树
 ├── 启动.bat             # 一键启动（py -3 server.py）
 ├── 安装.bat             # 新电脑一键装环境（自动装 Python + 依赖，再启动）
 ├── error/               # 运行时报错日志（自动创建）
@@ -101,11 +106,15 @@ ChatSight/
 ### 发版流程
 
 ```powershell
-py release.py                     # 看下一个版本号该是多少（以标签为基准）
-py release.py --apply             # 只写进 version.py
-py release.py --release           # 一键：提交 → 打标签 → 推送 → 建 GitHub Release
-py release.py --release --beta    # 发测试版（Release 勾 pre-release）
+py release.py                              # 只读预览：以标签为基准的下一个版本号
+py release.py --apply --approved 1.1.1     # 只写进 version.py
+py release.py --release --approved 1.1.1   # 一键：提交 → 打标签 → 推送 → 建 GitHub Release
+py release.py --release --beta --approved 1.2.0-beta.1   # 发测试版（Release 勾 pre-release）
 ```
+
+> **会改版本号的命令必须带 `--approved <版本号>`**（人工同意凭据），否则 `release.py`
+> 直接拒绝执行（退出码 4）。版本号本身**必须先问过用户**——见 `AGENTS.md` 第一条。
+> 权威副本在 `AGENTS.md`「发版标准流程」；本节是摘要，由 `tools/check_docs.py` 保证两者不漂移。
 
 建 Release 需要 `GITHUB_TOKEN` 环境变量（`repo` 权限）；没设也能打标签推送，
 只是会跳过建 Release 并提示网页链接。
@@ -122,7 +131,7 @@ py release.py --release --beta    # 发测试版（Release 勾 pre-release）
 ```powershell
 git switch dev                          # 日常开发
 git switch -c release/1.2 dev           # 准备发 1.2.0
-py release.py --release                 # 发版（打 tag + 建 Release）
+py release.py --release --approved 1.2.0    # 发版（打 tag + 建 Release，版本号需用户同意）
 git switch main && git merge release/1.2
 git switch dev && git merge release/1.2
 ```

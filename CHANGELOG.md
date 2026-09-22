@@ -33,13 +33,11 @@ GitHub 上把测试版的 Release 勾选为 **pre-release**；程序里「更新
 **不会**给普通用户提示测试版（可在设置里切到 `beta` 尝鲜）。
 
 **发版流程**（`release.py` 以 **git 标签**为基准推算版本号，不再依赖"远端读到的版本号"
-——那正是早期出现重号的原因）：
+——那正是早期出现重号的原因）：完整命令见 **[AGENTS.md](AGENTS.md)「发版标准流程」**，
+这里**不再复制一份**——本项目正是吃过"同一份流程抄四份、其中两份烂掉"的亏
+（见 **[PROJECT.md](PROJECT.md)** §0）。
 
-```powershell
-py release.py                     # 看看下一个版本号该是多少
-py release.py --release           # 一键发版：提交 → 打标签 → 推送 → 建 GitHub Release
-py release.py --release --beta    # 发测试版（Release 标记为 pre-release）
-```
+> 唯一要记住的一条：**会改版本号的命令必须带 `--approved <版本号>`**，且版本号必须先获用户同意。
 
 ## [1.1.0] - 2026-09-21
 
@@ -58,6 +56,16 @@ py release.py --release --beta    # 发测试版（Release 标记为 pre-release
   `--release --beta` 发测试版并把 Release 标记为 pre-release。
 - **历史版本标签**：给 `1.0.0` ~ `1.0.5` 五个历史版本补上 Git 标签，
   GitHub 的 Tags / Releases 页从此能看到版本脉络。
+- **`PROJECT.md`——项目主框架与工作流（新建）**：回答一个此前**没有任何文件回答**的问题：
+  "一个需求从哪进来、经过哪几道门、到哪结束"。内容：定位与边界（含**不做清单**）、
+  单一事实源地图、**七阶段主线 + 阶段门禁 G0~G6**、分层验证矩阵、反模式清单（8 条，
+  每条带本项目真实物证）、AI 工具协作协议、路线图。
+  动因：`AGENTS.md` 六条规则全是"什么不能做"，没有一条管正向流程，于是项目容易"想一出是一出"。
+- **`tools/check_docs.py`——文档一致性门禁（新建，**纳入版本控制**）**：把"同一事实只写一处"
+  从口号变成机械检查——版本号是否与 CHANGELOG 同步、所有会改版本号的命令示例是否带
+  `--approved`、`version.py` 是否残留旧版基准说法、`PLAN.md` 架构树列的文件是否存在、
+  `AGENTS.md`/`README.md` 是否指向主流程。实测首次运行**精准命中 8 处真实问题、零误报**。
+  （与 `.bld/` 的区别：`.bld/` 不入版本控制、只放一次性调试脚本。）
 
 ### 修复
 
@@ -66,6 +74,19 @@ py release.py --release --beta    # 发测试版（Release 标记为 pre-release
   tags/releases 落后时就会拿到偏低的号，于是同一个版本号被发两次——
   这正是之前 CHANGELOG 出现两组同名版本（两套 1.5.0/1.4.0/1.3.0）的根因。
   现在以标签为权威基准，并会在"目标版本不比基准新"时**拒绝发版**（除非 `--force`）。
+- **`PLAN.md` 与 `CHANGELOG.md` 里的发版命令缺 `--approved`（照做会被自己的闸门拒绝）**：
+  这两处的命令还是旧的 `--release` 写法（不带人工同意凭据），而 `release.py` 在缺 `--approved`
+  时会直接拒绝执行（退出码 4）——**同一份流程抄了四份，其中两份悄悄烂掉**，
+  更讽刺的是 `PLAN.md` 就在同一节的上文写着"缺 `--approved` 会拒绝执行"，自相矛盾。
+  现已全部补齐，并交给 `tools/check_docs.py` 长期看住（这就是它存在的理由）。
+- **`version.py` 文件头的旧版基准规则其实没改干净（重要）**：1.1.0 的登记里写着
+  "已修正 version.py 文件头 docstring 的过时说法"，但它**仍是**"以 GitHub 仓库上的版本为准，
+  提交新版本时取它的**下一个**"——**正是导致同号重发的那条规则，而且躺在改版本号时
+  第一眼就会看到的位置**。现已改写为"以 git 标签为唯一基准"并注明旧写法已废弃。
+  教训固化进 `PROJECT.md` §5 反模式 #2 与 `tools/check_docs.py` 的检查项。
+- **`PLAN.md` 的标题与架构树残留旧说法**：标题仍写"桌面聊天识别与智能推荐工具"，
+  而项目早已是网页版（git 里就有"移除 exe 打包链路"的提交）；架构树里 `release.py`
+  仍描述为"按 GitHub 版本 + 1 算出"。两处都已改正，载体锁定写进 `PROJECT.md` §1。
 
 ### 变更
 
@@ -89,6 +110,11 @@ py release.py --release --beta    # 发测试版（Release 标记为 pre-release
   底层 `write_local_version(version, approved=True)` 在未授权时抛 `PermissionError`，
   防止以后有人/AI 新写一段代码绕过闸门。只读预览不受影响。
   实测：4 条拒绝路径全部拦住，`version.py` 未被改动（`test_version_gate.py` 6/6）。
+- **`AGENTS.md` / `README.md` 增加指向 `PROJECT.md` 的主流程入口**：`AGENTS.md` 顶部与
+  `README.md` 的贡献者一节都指向主流程与阶段门禁；`CHANGELOG.md` 头部那份发版命令**改为链接**
+  （账本不该承载流程全文，本项目已经因为"流程抄四份"受过一次伤）。
+- **`PLAN.md` 架构树补全**：补上 `AGENTS.md`、`README.md`、`PROJECT.md`、`tools/`，
+  此前架构树只列代码，文档与门禁脚本在树里查无此物（`check_docs.py` 会对未登记的顶层文件告警）。
 
 ### 修复（功能验收部分）
 
