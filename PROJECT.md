@@ -172,13 +172,18 @@ P0 立项 ──▶ P1 设计 ──▶ P2 实现 ──▶ P3 验证 ──▶ 
 | --- | --- |
 | 文档 / `CHANGELOG` / 版本号 | `py -3 tools\check_docs.py` |
 | 任意代码 | `py -3 -m py_compile <改动文件>` |
-| `config` / `storage` / `logger` / `ocr` / 搜索 / 更新 | `py -3 .bld\test_modules.py` |
-| `server.py` 路由、接口返回结构 | 先启动服务，再 `py -3 .bld\test_api.py` |
-| `update_check` / 稳定-测试双通道 | `py -3 .bld\test_channels.py` |
-| `ocr.py` | `py -3 .bld\test_ocr.py` |
+| `config` / `storage` / `logger` / `ocr` / 搜索 / 更新 | `py -3 tools\test_modules.py` |
+| `server.py` 路由、接口返回结构 | 先启动服务，再 `py -3 tools\test_api.py` |
+| `update_check` / 稳定-测试双通道 | `py -3 tools\test_channels.py` |
+| `ocr.py` | `py -3 tools\test_ocr.py` |
 | `web_search.py` / 别名词典 | `py -3 eval\harness.py --all --seed 20260101`（先量基线，再改） |
-| `release.py` / 版本闸门 | `py -3 .bld\test_version_gate.py` |
-| `安装.bat` / `启动.bat` | `py -3 .bld\fix_bat.py`（ASCII / CRLF / 括号三条体检） |
+| `release.py` / 版本闸门 | `py -3 tools\test_version_gate.py` |
+| `static/` 前端（`index.html` / `app.js` / `style.css`） | `py -3 tools\check_frontend.py`、`py -3 tools\check_ids.py` |
+| `server.py` 路由 ↔ 前端调用的契约 | `py -3 tools\check_api_contract.py` |
+| `安装.bat` / `启动.bat` | `py -3 tools\fix_bat.py`（ASCII / CRLF / 括号三条体检，**只读**） |
+
+> 上表里的 `tools/` 脚本都**纳入版本控制**，且路径基于脚本位置解析——换台机器、换目录都能直接跑。
+> 加新检查时照此办理：写进 `tools/`、路径自解析、在上表登记一行。
 
 > **搜索模块是例外且是范例**：改它之前**必须先在 `eval/` 上量一遍基线**（`eval/harness.py` 抽题 → 真实搜索 → 评分 → 落盘，`eval/compare.py` 对比前后），结论写进 `eval/REPORT.md`。
 > 基线 43.1 → 优化后 85~95、空结果率 60% → 0%，就是这么量出来的。**其他模块要向它看齐。**
@@ -233,9 +238,9 @@ P0 立项 ──▶ P1 设计 ──▶ P2 实现 ──▶ P3 验证 ──▶ 
 | --- | --- | --- |
 | P0（已完成） | 建立本文件 + `tools/check_docs.py`，消除文档漂移 | 一切后续工作的地基 |
 | P1 | 把 `eval/` 的"先量基线再改"范式推广到 OCR 与搜索的其余路径 | 项目里唯一被证明有效的质量手段 |
-| P1 | 把 `.bld/` 里仍有效的检查收敛进 `tools/`（纳入版本控制） | 反模式 #6：98 个脚本目前不进版本控制，换机器即失传 |
-| P2 | 截图磁盘占用治理（`screenshot_keep: 0` = 永久保留，现状已数十 MB 且含单张 4MB 的图） | 长期运行会持续膨胀 |
-| P2 | 复盘 `1.0.6`~`1.0.10` 五个版本在 git 里没有对应标签 | 文档声称的版本在版本库里没有快照 |
+| ~~P1~~ **已完成** | ~~把 `.bld/` 里仍有效的检查收敛进 `tools/`~~ —— 已收敛 **9 个**（模块 / 接口 / 双通道 / OCR / 版本闸门 / 前端 / 元素 id / 接口契约 / `.bat` 体检），并把写死的 `D:\ai助手` 改成基于脚本位置的相对定位（否则搬进版本控制也换不了机器） | 反模式 #6 |
+| P2 | 截图磁盘占用治理（`screenshot_keep: 0` = 永久保留，现状 **52 张 / 45.2 MB**，含单张约 4 MB 的全屏截图） | 长期运行会持续膨胀 |
+| ~~P2~~ **已完成** | ~~复盘 `1.0.6`~`1.0.10` 五个版本在 git 里没有对应标签~~ —— 已查清那五个条目共用同一次提交 `59eb24c`，已并入 `1.1.0`，`1.0.x` 收敛回 6 个并与 Git 标签一一对应 | 文档与 Git 不再各说各话 |
 
 ### 7.3 本次审计发现的问题
 

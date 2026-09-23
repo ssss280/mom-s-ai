@@ -61,10 +61,10 @@ AI  ：（此时才执行 py release.py --approved 1.1.1 ...）
 
 ```powershell
 py -3 tools\check_docs.py      # 文档一致性（改了文档 / 版本号 / 发版命令必跑）
-py -3 .bld\test_modules.py     # 模块功能（配置/存储/日志/OCR/搜索/更新）
-py -3 .bld\test_api.py         # 接口（需先启动服务）
-py -3 .bld\test_channels.py    # 稳定/测试双通道
-py -3 .bld\test_ocr.py         # OCR
+py -3 tools\test_modules.py     # 模块功能（配置/存储/日志/OCR/搜索/更新）
+py -3 tools\test_api.py         # 接口（需先启动服务）
+py -3 tools\test_channels.py    # 稳定/测试双通道
+py -3 tools\test_ocr.py         # OCR
 py -3 eval\harness.py --all --seed 20260101   # 联网搜索评测
 ```
 

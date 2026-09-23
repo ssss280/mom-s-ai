@@ -59,7 +59,7 @@ ChatSight/
 ├── PLAN.md              # 本计划文件：架构与模块设计取舍（不可删除）
 ├── CHANGELOG.md         # 更新记录（每次改动都必须登记，见下）
 ├── README.md            # 使用者视角：安装、运行、功能与自检
-├── tools/               # 项目级门禁脚本（**纳入版本控制**，与 .bld/ 不同）
+├── tools/               # 项目级门禁（**纳入版本控制**）：check_docs + 9 个自检/静态检查
 │   └── check_docs.py    # 文档一致性：版本号 / --approved 命令 / 过时规则 / 架构树
 ├── 启动.bat             # 一键启动（py -3 server.py）
 ├── 安装.bat             # 新电脑一键装环境（自动装 Python + 依赖，再启动）
@@ -447,7 +447,7 @@ powershell -NoProfile -ExecutionPolicy Bypass -Command "iwr -useb https://www.py
 > 2. **必须 CRLF 换行**：LF-only 的批处理会让 `goto` / 标签解析出错；
 > 3. **块内引号里不能出现 `)`**，且解释器路径与参数要分开存
 >    （`"%PY%"` 里塞 `py -3` 会被 cmd 当成一个不存在的程序名）。
-> 用 `py .bld\fix_bat.py` 可以对这三条做体检。
+> 用 `py tools\fix_bat.py` 可以对这三条做体检。
 
 ### 已经装过 Python
 双击 `启动.bat`（等价于 `py -3 server.py`）。

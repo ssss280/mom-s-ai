@@ -66,12 +66,13 @@ py release.py --release --beta --approved 1.2.0-beta.1   # 发测试版
 
 ## 自检脚本
 
-`eval/` 下是联网搜索评测；`.bld/` 下是功能自检（未纳入版本控制）：
+`eval/` 下是联网搜索评测；`tools/` 下是功能自检与静态检查（**纳入版本控制**，换台机器也在）；
+`.bld/` 只放一次性调试脚本（未纳入版本控制）：
 
 ```powershell
-py -3 .bld\test_modules.py    # 模块功能（配置/存储/日志/OCR/搜索/更新）
-py -3 .bld\test_api.py        # 接口（需先启动服务）
-py -3 .bld\test_channels.py   # 稳定/测试双通道
-py -3 .bld\test_ocr.py        # OCR
+py -3 tools\test_modules.py    # 模块功能（配置/存储/日志/OCR/搜索/更新）
+py -3 tools\test_api.py        # 接口（需先启动服务）
+py -3 tools\test_channels.py   # 稳定/测试双通道
+py -3 tools\test_ocr.py        # OCR
 py -3 eval\harness.py --all --seed 20260101   # 联网搜索评测
 ```
