@@ -17,6 +17,10 @@ PROBES = ["香港国际秋季灯饰展 2026", "北京天气", "python asyncio ga
 
 
 def load_module():
+    # 同 harness.py：根目录必须进 sys.path，否则 web_search 里的 fair_aliases 导入
+    # 静默失败，跑题扣分 / 官方名兜底在巡检里全部是关着的
+    if ROOT not in sys.path:
+        sys.path.insert(0, ROOT)
     path = os.path.join(ROOT, "web_search.py")
     spec = importlib.util.spec_from_file_location("ws_health", path)
     module = importlib.util.module_from_spec(spec)

@@ -95,22 +95,30 @@ def plan() -> dict:
     """算出这次更新会做什么：新增哪些、覆盖哪些、远端删了哪些（本地保留）。
 
     只做"预演"不写盘，让用户/界面先看清楚再决定。
+    `download_size` 是**本次实际要下载的字节数**（新增 + 覆盖的文件大小合计），
+    供更新弹窗显示"更新大小"；`remote_size` 是远端仓库总大小，仅作参考。
     """
     remote = remote_manifest()
     local = _local_files()
-    remote_paths = {item["path"] for item in remote}
-    protected = {item["path"] for item in remote if _is_protected(item["path"])}
+    size_by_path = {item["path"]: item.get("size", 0) for item in remote}
+    remote_paths = set(size_by_path)
+    add = sorted(remote_paths - local)
+    overwrite = sorted(remote_paths & local)
+    download_size = sum(size_by_path[p] for p in add) + sum(size_by_path[p] for p in overwrite)
 
     return {
         "repo": UPDATE_REPO,
         "branch": UPDATE_BRANCH,
         "remote_count": len(remote_paths),
         "local_count": len(local),
-        "add": sorted(remote_paths - local),
-        "overwrite": sorted(remote_paths & local),
+        "add": add,
+        "overwrite": overwrite,
+        "add_count": len(add),
+        "overwrite_count": len(overwrite),
         "keep_only_local": sorted(local - remote_paths),
-        "skip_protected": sorted(protected),
-        "remote_size": sum(item["size"] for item in remote),
+        "skip_protected": sorted(p for p in remote_paths if _is_protected(p)),
+        "download_size": download_size,
+        "remote_size": sum(size_by_path.values()),
     }
 
 

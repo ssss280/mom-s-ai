@@ -48,7 +48,18 @@ for _tier_index, _tier in enumerate((("so360", "bing_cn"),
 
 
 def load_module():
-    """按文件路径加载 web_search，保证测的就是仓库里这一份代码。"""
+    """按文件路径加载 web_search，保证测的就是仓库里这一份代码。
+
+    必须先把仓库根目录放进 sys.path：web_search 运行时会 `from fair_aliases import ...`
+    （跑题判定 / 官方名兜底）和 `from paths import ...`（查询记录落盘）。
+    本脚本按文件路径加载模块时 sys.path[0] 是 eval/ 而不是仓库根目录，
+    缺了这一步，fair_aliases 导入会静默失败（web_search 里 try/except 吞掉），
+    于是评测进程里"跑题扣分"和"官方名兜底"整套装甲都是关着的——
+    垃圾百科页不被扣分、口语说法不触发官方名重搜，分数被显著低估
+    （2026-10-03 实测：「香港玩具展」类题目在评测里全挂，线上却全对）。
+    """
+    if ROOT not in sys.path:
+        sys.path.insert(0, ROOT)
     path = os.path.join(ROOT, "web_search.py")
     spec = importlib.util.spec_from_file_location("ws_under_test", path)
     module = importlib.util.module_from_spec(spec)

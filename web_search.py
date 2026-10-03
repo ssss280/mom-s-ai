@@ -54,11 +54,19 @@ DEFAULT_COUNT = 6
 CACHE_TTL = 300
 MAX_SNIPPET = 300
 MIN_RELEVANCE = 0.28     # 相关性达到这个值才算"可信结果"
+SOLID_MIN = 0.42         # 最高分过了这条线才"见好就收"。0.28~0.42 之间算"勉强过线"：
+                         # 收下当兜底，但继续换查询词找更好的。实测「世界杯在哪些国家举办」
+                         # 时 bing_cn 给「世界地图」（0.307）勉强过线就截停，而换个查询词
+                         # 就能拿到真正的举办国页面（0.6+）
 FALLBACK_MIN = 0.15      # 达不到上面但到了这个值：作为"低相关参考"喂给模型，并提示它自行判断
 GOOD_ENOUGH = 3          # 一批里拿到这么多"可信结果"就够用（保留给调用方参考）
 TAIL_RATIO = 0.55        # 一批里最高分 × 这个比例 = 垫底结果的相对下限（见 search 内的 floor）
 TOTAL_BUDGET = 8         # 一轮搜索的总预算（秒）。原来 12s：一轮里只要有一个源连不上，
                          # 用户就要等十几秒才看到回复；搜索是"够用就行"的环节，宁可少几条
+ENGINE_WAIT_CAP = 4      # 单批引擎最多等多久（秒）。urllib 的 timeout 只约束单次 socket
+                         # 操作，一个 DNS 卡死的引擎照样挂 10s+；join 若等到全局死线，
+                         # 后面的批次就全没了（实测 DuckDuckGo 挂起时 so360 在第 2 批
+                         # 根本轮不到）。到点就放弃，挂着的线程后台自灭并触发冷却
 READ_PAGES = 3           # 联网搜索后抓前几篇的正文
 PAGE_MAX_CHARS = 2000    # 每篇正文最多取多少字符喂给模型
 PAGE_MAX_BYTES = 800_000  # 单页最多下载多少字节（防大页面拖时间）
@@ -283,10 +291,18 @@ _YEAR_RE = re.compile(r"(?<![0-9A-Za-z])(?:19|20)\d{2}\s*年?(?![0-9])")
 # 只削句尾的疑问成分，不要句中乱削（否则「今天北京天气怎么样」会变成「今天北京天气 样」）
 _TAIL_QUESTION_RE = re.compile(
     r"(?:怎么样|怎么|如何|是多少|多少钱|在哪[里儿]?|什么时候|何时|是什么|有哪些|几点|多久|的时间|时间|是|吗|呢|啊|呀|吧|的)\s*$"
+    # 列举式问句的尾巴：「香港地铁东铁线经过哪些站」「高铁途经哪些城市」。
+    # 这类尾巴留在查询词里会稀释打分（「经过/哪些」是答案页不会出现的说法），
+    # 削掉后「香港地铁东铁线」正是线路页的标准检索词
+    r"|(?:经过|途经|路过|会经过|要经过|都经过)?哪些(?:站|车站|城市|国家|地方|地点|线路|景点)\s*$"
 )
 _LEAD_COMMAND_RE = re.compile(
     r"^(?:(?:帮我|请|麻烦|帮忙)\s*)?(?:(?:查一查|查查|查一下|查询|搜索一下|搜索|搜一下|搜一搜|找一下|了解一下|看看)\s*)?"
 )
+# 句首时间状语：对搜索引擎来说基本是噪声（"最近 AI 大模型有什么新发布"会被 Bing 按字面
+# 匹配"最近"，返回一堆词典页）。只在"关键词变体"里削、且只削句首——
+# 句中的"最近"是实打实的限定词（「git 撤销最近一次提交」削掉就改变了语义）。
+_TIME_ADVERB_RE = re.compile(r"^\s*(?:最近|最新|近期|目前|现在|当今|今天|今日|这几天|当前)\s*")
 
 
 def query_variants(query: str) -> list:
@@ -316,10 +332,23 @@ def query_variants(query: str) -> list:
     # - 允许削到只剩 2 个字：实测「北京天气怎么样」要削掉"怎么样"才能搜到天气页
     #   （不削的话 bing_cn 只按"北京"给一堆「北京市_百度百科」）；
     #   而 2 字是搜索的下限，再短就没有检索价值了
+    # 关键词变体：用 term_text 把**句中所有**问句成分都削掉（不止句尾），再压平空白。
+    # 实测动机：「git 怎么撤销最近一次提交但保留改动」的"怎么"在句中，句尾削问句够不着，
+    # 原样搜 20 条候选全被判不相关（引擎按字面匹配"怎么"），一轮下来 0 结果；
+    # 削成「git 撤销最近一次提交但保留改动」立刻有结果。
+    # 同理「香港灯具展是什么时候 2026年」（追问拼出来的）->「香港灯具展 2026年」、
+    # 「最近 AI 大模型有什么新发布」->「AI 大模型 新发布」。
+    # 时间状语只在变体里削：「2026香港秋季照明展」这种"年份即实体"的查询不受影响
+    # （它没有问句成分，term_text 削完还是原样，会被下面的去重挡掉）。
+    keyword = _tidy(_TIME_ADVERB_RE.sub(" ", term_text(query)))
+    keyword = re.sub(r"\s+", " ", keyword)
+
     candidates = []
-    if no_year and no_year != query and len(term_text(no_year).strip()) >= 2:
+    if keyword and keyword != query and len(term_text(keyword).strip()) >= 2:
+        candidates.append(keyword)          # 优先：留住实体和年份，只削噪声
+    if no_year and no_year != query and no_year != keyword and len(term_text(no_year).strip()) >= 2:
         candidates.append(no_year)
-    if core and core != query and core != no_year and len(term_text(core).strip()) >= 2:
+    if core and core != query and core != no_year and core != keyword and len(term_text(core).strip()) >= 2:
         candidates.append(core)
     if not candidates:
         candidates.append(query)
@@ -417,7 +446,7 @@ def _resolve_results(results: list, timeout: int = 6) -> list:
 # 问句成分：它们不是检索关键词，留在打分里只会稀释命中率
 # （实测「香港灯具展是什么时候」9 个 bigram 里 4 个是问句噪声，把真结果压到阈值以下）
 _QUESTION_WORDS = re.compile(
-    r"(什么时候|多久|几点|什么样|怎么样|怎么办|怎么|如何|是什么|哪些|哪个|哪里|在哪[里儿]?|"
+    r"(什么时候|多久|几点|什么样|怎么样|怎么办|怎么|如何|是什么|有什么|在哪些|哪些|哪个|哪里|在哪[里儿]?|"
     r"多少钱|多少|为何|为什么|是不是|有没有|能不能|可不可以|"
     r"请问|帮我|帮忙|查一查|查查|查一下|查询|搜索一下|搜索|搜一下|搜一搜|找一下|了解一下|看看|告诉我|"
     r"是|的|吗|呢|啊|呀|吧|了|一下|时候)"
@@ -465,6 +494,10 @@ def _host_matches_query(host: str, cjk: str, words: set) -> bool:
 # 却不是答案，会把真正的新闻/定价页挤下去。
 _SECTION_ONLY_PATHS = {"", "index", "index.html", "index.htm", "home", "default",
                        "docs", "doc", "api", "download", "downloads", "en", "zh", "cn"}
+# 纯语言代码路径（zh-cn / en-us / zh-hans）也是"栏目入口"而不是内容页，
+# 实测 docs.python.org/zh-cn/ 这种"文档站语言首页"靠域名加成过了阈值，
+# 把英文题在第 1 批就截停（搜 asyncio 返回「Python 3.14.7 文档」）。
+_LANG_PATH_RE = re.compile(r"^[a-z]{2}(?:[-_][a-z]{2,8})?$")
 # 注意：路径**非空**时不再一律算"栏目页"。实测「iPhone - Apple (中国大陆)」的
 # /iphone/ 路径很短，却是这道题的正确落地页；一律扣分会误伤正常结果。
 _ENTITY_NOISE_RE = re.compile(r"(百度百科|维基百科|官方网站|官网|首页|百科|home|official)", re.I)
@@ -553,9 +586,20 @@ def _is_generic_page(item: dict, query: str, cjk: str, words: set,
     if _is_offtopic(item, query):
         return True
 
+    # 情况 A0（英文查询专属）：标题+URL 只覆盖了查询里 ≤1 个实词。
+    # 实测 bing_cn / bing_web 对英文题几乎"不看"查询词——搜「python asyncio gather
+    # vs wait difference」返回 Python 官网首页、搜「rust ownership rules explained」
+    # 返回 Rust 官方书首页。这类页面靠"域名命中 +0.10 / 权威站 +0.06"加成就能过
+    # 阈值，把第 1 批截停，so360 里真正对题的结果（php.cn 的 gather vs wait 对比文）
+    # 根本轮不到。中文查询不走这条：bigram + 情况 A~C 已经覆盖。
+    if not cjk and len(words) >= 3:
+        covered = {w for w in words if w in normalized or w in path}
+        if len(covered) <= 1:
+            return True
+
     # 情况 A：典型的首页/栏目页——但对"查询本身就没别的限定词"的题不算（搜「北京天气」
     # 落到天气网首页就是正确答案）；只有当查询带着没被覆盖的年份/英文/中文限定词时才算泛指向页
-    if path in _SECTION_ONLY_PATHS:
+    if path in _SECTION_ONLY_PATHS or _LANG_PATH_RE.match(path):
         return bool(missed)
 
     if not normalized or not entity:
@@ -887,15 +931,22 @@ ENGINES = (
     ("baidu", _search_baidu),
 )
 
-# 批次顺序由 **实测** 决定（`py -3 eval/engine_eval.py` 顺序跑 25 题 × 每个源，间隔 0.2s）：
+# 批次顺序由 **实测** 决定（`py -3 eval/engine_eval.py` 顺序跑 29 题 × 每个源，间隔 0.3s）：
 #
-#   源          有贡献的题数   每次宽松达标   被拦     延迟P50
-#   so360          96%          3.00 条      0/25    1481ms
-#   bing_cn        40%          1.40 条      0/25     300ms
-#   bing_web       36%          1.36 条      0/25     508ms
-#   bing_news       0%          0.00 条      0/25     707ms   ← 完全没用了
-#   sogou           0%          0.00 条      0/25     409ms
-#   baidu           0%          0.00 条     25/25     395ms   ← 全程被安全验证
+#   2026-09-29 实测：                    2026-09-21 实测：
+#   源          贡献   每次宽松  被拦      源          贡献   每次宽松  被拦
+#   so360        90%     2.97    1/29     so360        96%     3.00    0/25
+#   bing_cn      48%     1.45    0/29     bing_cn      40%     1.40    0/25
+#   bing_web     48%     1.45    0/29     bing_web     36%     1.36    0/25
+#   baidu        41%     4.86   16/29     baidu         0%     0.00   25/25
+#   sogou         3%     0.28   11/29     sogou         0%     0.00    0/25
+#   bing_news     0%     0.00    0/29     bing_news     0%     0.00    0/25
+#
+# 变化与决策：
+# - bing_news 两轮实测都是 0 条结果（RSS 入口已失效），从批次里移除（保留函数供巡检）。
+# - baidu 从第 4 批升到第 2 批：今天 41% 贡献、每次 4.86 条；被拦时会快速失败并进 90s
+#   冷却，成本很低。它忽好忽坏（9/21 全程被拦），所以只放在 bing_web 旁边当补充。
+# - so360 + bing_cn 稳居第 1 批（两轮实测都最强）。
 #
 # 第 1 批只有两个源，是刻意的：**并行猛打会把源打爆**——同一时段并行打 8 个源时
 # so360 被拦 23/25；顺序、少量请求时 25/25 全通。少打几个源既快又不招反爬。
@@ -905,24 +956,22 @@ ENGINE_TIERS = (
     ("bing_cn", _search_bing),
 ), (
     ("bing_web", _search_bing_web),
-    ("bing_news", _search_bing_news),
+    ("baidu", _search_baidu),
 ), (
     ("duckduckgo", _search_duckduckgo),
     ("wikipedia", _search_wikipedia),
 ), (
     ("sogou", _search_sogou),
-    ("baidu", _search_baidu),
 )
 PRIMARY_ENGINES = ENGINE_TIERS[0]
 SECONDARY_ENGINES = ENGINE_TIERS[2]
 FALLBACK_ENGINE = ENGINE_TIERS[3]
 
 # 英文查询要换顺序：实测 cn.bing 对英文技术问题根本不"看"查询词，
-# 搜「python asyncio gather vs wait difference」返回 Python 官网首页、Docker 官网首页，
-# 英文查询要换顺序：实测 cn.bing 对英文技术问题根本不"看"查询词，
 # 搜「python asyncio gather vs wait difference」返回 Python 官网首页、Docker 官网首页。
-# 英文技术题真正给得出答案的是 bing_web（国际站，实测 asyncio 题给 stackoverflow）
-# 与 DuckDuckGo / 英文维基。so360 仍留在后面兜底：它对英文题也常有结果。
+# 英文技术题真正给得出答案的是 DuckDuckGo / 英文维基，以及 so360（实测它对英文题
+# 常有中文技术社区的对题文章，如 gather vs wait 的对比文）。
+# bing_web 保留在第 1 批：它对英文至少会返回官方文档站，配合泛指向页扣分可当兜底。
 _ENGLISH_TIERS = (
     ("bing_web", _search_bing_web),
     ("duckduckgo", _search_duckduckgo),
@@ -931,10 +980,9 @@ _ENGLISH_TIERS = (
     ("so360", _search_so360),
 ), (
     ("bing_cn", _search_bing),
-    ("bing_news", _search_bing_news),
+    ("baidu", _search_baidu),
 ), (
     ("sogou", _search_sogou),
-    ("baidu", _search_baidu),
 )
 
 
@@ -1057,8 +1105,11 @@ def _gather(query: str, engines, count: int, deadline: float, trace: list = None
         thread = threading.Thread(target=worker, args=(name, engine), daemon=True)
         thread.start()
         threads.append(thread)
+    # 到点就不再等：挂起的引擎（DNS 卡死类，单次 socket 超时管不住）不值得吃掉
+    # 全局预算——放弃它，把时间留给后面的批次。它自己最终抛错/被拦时会进冷却。
+    join_deadline = time.time() + min(max(0.1, deadline - time.time()), ENGINE_WAIT_CAP)
     for thread in threads:
-        thread.join(max(0.1, deadline - time.time()))
+        thread.join(max(0.1, join_deadline - time.time()))
     return merged, errors
 
 
@@ -1294,6 +1345,7 @@ def search(query: str, count: int = DEFAULT_COUNT, use_cache: bool = True) -> di
         tier_names.add("/".join(key))
 
         pool: list = []
+        mediocre: tuple = ()       # (scored, variant) 勉强过线的兜底池（见 SOLID_MIN）
         for variant in variants:
             if time.time() >= deadline:
                 break
@@ -1303,9 +1355,22 @@ def search(query: str, count: int = DEFAULT_COUNT, use_cache: bool = True) -> di
                 tier_empty_streak[key] = 0
                 logger.info(f"搜索「{query}」批次 {key} 用查询词「{variant}」"
                             f"拿到 {len(good)} 条可信结果")
-                pool = scored
-                info["query_used"] = variant
-                break
+                # 勉强过线（< SOLID_MIN）不见好就收：记下这一池当兜底，继续换查询词。
+                # 实测「世界杯在哪些国家举办」时 bing_cn 的「世界地图」（0.307）一过线就
+                # 截停，把换词就能拿到的高分结果（举办国页面）挡在了门外。
+                # 不在最后一个变体上"被迫收下"：交给循环后的 best-mediocre 兜底，
+                # 否则最后一个变体的低分池会盖掉前面变体的高分池。
+                if good[0]["score"] >= SOLID_MIN:
+                    pool = scored
+                    info["query_used"] = variant
+                    break
+                if not mediocre or good[0]["score"] > mediocre[0][0].get("score", 0):
+                    mediocre = (scored, variant)
+                logger.info(f"搜索「{query}」查询词「{variant}」最高分仅 "
+                            f"{good[0]['score']}（勉强过线），换查询词再试")
+
+        if not pool and mediocre:
+            pool, info["query_used"] = mediocre
 
         if not pool:
             # 这一批 + 所有查询词都没戏：连续两次空手就冷却，别在后面的批次上再浪费预算
@@ -1441,23 +1506,75 @@ _BLOCK_END_RE = re.compile(r"</?(?:br|p|div|li|h[1-6]|tr|section|article|header|
 _TAG_RE = re.compile(r"<[^>]+>")
 _SPACE_RE = re.compile(r"[ \t\u00a0\u3000]+")
 
-# 常见正文容器，命中就只取它，能明显减少导航/推荐位噪声
+# 语义容器：**只在直接抽取拿不到东西时**才用，而且只认配对明确的标签。
+#
+# 为什么不再把 <div class="content"> 这类算进来（2026 实测，本轮最大的抽取 bug）：
+# 正则 `(.*?)</div>` 碰到**嵌套 div** 会在第一个 `</div>` 就截断，于是"正文容器"
+# 只捞出容器开头那几十个字。实测代价：
+#   聚展 jufair.com 正文 503 → 130 字；gpt-chinese-guide.com 2000 → 123 字，
+#   而这两页**直接抽整页本来就能拿到完整正文**。
+# 也就是说这层容器启发式净效果是负的：它把好页面切碎，只有少数页面靠它变好。
+# 改为"默认抽整页，短到不可用时才回退到语义容器"。
 _MAIN_PATTERNS = (
     r"<article\b[^>]*>(.*?)</article>",
     r"<main\b[^>]*>(.*?)</main>",
-    r'<div\b[^>]*(?:id|class)="[^"]*(?:article|content|main|post|detail|text)[^"]*"[^>]*>(.*?)</div>',
 )
 
+# JS 渲染页的正文常整段放在 JSON-LD 里（实测腾讯新闻 news.qq.com 的图文页
+# 一个 <p> 标签都没有，正文在 window.DATA 与 ld+json 中）。
+# 不读它，这类页面只能抽出标题（46 字），低于 MIN_PAGE_CHARS 被整篇丢掉。
+_LD_JSON_RE = re.compile(
+    r'<script[^>]+type=["\']application/ld\+json["\'][^>]*>(.*?)</script>', re.S | re.I)
+_META_DESC_RE = re.compile(
+    r'<meta[^>]+(?:name|property)=["\'](?:description|og:description)["\'][^>]*'
+    r'content=["\']([^"\']{20,})["\']', re.I)
+# 正文类字段：按可信度排序，命中即用
+_LD_BODY_KEYS = ("articleBody", "description")
+# JSON-LD 正文短于这个长度就不算正文（很多页面的 description 只是摘要）
+_LD_MIN_CHARS = 120
+# 整页抽出来的文本"平均每行少于这么多字"就认为太零碎，值得回退到语义容器
+_FRAGMENT_AVG_LINE = 18
 
-def extract_text(page: str, max_chars: int = PAGE_MAX_CHARS) -> str:
-    """从 HTML 里抠出正文（不引入 bs4/lxml，纯正则 + 常见容器启发式）。"""
-    text = _COMMENT_RE.sub(" ", page or "")
+
+def _jsonld_body(page: str) -> str:
+    """从页面内嵌的 JSON-LD 里取正文，取不到返回空串。
+
+    只认 articleBody / description，且要求够长——JSON-LD 里还塞着面包屑、评分、
+    作者等一堆短字段，误取会把噪声当正文。
+    """
+    for blob in _LD_JSON_RE.findall(page or ""):
+        try:
+            data = json.loads(blob.strip())
+        except Exception:
+            continue
+        pending = [data]
+        while pending:
+            node = pending.pop()
+            if isinstance(node, dict):
+                for key in _LD_BODY_KEYS:
+                    value = node.get(key)
+                    if isinstance(value, str) and len(value) >= _LD_MIN_CHARS:
+                        return _text(value)
+                pending.extend(node.values())
+            elif isinstance(node, list):
+                pending.extend(node)
+    return ""
+
+
+def _meta_description(page: str) -> str:
+    """页面摘要（meta description / og:description）。
+
+    JS 渲染页最后的退路：正文抓不到时，至少把"这段讲了什么"给模型。
+    实测腾讯新闻那条只剩 46 字标题，补上摘要后信息量明显变多。
+    """
+    match = _META_DESC_RE.search(page or "")
+    return html.unescape(match.group(1)).strip() if match else ""
+
+
+def _html_to_text(fragment: str, max_chars: int) -> str:
+    """把一段 HTML 变成可读文本（去脚本/样式、块级标签转换行、压缩空白）。"""
+    text = _COMMENT_RE.sub(" ", fragment or "")
     text = _SCRIPT_RE.sub(" ", text)
-    for pattern in _MAIN_PATTERNS:
-        match = re.search(pattern, text, re.S | re.I)
-        if match and len(match.group(1)) > 400:
-            text = match.group(1)
-            break
     text = _BLOCK_END_RE.sub("\n", text)
     text = _TAG_RE.sub(" ", text)
     text = html.unescape(text)
@@ -1465,6 +1582,43 @@ def extract_text(page: str, max_chars: int = PAGE_MAX_CHARS) -> str:
     lines = [line.strip() for line in text.split("\n")]
     lines = [line for line in lines if len(line) > 1]
     return "\n".join(lines)[:max_chars].strip()
+
+
+def extract_text(page: str, max_chars: int = PAGE_MAX_CHARS) -> str:
+    """从 HTML 里抠出正文（不引入 bs4/lxml，纯正则）。
+
+    顺序（每一步都有实测理由，见上方常量注释）：
+    1. JSON-LD 的 articleBody/description —— JS 渲染新闻页唯一的正文来源；
+    2. 整页直接抽 —— 默认路径，实测覆盖比"先猜正文容器"更全；
+    3. 抽出来太零碎时才回退到 <article>/<main>；
+    4. 仍不足 MIN_PAGE_CHARS 时补上 meta description。
+
+    这里**不做"太短就返回空"的裁断**：那是调用方的策略（见 fetch_page_text）。
+    """
+    # 1) JSON-LD 正文
+    ld_body = _jsonld_body(page)
+    if len(ld_body) >= _LD_MIN_CHARS:
+        return ld_body[:max_chars].strip()
+
+    # 2) 整页直接抽
+    text = _html_to_text(page, max_chars)
+
+    # 3) 太零碎时回退到语义容器（只认 <article>/<main>，不会把嵌套 div 切碎）
+    if text and len(text) / (text.count("\n") + 1) < _FRAGMENT_AVG_LINE:
+        for pattern in _MAIN_PATTERNS:
+            match = re.search(pattern, page or "", re.S | re.I)
+            if match:
+                candidate = _html_to_text(match.group(1), max_chars)
+                if len(candidate) > len(text):
+                    text = candidate
+                    break
+
+    # 4) 还不够长就补摘要
+    if len(text) < MIN_PAGE_CHARS:
+        meta = _meta_description(page)
+        if meta and meta not in text:
+            text = (text + "\n" + meta).strip()[:max_chars]
+    return text[:max_chars].strip()
 
 
 def fetch_page_text(url: str, max_chars: int = PAGE_MAX_CHARS, timeout: int = PAGE_TIMEOUT) -> str:
