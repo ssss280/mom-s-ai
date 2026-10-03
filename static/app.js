@@ -699,6 +699,7 @@ document.addEventListener("keydown", (e) => {
   if (!$("#image-modal").hidden) closeImage();
   else if (!$("#crop-modal").hidden) closeCropModal();
   else if (!$("#window-modal").hidden) closeWindowPicker();
+  else if (!$("#update-modal").hidden) closeUpdateModal();
 });
 
 // ---------- 识别：复制 / 导出 ----------
@@ -1108,13 +1109,10 @@ function renderVersionBadge(info) {
     badge.classList.add("updatable");
     const suffix = info.latest_prerelease ? "（预发布版）" : "";
     badge.title = `发现新版本 v${String(info.latest).replace(/^v/i, "")}${suffix}` +
-      `（当前 v${name}），点击直接下载更新`;
-    // 点击**直接下载并覆盖到本地**，不再跳转 GitHub（用户要求）
-    badge.onclick = applyLocalUpdate;
+      `（当前 v${name}），点击查看更新详情`;
   } else {
     // 已是最新 / 连不上 GitHub / 还在检测：只显示版本名称
     badge.classList.remove("updatable");
-    badge.onclick = null;
     // 稳定通道下若远端有更新的预发布版，如实说明"按通道不提示"，而不是假装已是最新
     const held = info && info.latest && info.latest_prerelease && !info.has_update;
     if (held) {
@@ -1128,6 +1126,9 @@ function renderVersionBadge(info) {
       badge.title = `ChatSight v${name}（已是最新版本）`;
     }
   }
+  // 点徽标（任何时候，不只可更新时）打开「软件更新」弹窗：
+  // 直接看到是否需要更新、要下载多少，再决定要不要更新
+  badge.onclick = openUpdateModal;
   badge.hidden = false;
 }
 
@@ -1145,12 +1146,95 @@ async function checkUpdate(attempt = 0) {
   }
 }
 
+// ---------- 软件更新弹窗：直接看是否需要更新与更新大小 ----------
+
+function fmtSize(bytes) {
+  const n = Number(bytes) || 0;
+  if (n >= 1048576) return (n / 1048576).toFixed(1) + " MB";
+  if (n >= 1024) return Math.max(1, Math.round(n / 1024)) + " KB";
+  return n + " B";
+}
+
+function closeUpdateModal() {
+  $("#update-modal").hidden = true;
+}
+
+function openUpdateModal() {
+  $("#update-modal").hidden = false;
+  loadUpdateInfo();
+}
+
+// 预演：问后端 /api/update/local（实时查 GitHub，约 1 秒），
+// 拿到 本地/远端版本、是否需要更新、新增/覆盖文件数与下载大小
+async function loadUpdateInfo() {
+  const status = $("#update-status");
+  const details = $("#update-details");
+  const applyBtn = $("#btn-update-apply");
+  status.textContent = "正在向 GitHub 查询，约 1 秒…";
+  details.innerHTML = "";
+  applyBtn.disabled = true;
+  applyBtn.textContent = "立即更新";
+  try {
+    renderUpdateInfo(await api("/api/update/local"));
+  } catch (e) {
+    status.textContent = "查询失败";
+    details.innerHTML = `<p class="update-error">${escapeHtml(e.message)}</p>`;
+  }
+}
+
+function renderUpdateInfo(info) {
+  const status = $("#update-status");
+  const details = $("#update-details");
+  const applyBtn = $("#btn-update-apply");
+  const local = String(info.local_version || state.version || "?").replace(/^v/i, "");
+  const remote = String(info.remote_version || "").replace(/^v/i, "");
+  const plan = info.plan || {};
+  const addCount = plan.add_count != null ? plan.add_count : (plan.add || []).length;
+  const overCount = plan.overwrite_count != null ? plan.overwrite_count : (plan.overwrite || []).length;
+
+  // 版本号没拿到（网络失败）：如实显示原因，不给"立即更新"
+  if (!remote) {
+    status.textContent = "未能获取远端版本信息。";
+    details.innerHTML = info.error
+      ? `<p class="update-error">${escapeHtml(info.error)}</p>` : "";
+    return;
+  }
+
+  if (info.blocked === "downgrade") {
+    status.textContent = `远端版本 v${remote} 比本地 v${local} 旧，已拒绝覆盖（避免把本地新代码降级冲掉）。`;
+    return;
+  }
+
+  if (info.has_update) {
+    const pre = info.latest_prerelease ? "（预发布版）" : "";
+    status.innerHTML = `发现新版本 <b>v${escapeHtml(remote)}</b>${pre}，当前 v${escapeHtml(local)}，需要更新。`;
+    details.innerHTML =
+      `<div class="update-stats">` +
+      `<span>更新大小 <b>${fmtSize(plan.download_size)}</b></span>` +
+      `<span>新增文件 ${addCount} 个</span>` +
+      `<span>覆盖文件 ${overCount} 个</span>` +
+      `</div>` +
+      `<p class="update-note">覆盖前自动备份到 data/update_backup/，绝不碰 config.json、data/ 等用户数据；更新完成需重启程序。</p>`;
+    applyBtn.disabled = false;
+    return;
+  }
+
+  if (info.latest_prerelease) {
+    // 远端只有更新的预发布版：与徽标同一套通道规则，如实说明而不是假装已是最新
+    status.textContent = `远端有预发布版 v${remote}（当前 v${local}），stable 通道不提示；想尝鲜可在设置里切到 beta 通道。`;
+  } else {
+    status.textContent = `已是最新版本（v${local}）。`;
+  }
+}
+
 // 本地内建更新：把 GitHub 上的文件下载回本地覆盖，不跳浏览器。
-// 后端会拒绝"远端比本地旧"的降级覆盖，并把原因返回（HTTP 409），这里如实显示。
+// 由更新弹窗的「立即更新」按钮触发；后端会拒绝"远端比本地旧"的降级覆盖，并把原因返回（HTTP 409）。
 async function applyLocalUpdate() {
-  const badge = $("#version-badge");
-  const previous = badge ? badge.textContent : "";
-  if (badge) { badge.textContent = "正在下载更新…"; badge.onclick = null; }
+  const status = $("#update-status");
+  const details = $("#update-details");
+  const applyBtn = $("#btn-update-apply");
+  applyBtn.disabled = true;
+  applyBtn.textContent = "正在下载更新…";
   toast("正在从 GitHub 下载更新…");
   try {
     const response = await fetch("/api/update/apply", {
@@ -1160,30 +1244,49 @@ async function applyLocalUpdate() {
     });
     const result = await response.json();
     if (result.blocked === "downgrade") {
+      // 这不是"失败"，是我们主动拦下的：如实说明，不显示成更新成功
       toast("远端版本比本地旧，已拒绝覆盖（避免降级）");
-      alert("没有下载覆盖：\n\n" + (result.error || "远端版本比本地旧"));
+      status.textContent = "没有下载覆盖：远端版本比本地旧，已拒绝（避免降级）。";
+      applyBtn.textContent = "立即更新";
     } else if (result.ok) {
       const added = (result.add || []).length;
       const overwritten = (result.overwrite || []).length;
-      alert(
-        `更新完成：新增 ${added} 个文件、覆盖 ${overwritten} 个文件。\n` +
-        `远端版本：${result.remote_version}（本地原为 ${result.local_version}）\n` +
-        (result.backup ? `被覆盖的文件已备份到：\n${result.backup}\n` : "") +
-        `\n请重启程序（关掉窗口重新运行 启动.bat）让新代码生效。`
-      );
+      status.innerHTML = `更新完成：v${escapeHtml(String(result.local_version || ""))} → ` +
+        `<b>v${escapeHtml(String(result.remote_version || ""))}</b>`;
+      details.innerHTML =
+        `<div class="update-stats">` +
+        `<span>新增文件 ${added} 个</span>` +
+        `<span>覆盖文件 ${overwritten} 个</span>` +
+        `</div>` +
+        (result.backup
+          ? `<p class="update-note">被覆盖的文件已备份到 <code>${escapeHtml(result.backup)}</code>，可手动回滚。</p>`
+          : "") +
+        `<p class="update-note update-restart">请重启程序（关掉窗口重新运行 启动.bat）让新代码生效。</p>`;
+      applyBtn.textContent = "已更新，请重启";
       toast("更新完成，请重启程序");
+      checkUpdate();
+      return;
     } else {
+      status.textContent = "更新失败";
+      details.innerHTML = `<p class="update-error">${escapeHtml(result.error || "未知原因")}</p>`;
       toast("更新失败：" + (result.error || "未知原因"));
-      alert("更新失败：\n\n" + (result.error || "未知原因"));
     }
   } catch (e) {
+    status.textContent = "更新失败";
+    details.innerHTML = `<p class="update-error">${escapeHtml(e.message)}</p>`;
     toast("更新失败：" + e.message);
-    alert("更新失败：" + e.message);
-  } finally {
-    if (badge && previous) badge.textContent = previous;
-    checkUpdate();
   }
+  // 失败后允许重试（成功 / 被拦下时保持禁用）
+  applyBtn.disabled = false;
+  applyBtn.textContent = "立即更新";
 }
+
+$("#btn-update-close").addEventListener("click", closeUpdateModal);
+$("#btn-update-refresh").addEventListener("click", loadUpdateInfo);
+$("#btn-update-apply").addEventListener("click", applyLocalUpdate);
+$("#update-modal").addEventListener("click", (e) => {
+  if (e.target.id === "update-modal") closeUpdateModal();
+});
 
 // ---------- 启动 ----------
 

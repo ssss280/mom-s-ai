@@ -3,6 +3,11 @@
 > **任何 AI 助手（Claude / Copilot / Cursor / DeepSeek / 其它）在修改本项目之前，先读完本文件。**
 > 这些规则不是建议，是**必须遵守的工作流**。违反其中任何一条都算改坏项目。
 
+> **配套文件**：本文件是**行为守则**（什么绝对不能做）。
+> 一个需求从立项、设计、实现、验证、登记到发版走哪几步、每步的门禁是什么，
+> 见 **[PROJECT.md](PROJECT.md)**（项目主框架与工作流）；架构与设计取舍见 [PLAN.md](PLAN.md)。
+> 收工前跑 `py -3 tools\check_docs.py`，它会自动检查这几份文件有没有互相矛盾。
+
 ---
 
 ## 🚫 第一条（最高优先级）：改动版本号前必须先问人
@@ -51,13 +56,15 @@ AI  ：（此时才执行 py release.py --approved 1.1.1 ...）
 
 ## 第四条：改动后的最小验证
 
-改完至少跑一遍相关自检（脚本在 `.bld/`，未纳入版本控制）：
+改完至少跑一遍相关自检（`.bld/` 是本地调试脚本、**未纳入版本控制**；
+`tools/` 是**纳入版本控制**的项目级门禁，换台机器也在）：
 
 ```powershell
-py -3 .bld\test_modules.py     # 模块功能（配置/存储/日志/OCR/搜索/更新）
-py -3 .bld\test_api.py         # 接口（需先启动服务）
-py -3 .bld\test_channels.py    # 稳定/测试双通道
-py -3 .bld\test_ocr.py         # OCR
+py -3 tools\check_docs.py      # 文档一致性（改了文档 / 版本号 / 发版命令必跑）
+py -3 tools\test_modules.py     # 模块功能（配置/存储/日志/OCR/搜索/更新）
+py -3 tools\test_api.py         # 接口（需先启动服务）
+py -3 tools\test_channels.py    # 稳定/测试双通道
+py -3 tools\test_ocr.py         # OCR
 py -3 eval\harness.py --all --seed 20260101   # 联网搜索评测
 ```
 

@@ -422,7 +422,8 @@ def suggest_questions():
         text = (response.choices[0].message.content or "").strip()
         questions = [q.strip() for q in text.split("\n") if q.strip()][:3]
         return jsonify({"questions": questions})
-    except Exception:
+    except Exception as e:
+        logger.warning(f"推荐追问生成失败: {e}")
         return jsonify({"questions": []})
 
 
@@ -664,10 +665,33 @@ def update_status():
 
 @app.get("/api/update/local")
 def update_local_plan():
-    """预演本地内建更新：会新增/覆盖哪些文件（只读远端清单，不下载整个包）。"""
+    """更新预演：本地/远端版本、是否需要更新、会新增/覆盖哪些文件与下载大小。
+
+    给「软件更新」弹窗用。实时查 GitHub（contents 读远端版本号 + trees 读文件清单，
+    约 1 秒，只在用户打开弹窗时调用，不挂在页面加载上）。
+    `has_update` 与版本徽标同一套通道规则：stable 通道不把预发布版当"需要更新"；
+    远端比本地旧时返回 blocked=downgrade，前端据此禁用按钮并说明原因。
+    """
     try:
-        return jsonify({"ok": True, "local": local_update.status(),
-                        "protected": sorted(local_update.PROTECTED_DIRS)})
+        info = local_update.status()
+        plan_info = local_update.plan()
+        remote, local = info["remote_version"], info["local_version"]
+        channel = update_check.update_channel()
+        prerelease = update_check.is_prerelease(remote)
+        newer = update_check.is_newer(remote, local)
+        # 版本号没拿到（网络失败）时如实带出 error，前端在弹窗里显示原因
+        return jsonify({
+            "ok": True,
+            "local_version": local,
+            "remote_version": remote,
+            "channel": channel,
+            "latest_prerelease": prerelease,
+            "has_update": newer and (channel == "beta" or not prerelease),
+            "blocked": "downgrade" if local_update.is_downgrade(remote, local) else "",
+            "plan": plan_info,
+            "protected": sorted(local_update.PROTECTED_DIRS),
+            "error": info.get("error", ""),
+        })
     except Exception as e:
         return err(e)
 

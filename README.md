@@ -25,8 +25,18 @@
 > **改动版本号前必须先询问用户，得到明确同意后才能改。**
 > （`release.py` 缺 `--approved <版本号>` 会直接拒绝执行，这是刻意设计的摩擦。）
 
+然后看 **[PROJECT.md](PROJECT.md)**——项目主框架：一个需求从立项到发版走哪几步、
+每步的门禁（Gate）是什么、哪种事实以哪个文件为唯一权威。
+**想知道"这个改动该按什么流程做"，就看它。**
+
 其他约定见 [PLAN.md](PLAN.md)（架构、各模块设计取舍、版本管理约定）与
 [CHANGELOG.md](CHANGELOG.md)（每次改动都必须登记）。
+
+收工前跑一遍文档一致性门禁（改了文档/版本号必跑）：
+
+```powershell
+py -3 tools\check_docs.py     # 版本号是否同步、发版命令是否带 --approved、有无过时规则
+```
 
 ## 版本与更新
 
@@ -56,12 +66,13 @@ py release.py --release --beta --approved 1.2.0-beta.1   # 发测试版
 
 ## 自检脚本
 
-`eval/` 下是联网搜索评测；`.bld/` 下是功能自检（未纳入版本控制）：
+`eval/` 下是联网搜索评测；`tools/` 下是功能自检与静态检查（**纳入版本控制**，换台机器也在）；
+`.bld/` 只放一次性调试脚本（未纳入版本控制）：
 
 ```powershell
-py -3 .bld\test_modules.py    # 模块功能（配置/存储/日志/OCR/搜索/更新）
-py -3 .bld\test_api.py        # 接口（需先启动服务）
-py -3 .bld\test_channels.py   # 稳定/测试双通道
-py -3 .bld\test_ocr.py        # OCR
+py -3 tools\test_modules.py    # 模块功能（配置/存储/日志/OCR/搜索/更新）
+py -3 tools\test_api.py        # 接口（需先启动服务）
+py -3 tools\test_channels.py   # 稳定/测试双通道
+py -3 tools\test_ocr.py        # OCR
 py -3 eval\harness.py --all --seed 20260101   # 联网搜索评测
 ```

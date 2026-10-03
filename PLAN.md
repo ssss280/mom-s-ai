@@ -1,4 +1,4 @@
-# ChatSight - 桌面聊天识别与智能推荐工具
+# ChatSight - 聊天识别与 AI 回复助手（**网页版**）
 
 > ## 🚫 AI / 贡献者必读：改版本号前必须先问人
 >
@@ -39,7 +39,7 @@ ChatSight/
 ├── web_search.py        # 免密钥联网搜索（Bing 中文+资讯 RSS 主攻，维基/DDG 补英文，相关性过滤）
 ├── fair_aliases.py      # 展会别名词典：按「地区 + 种类」推断官方展会名（口语说法搜不到时兜底）
 ├── eval/                # 联网搜索评测（随机题库 + 判据评分 + 报告，见 eval/REPORT.md）
-├── release.py           # 发版助手：按「GitHub 版本 + 1」算出该提交的版本号
+├── release.py           # 发版助手：以 git 标签为基准算下一个版本号（改号必须带 --approved）
 ├── static/              # 网页前端（黑白极简风格）
 │   ├── index.html       # 页面结构
 │   ├── app.js           # 前端逻辑（对话、识别、框选、历史、设置）
@@ -54,8 +54,13 @@ ChatSight/
 ├── config.json          # 用户配置（含 API Key，已被 .gitignore 排除）
 ├── config.example.json  # 配置模板
 ├── requirements.txt     # Python 依赖
-├── PLAN.md              # 本计划文件（不可删除）
+├── AGENTS.md            # AI 助手行为守则（入口文件，第一条：改版本号前先问人）
+├── PROJECT.md           # 项目主框架：主流程 / 阶段门禁 / 单一事实源地图 / 路线图
+├── PLAN.md              # 本计划文件：架构与模块设计取舍（不可删除）
 ├── CHANGELOG.md         # 更新记录（每次改动都必须登记，见下）
+├── README.md            # 使用者视角：安装、运行、功能与自检
+├── tools/               # 项目级门禁（**纳入版本控制**）：check_docs + 9 个自检/静态检查
+│   └── check_docs.py    # 文档一致性：版本号 / --approved 命令 / 过时规则 / 架构树
 ├── 启动.bat             # 一键启动（py -3 server.py）
 ├── 安装.bat             # 新电脑一键装环境（自动装 Python + 依赖，再启动）
 ├── error/               # 运行时报错日志（自动创建）
@@ -101,11 +106,15 @@ ChatSight/
 ### 发版流程
 
 ```powershell
-py release.py                     # 看下一个版本号该是多少（以标签为基准）
-py release.py --apply             # 只写进 version.py
-py release.py --release           # 一键：提交 → 打标签 → 推送 → 建 GitHub Release
-py release.py --release --beta    # 发测试版（Release 勾 pre-release）
+py release.py                              # 只读预览：以标签为基准的下一个版本号
+py release.py --apply --approved 1.1.1     # 只写进 version.py
+py release.py --release --approved 1.1.1   # 一键：提交 → 打标签 → 推送 → 建 GitHub Release
+py release.py --release --beta --approved 1.2.0-beta.1   # 发测试版（Release 勾 pre-release）
 ```
+
+> **会改版本号的命令必须带 `--approved <版本号>`**（人工同意凭据），否则 `release.py`
+> 直接拒绝执行（退出码 4）。版本号本身**必须先问过用户**——见 `AGENTS.md` 第一条。
+> 权威副本在 `AGENTS.md`「发版标准流程」；本节是摘要，由 `tools/check_docs.py` 保证两者不漂移。
 
 建 Release 需要 `GITHUB_TOKEN` 环境变量（`repo` 权限）；没设也能打标签推送，
 只是会跳过建 Release 并提示网页链接。
@@ -122,7 +131,7 @@ py release.py --release --beta    # 发测试版（Release 勾 pre-release）
 ```powershell
 git switch dev                          # 日常开发
 git switch -c release/1.2 dev           # 准备发 1.2.0
-py release.py --release                 # 发版（打 tag + 建 Release）
+py release.py --release --approved 1.2.0    # 发版（打 tag + 建 Release，版本号需用户同意）
 git switch main && git merge release/1.2
 git switch dev && git merge release/1.2
 ```
@@ -183,6 +192,8 @@ git switch dev && git merge release/1.2
 | GET    | `/api/config`                     | 读取配置 + 各提供商的默认模型列表 + 当前版本号 |
 | POST   | `/api/config`                     | 保存配置                         |
 | GET    | `/api/update`                     | 检测 GitHub 上是否有新版本（立即返回，后台联网） |
+| GET    | `/api/update/local`               | 更新预演：本地/远端版本、是否需要更新、会新增/覆盖哪些文件与下载大小（实时查 GitHub，约 1 秒） |
+| POST   | `/api/update/apply`               | 本地内建更新：把 GitHub 上的文件下载回本地覆盖（拒绝降级时回 409） |
 | POST   | `/api/models`                     | 用表单里的临时配置拉取模型列表   |
 | POST   | `/api/chat`                       | AI 对话（`search: true` 时先联网搜索，返回 `sources` 与 `search` 元信息；返回 `session_id`，并把这一问一答存进对话记录） |
 | POST   | `/api/ocr/upload`                 | 上传图片识别，返回 `image_url`（保存的图） |
@@ -209,8 +220,12 @@ git switch dev && git merge release/1.2
 - **查看截图**：识别结果下方有一条缩略图带（原图 / 裁剪图），加载历史会话时显示该会话保存过的截图；
   点击缩略图打开大图弹层（`#image-modal`），可"在新标签打开"或另存
 - **左下角版本标识**（`#version-badge`，位于状态栏最左侧）：页面一打开就显示版本号，
-  同时异步调 `/api/update`；检测到新版本时在版本号后面挂一个琥珀色「可更新」标记，点击跳转 GitHub；
-  已是最新 / 连不上 GitHub / 还在检测时都只显示版本号（失败原因放在鼠标悬停提示里）。
+  同时异步调 `/api/update`；检测到新版本时在版本号后面挂一个琥珀色「可更新」标记。
+  **点徽标（任何时候，不只是可更新时）打开「软件更新」弹窗**（`#update-modal`）：
+  弹窗里直接看到本地/远端版本、**是否需要更新、本次要下载多少（新增 + 覆盖的文件数与总大小）**，
+  以及「立即更新」按钮（无更新 / 被降级拦截 / 按通道不提示时禁用并说明原因）。
+  点「立即更新」走 `POST /api/update/apply` 下载覆盖，结果（新增/覆盖数、备份位置、需重启）也显示在弹窗里。
+  已是最新 / 连不上 GitHub / 还在检测时，弹窗如实说明（失败原因不再只藏在悬停提示里）。
   注意 `setStatus()` 只写 `#status-text`，不能整块覆盖状态栏，否则会把版本标识冲掉
 - **联网搜索开关**（`#chat-search`，输入框下方）：勾选后发送会带上 `search: true`，
   回答里的 `[1] [2]` 编号对应正文下方 `.msg-sources` 里列出的来源；每条来源展示
@@ -245,7 +260,11 @@ git switch dev && git merge release/1.2
   避免把正文里 Keep a Changelog 的链接版本号当成项目版本
 
 ### local_update.py - 本地内建更新（下载覆盖，不跳浏览器）
-- 入口：界面点「可更新」→ `POST /api/update/apply`；也可 `GET /api/update/local` 先预演
+- 入口：点版本徽标打开「软件更新」弹窗（`GET /api/update/local` 预演：是否需要更新、
+  新增/覆盖的文件清单与**下载大小合计**）→ 点「立即更新」走 `POST /api/update/apply`
+- **预演与通道**：`/api/update/local` 实时查远端（contents 读版本号 + trees 读文件清单，
+  约 1 秒），`has_update` 与徽标同样按 `update_channel` 过滤预发布版；
+  远端比本地旧时返回 `blocked=downgrade`（弹窗里说明原因并禁用按钮）
 - **下载通道按实测选**：`raw.githubusercontent.com` 在本机**直接超时**（10 秒读不到数据）→ 不用它；
   优先 `codeload` 整包 zip（一次拿全），失败退到 `api.github.com` 逐文件下载
 - **只覆盖仓库里真实存在的文件**，本地多出来的文件一律保留不删
@@ -277,6 +296,9 @@ git switch dev && git merge release/1.2
   - 不剔的话「香港灯具展是什么时候」9 个 bigram 里有 4 个是噪声，真结果会被压到阈值以下
     （实测真结果 0.29 → 剔除后 **1.00**，日历垃圾仍 0.00）
   - `≥ MIN_RELEVANCE`（0.28）= 可信结果，正常喂给模型
+  - `≥ SOLID_MIN`（0.42）才算"见好就收"：最高分落在 0.28~0.42 的"勉强过线"区间时，
+    池子收下当兜底、但继续换查询词，最后用最好的那池——实测「世界杯在哪些国家举办」
+    拿到「世界地图」（0.307）一过线就截停，把换词能拿到的高分结果挡在门外
   - `FALLBACK_MIN`（0.15）~ 0.28 = **低相关参考**：仍交给模型，但注入 `SEARCH_LOW_RELEVANCE_PROMPT`
     要求它声明"没检索到很匹配的资料、仅供参考"——模型判语义比 bigram 打分靠谱，也好过直接说"没查到"
   - 低于 0.15 通常丢弃；但**一条都没到 0.15 时**，会挑分数最高的一两条同样按"低相关参考"交给模型
@@ -286,7 +308,11 @@ git switch dev && git merge release/1.2
   `北京天气` 这种短查询不会被误拼
 - **评测体系（`eval/`）**：改搜索之前先在 `eval/` 上量一遍。25 道随机题库带客观判据，
   `harness.py` 抽题→跑真实搜索→评分→落盘，`compare.py` 对比前后，`check_engines.py` 巡检引擎健康。
-  结论见 `eval/REPORT.md`（基线 43.1 → 优化后 85~95，空结果率 60% → 0%）
+  结论见 `eval/REPORT.md`（基线 43.1 → 优化后 85~95，空结果率 60% → 0%）。
+  **注意**：`harness.py` 等脚本按文件路径加载 `web_search`，加载前必须把仓库根目录
+  放进 `sys.path`——否则 `from fair_aliases import ...` 在评测进程里静默失败，
+  "跑题扣分 / 官方名兜底"整套机制在评测里是关着的，分数被低估且与线上不一致
+  （2026-10-03 实测踩中：评测里「香港玩具展」全挂、线上全对）
 - **搜索引擎分 4 批打**（`ENGINE_TIERS`，前一批不够数才升级）：
   **顺序不是猜的，由 `eval/engine_eval.py` 顺序实测决定**（看每个源"有贡献的题数 / 被拦次数"）；
   批次只放 2 个源是有意的——并行猛打会把源打爆（并行打 8 个源时 so360 被拦 23/25，顺序时 25/25 全通）。
@@ -317,7 +343,9 @@ git switch dev && git merge release/1.2
 - **查询词清洗与改写**（`clean_query` / `query_variants`）——这条是被"和浏览器搜出来的结果不一样"逼出来的：
   - 聊天里的一句话先砍成第一个分句：`2026香港秋季照明展，什么时候在哪办？` → `2026香港秋季照明展`（问句成分只会稀释关键词）
   - 首轮没有相关结果时**自动换查询词重试**（最多 3 个候选、共用 `TOTAL_BUDGET`）：
-    原样 → 去掉 4 位年份 → 再去掉"帮我查一下/怎么样"这类成分
+    原样 → **关键词变体**（`term_text` 削掉句中所有问句成分 + 句首时间状语，
+    对付「git **怎么**撤销…」「香港灯具展**是什么时候** 2026年」这类句中噪声）→
+    去掉 4 位年份 → 再去掉"帮我查一下/怎么样"这类成分
   - 实测依据：搜 `2026香港秋季照明展` 时，**Bing 把 2026 当实体、返回全年日历**；
     去掉年份后 Bing 第一条就变成「展会概览 | 香港贸发局香港国际秋季灯饰展 - HKTDC」；
     而 `2026香港秋季照明展 时间 地点` 同样是日历垃圾。
@@ -438,7 +466,7 @@ powershell -NoProfile -ExecutionPolicy Bypass -Command "iwr -useb https://www.py
 > 2. **必须 CRLF 换行**：LF-only 的批处理会让 `goto` / 标签解析出错；
 > 3. **块内引号里不能出现 `)`**，且解释器路径与参数要分开存
 >    （`"%PY%"` 里塞 `py -3` 会被 cmd 当成一个不存在的程序名）。
-> 用 `py .bld\fix_bat.py` 可以对这三条做体检。
+> 用 `py tools\fix_bat.py` 可以对这三条做体检。
 
 ### 已经装过 Python
 双击 `启动.bat`（等价于 `py -3 server.py`）。
