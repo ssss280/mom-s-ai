@@ -265,6 +265,26 @@
   <div class="image-body"><img id="image-view" alt="截图"></div>
 </div>
 
+<!-- 软件更新弹窗：直接看是否需要更新与更新大小 -->
+<div id="update-modal" hidden>
+  <div class="win-box update-box">
+    <div class="win-head">
+      <span>软件更新</span>
+      <div class="win-head-actions">
+        <button class="btn btn-mini" id="btn-update-refresh">重新检测</button>
+        <button class="btn btn-mini" id="btn-update-close">关闭</button>
+      </div>
+    </div>
+    <div class="update-body">
+      <p class="update-status" id="update-status">正在检测更新…</p>
+      <div id="update-details"></div>
+    </div>
+    <div class="update-actions">
+      <button class="btn btn-primary" id="btn-update-apply" disabled>立即更新</button>
+    </div>
+  </div>
+</div>
+
 <div id="toast" hidden></div>
 
 <footer id="statusbar">

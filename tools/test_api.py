@@ -62,8 +62,8 @@ record("GET /api/update", status, data,
 
 status, data = call("GET", "/api/update/local")
 record("GET /api/update/local", status, data,
-       f"HTTP {status}，本地={data.get('local', {}).get('local_version')!r} "
-       f"远端={data.get('local', {}).get('remote_version')!r}")
+       f"HTTP {status}，本地={data.get('local_version')!r} 远端={data.get('remote_version')!r} "
+       f"has_update={data.get('has_update')} 下载大小={data.get('plan', {}).get('download_size')} 字节")
 
 status, data = call("GET", "/api/search/log?limit=3")
 record("GET /api/search/log", status, data,

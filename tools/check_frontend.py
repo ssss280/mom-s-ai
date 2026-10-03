@@ -25,6 +25,8 @@ features = {
     "联网搜索开关": "chat-search",
     "搜索记录按钮": "btn-search-log",
     "版本徽标点击（本地更新）": "applyLocalUpdate",
+    "更新弹窗打开": "openUpdateModal",
+    "更新弹窗立即更新按钮": "btn-update-apply",
     "发送按钮": "btn-chat-send",
     "截屏按钮": "btn-capture",
     "窗口截屏": "btn-window",
